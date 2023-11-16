@@ -1,9 +1,9 @@
 
-import mysql from 'mysql';
-const connection = mysql.createPool({
+import mysql2 from 'mysql2';
+const connection = mysql2.createPool({
 	host: 'localhost',
 	user: 'root',
-	password: '42530953',
-	database: 'innway_sw_mantenimiento'
+	password: 'root',
+	database: 'innway_ingenieria'
 });
 export default connection;

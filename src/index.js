@@ -43,7 +43,7 @@ function mifuncion(){
         if(error){
             console.log(error);
         }else{
-            console.log(usuarios);
+            console.log("Base de datos conectada");
         }
     });
 };

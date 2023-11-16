@@ -9,5 +9,6 @@ router.get('/orden-de-trabajo', (req, res) => res.render('orden_trabajo.ejs'))
 router.get('/almacen', (req, res) => res.render('almacen.ejs'))
 router.get('/gestion-mantenimiento', (req, res) => res.render('gestion_mantenimiento.ejs'))
 router.get('/terceros', (req, res) => res.render('terceros.ejs'))
+router.get('/administrar-usuario', (req, res) => res.render('administrar_usuario.ejs'))
 
 export default router
