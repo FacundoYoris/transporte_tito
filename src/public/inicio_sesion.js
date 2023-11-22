@@ -8,8 +8,6 @@ var formulario_contacto = document.querySelector(".formulario_contacto");
 var seccion_login = document.querySelector(".seccion_login");
 var seccion_contacto = document.querySelector(".seccion_contacto");
 
-
-
 function anchoPagina(){
     if(window.innerWidth > 850){
         seccion_login.style.display = "block";
@@ -56,4 +54,5 @@ function contacto(){
         seccion_login.style.opacity = "1";
     }
 }
+
 

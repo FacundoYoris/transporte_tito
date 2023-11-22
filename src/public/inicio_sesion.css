@@ -64,7 +64,7 @@ main{
 }
 .contenedor_delantero form{
    width: 100%;
-   padding: 80px 20px;
+   padding: 20px 20px;
    background: white;
    position: absolute;
    border-radius: 20px;
@@ -94,6 +94,14 @@ main{
     cursor: pointer;
     color: white;
     outline: none;
+}
+.error{
+    padding-top: 10px;
+    font-size: 10px;
+    color: rgb(209, 49, 49)
+}
+.escondido{
+    display: none;
 }
 
 .formulario_login{

@@ -18,7 +18,7 @@
             <nav>
                 <ul>
                     <li><a href="#" id="selected"></a></li>
-                    <li><a href="/estadistica2">Estadísticas</a></li>
+                    <li><a href="/estadistica">Estadísticas</a></li>
                     <li><a href="/orden-de-trabajo">Órdenes de trabajo</a>
                         <ul>
                             <li><a href="#">Pendientes</a></li>
@@ -26,9 +26,10 @@
                             <li><a href="#">Terminadas</a></li>
                         </ul>
                     </li>
+                    <%= login %>
                     <li><a href="/terceros">Terceros</a></li>
                     <li><a href="/almacen">Almacen</a></li>
-                    <li><a href="/gestion-mantenimiento">Gestión de mantenimiento</a>
+                    <li id="gestion_mantenimiento"><a href="/gestion-mantenimiento">Gestión de mantenimiento</a>
                         <ul>
                             <li><a href="#">Tarea restringida 1</a></li>
                             <li><a href="#">Tarea restringida 2</a></li>
@@ -47,5 +48,4 @@
         
 
     </div>
-
 </header>
