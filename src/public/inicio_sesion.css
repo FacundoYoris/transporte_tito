@@ -101,8 +101,9 @@ main{
     color: rgb(209, 49, 49)
 }
 .escondido{
-    display: none;
+    display: block;
 }
+
 
 .formulario_login{
     opacity: 1;

@@ -9,25 +9,16 @@ const login = (req, res) => {
       if (err) {
         res.send(err);
       } else if (rows.length === 0) {
-        
-        res.redirect('/');
+        res.render("inicio_sesion", {"x": true});
       } else {
         const privilegio = rows[0].privilegio;
-        req.session.loggedImAdmin = false;
         if (privilegio === 1) {
           req.session.loggedImAdmin = true;
-          console.log("VERDADEROOOOOO");
         } else {
           req.session.loggedImAdmin = false;
-            
-          console.log("FALSOOOOOOOOOOO");
         }
-        
         res.redirect('/estadistica');
       }
     });
   };
-
-
-    
   export default login;

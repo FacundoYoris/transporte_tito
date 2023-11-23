@@ -1,3 +1,6 @@
+import database from '../database/db.js'
+import express from 'express'
+
 document.getElementById("btn_formulario_contacto").addEventListener("click",contacto);
 document.getElementById("btn_iniciar_sesion").addEventListener("click",IniciarSesion);
 window.addEventListener("resize", anchoPagina);

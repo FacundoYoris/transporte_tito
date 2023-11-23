@@ -9,12 +9,13 @@ import {fileURLToPath} from 'url'
 import indexRoutes from './routes/index.js'
 import mysql2 from 'mysql2';
 
+
 const app = express()
 const __dirname = dirname(fileURLToPath(import.meta.url)) //Forma de obtener la ruta absoluta. Por mas que movamos views de carpeta en carpeta siempre va a estar de la forma correcta.
 
 app.set('views', join(__dirname, 'views'))
 app.set('view engine', 'ejs')
-app.use(indexRoutes)
+
 app.use(express.static(join(__dirname,'public')))
 
 app.use(express.urlencoded({extended:false}));
@@ -33,6 +34,9 @@ app.use(
 	})
 )
 
+
+app.use(indexRoutes)
+
 const puerto = process.env.PORT || 3000;
 app.listen(puerto, ()=>{
     console.log('Server is listening on port: '+puerto);
@@ -41,19 +45,26 @@ app.listen(puerto, ()=>{
 
 
 import connection from './database/db.js'
-
-function mifuncion(){
-    connection.query('SELECT * FROM usuarios', (error,usuarios) =>{
-        if(error){
-            console.log(error);
-        }else{
-            console.log("Base de datos conectada");
-        }
-    });
-};
-mifuncion();
+// PARA VER SI ESTÁ CONECTADA LA BASE DE DATOS
+// function mifuncion(){
+//     connection.query('SELECT * FROM usuarios', (error,usuarios) =>{
+//         if(error){
+//             console.log(error);
+//         }else{
+//             console.log("Base de datos conectada");
+//         }
+//     });
+// };
+// mifuncion();
 
 import login from './controllers/login.js'
 app.post('/login', login);
+
+
+
+
+
+
+
 
 

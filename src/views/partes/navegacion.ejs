@@ -26,16 +26,18 @@
                             <li><a href="#">Terminadas</a></li>
                         </ul>
                     </li>
-                    <%= login %>
+                    
                     <li><a href="/terceros">Terceros</a></li>
                     <li><a href="/almacen">Almacen</a></li>
-                    <li id="gestion_mantenimiento"><a href="/gestion-mantenimiento">Gestión de mantenimiento</a>
+                    <% if (login){ %>
+                    <li class="gestion_mantenimiento"><a href="/gestion-mantenimiento">Gestión de mantenimiento</a>
                         <ul>
                             <li><a href="#">Tarea restringida 1</a></li>
                             <li><a href="#">Tarea restringida 2</a></li>
                             <li><a href="#">Tarea restringida 3</a></li>
                         </ul>
                     </li>
+                    <% } %>
                     <li><a href="/administrar-usuario">Usuario</a>
                         <ul>
                             <li><a href="/administrar-usuario">Administrar usuario</a></li>

@@ -1,7 +1,7 @@
 import { Router } from 'express'
 const router = Router()
 
-router.get('/', (req, res) => res.render('inicio_sesion.ejs', {x: 'Inicio de sesión' })) 
+router.get('/', (req, res) => res.render('inicio_sesion.ejs', {x:false})) 
 //Cuando el servidor este en la pagina inicial ejecutar inicio_sesion.ejs
 router.get('/estadistica', (req, res) => res.render('estadistica.ejs', {"login": req.session.loggedImAdmin}))
 router.get('/orden-de-trabajo', (req, res) => res.render('orden_trabajo.ejs', {"login": req.session.loggedImAdmin}))

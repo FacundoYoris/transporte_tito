@@ -272,3 +272,7 @@ article p{
         margin-top: 158px;
     }
 }
+
+.oculto{
+    display: none;
+}
