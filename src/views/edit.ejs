@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <title>EDITAR ÓRDEN</title>
+</head>
+<body>
+      <% if (orden) { %>
+      <div class="container mt-4">     
+            <div class="card border-secondary">  
+                <div class="card-header bg-primary text-white">Editar órden de trabajo</div>
+                <div class="card-body">
+                    <form action="/save" method="POST">
+                        <input id="id" name="id" value="<%= orden.id_orden_trabajo%>" hidden>
+                        <div class="mb-3">
+                        <label for="user" class="form-label">Tipo</label>
+                            <select id="tipo" name="tipo" class="form-select" aria-label="Default select example" tabindex="2">
+                                <option <%= orden.tipo == 'One shoot' ? "selected" : '' %> value="One shoot">One shoot</option>
+                                <option <%= orden.tipo == 'Periódico' ? "selected" : '' %> value="Periódico">Periódico</option>                    
+                            </select>
+                        <!-- <label for="user" class="form-label mt-2">Intervalo de tiempo en horas(ESTO DEBERÍA DESAPARECER DEPENDIENDO DE LA OPCIÓN)</label>
+                        <input type="text" class="form-control" id="lapso" name="lapso" tabindex="1" value="<%= orden.id_orden_trabajo%>"> -->
+                        <label for="user" class="form-label mt-2">Tarea</label>
+                        <input type="text" class="form-control" id="tarea" name="tarea" tabindex="1" value="<%= orden.actividad%>">
+                        <label for="user" class="form-label mt-2">Fecha inicio</label>
+                        <input type="date" class="form-control" id="fecha" name="fecha" tabindex="1" value="<%= orden.fecha_inicio %>">
+                        <label for="user" class="form-label mt-2">Activo</label>
+                        <input type="text" class="form-control" id="activo" name="activo" tabindex="1" value="<%= orden.activo %>">
+                        <label for="user" class="form-label mt-2">Responsable</label>
+                        <input type="text" class="form-control" id="Responsable" name="Responsable" tabindex="1" value="<%= orden.responsable %>">
+                        <label for="user" class="form-label mt-2">Tiempo esperado en horas</label>
+                        <input type="text" class="form-control" id="tiempo_esperado" name="tiempo_esperado" tabindex="1" value="<%= orden.tiempo_esperado %>">
+                        <label for="user" class="form-label mt-2">Prioridad</label>
+                        <select id="Prioridad" name="Prioridad" class="form-select" aria-label="Default select example" tabindex="2">
+                            <option <%= orden.prioridad == 'One shoot' ? "selected" : '' %> value="Alta">Alta</option>
+                            <option <%= orden.prioridad == 'One shoot' ? "selected" : '' %> value="Media">Media</option>
+                            <option <%= orden.prioridad == 'One shoot' ? "selected" : '' %> value="Baja">Baja</option>
+                        </select>
+                        <label for="user" class="form-label mt-2">Descripción del problema</label>
+                        <input type="text" class="form-control" id="descripción" name="descripcion" tabindex="1" value="<%= orden.descripción_problematica %>">
+                        
+                        </div>   
+                        <div class="mb-3">
+                        
+                        </div>                                   
+                        <button type="submit" class="btn btn-primary" tabindex="5">Guardar</button>
+                        <a href="/orden-de-trabajo/generar-orden" class="btn btn-secondary">Cancelar</a>
+                    </form>
+                </div>
+            </div>        
+        </div>
+        <% } %>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+</body>
+</html>
