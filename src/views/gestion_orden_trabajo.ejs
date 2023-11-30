@@ -41,8 +41,9 @@
             <th scope="col" class="p-1">ACCIONES</th>
           </tr>
         </thead>
-        <tbody>                                 
-          <% results.forEach((orden)=>{ %>
+        <tbody>
+          <!-- //Los results que yo paso en el index.js, acá los uso con la variable orden declarada dentro del forEach                                  -->
+          <% results.forEach((orden)=>{ %>             
             <tr>  
                 <td class="p-1"><%= orden.id_orden_trabajo %></td>  
                 <td class="p-1"><%= orden.actividad %></td>

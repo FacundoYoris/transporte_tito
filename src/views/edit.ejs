@@ -12,7 +12,7 @@
             <div class="card border-secondary">  
                 <div class="card-header bg-primary text-white">Editar órden de trabajo</div>
                 <div class="card-body">
-                    <form action="/save" method="POST">
+                    <form action="/update" method="POST">
                         <input id="id" name="id" value="<%= orden.id_orden_trabajo%>" hidden>
                         <div class="mb-3">
                         <label for="user" class="form-label">Tipo</label>
@@ -34,9 +34,9 @@
                         <input type="text" class="form-control" id="tiempo_esperado" name="tiempo_esperado" tabindex="1" value="<%= orden.tiempo_esperado %>">
                         <label for="user" class="form-label mt-2">Prioridad</label>
                         <select id="Prioridad" name="Prioridad" class="form-select" aria-label="Default select example" tabindex="2">
-                            <option <%= orden.prioridad == 'One shoot' ? "selected" : '' %> value="Alta">Alta</option>
-                            <option <%= orden.prioridad == 'One shoot' ? "selected" : '' %> value="Media">Media</option>
-                            <option <%= orden.prioridad == 'One shoot' ? "selected" : '' %> value="Baja">Baja</option>
+                            <option <%= orden.prioridad == 'Alta' ? "selected" : '' %> value="Alta">Alta</option>
+                            <option <%= orden.prioridad == 'Media' ? "selected" : '' %> value="Media">Media</option>
+                            <option <%= orden.prioridad == 'Baja' ? "selected" : '' %> value="Baja">Baja</option>
                         </select>
                         <label for="user" class="form-label mt-2">Descripción del problema</label>
                         <input type="text" class="form-control" id="descripción" name="descripcion" tabindex="1" value="<%= orden.descripción_problematica %>">

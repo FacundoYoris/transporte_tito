@@ -35,15 +35,16 @@ router.get('/orden-de-trabajo/generar-orden', (req, res) => {
 
     })
 })
+//RUTA PARA CREAR LOS REGISTROS.
 router.get('/orden-de-trabajo/create', (req, res) => res.render('create.ejs'))
+//RUTA PARA EDITAR LOS REGISTROS
 router.get('/orden-de-trabajo/edit/:id', (req, res) => {
-    const id = req.params.id_orden_trabajo;
-    connection.query('SELECT * FROM orden_trabajo WHERE id_orden_trabajo=?',[id], (error, results)=>{
+    const id = req.params.id;
+    connection.query('SELECT * FROM orden_trabajo WHERE id_orden_trabajo = ?',[id], (error, results)=>{
         
         if(error){
             throw error;
         }else{
-            console.log(results[0]);
             res.render('edit.ejs', {orden: results[0]});
         }
 
@@ -55,6 +56,6 @@ router.get('/terceros', (req, res) => res.render('terceros.ejs', {"login": req.s
 router.get('/administrar-usuario', (req, res) => res.render('administrar_usuario.ejs', {"login": req.session.loggedImAdmin}))
 
 import save from '../controllers/gestion_orden_trabajo.js';
-router.post('/save', save);
-
+router.post('/save', save.save);
+router.post('/update', save.update);
 export default router
