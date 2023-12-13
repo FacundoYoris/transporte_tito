@@ -42,7 +42,19 @@ const update = (req, res)=>{
       }
    })
 };
+const cambiarEstado = (req, res)=>{
+   const id = req.body.id;
+   connection.query('UPDATE orden_trabajo SET ? WHERE id_orden_trabajo = ?', [{estado: "En proceso"},id],(error,results)=>{
+      if(error){
+         console.log(error);
+      }else{
+         res.redirect('/orden-de-trabajo/pendiente');
+      }
+   })
+};
+
 export default {
    save, 
    update,
+   cambiarEstado,
 };

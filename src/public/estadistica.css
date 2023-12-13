@@ -8,7 +8,12 @@
     font-family: 'Source Sans 3', sans-serif;
     text-decoration: none;
 }
-
+a{
+    text-decoration: none;
+}
+a:hover{
+    color: white;
+}
 header{
     width: 100%;
     position: fixed;

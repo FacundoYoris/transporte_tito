@@ -107,4 +107,5 @@ router.get('/administrar-usuario', (req, res) => res.render('administrar_usuario
 import save from '../controllers/gestion_orden_trabajo.js';
 router.post('/save', save.save);
 router.post('/update', save.update);
+router.post('/cambiar-estado', save.cambiarEstado);
 export default router
