@@ -41,10 +41,18 @@
                     <td class="p-1"><%= orden.tiempo_esperado %></td>
                     <td class="p-1"><%= orden.descripción_problematica %></td>
                     <td class="p-1">
-                      <a href="#" class="btn btn-outline-primary"><i class='bx bx-show bx-sm'></i></a>
-                      <a href="#" class="btn btn-outline-success"><i class='bx bx-check-double bx-sm' style="color: rgb(0, 0, 0);"></i></a>                  
+                      <!-- Boton ver orden -->  
+                      <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#verOrden<%= orden.id_orden_trabajo %>">
+                        <i class='bx bx-show bx-sm'></i>
+                      </button>
+                      <!-- Boton aceptar orden -->  
+                      <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#terminarOrden<%= orden.id_orden_trabajo %>">
+                        <i class='bx bx-check-double bx-sm' style="color: rgb(0, 0, 0);"></i>
+                      </button>
                     </td>
-                </tr>                                   
+                </tr> 
+                <%- include('partes/modalVerOrden.ejs',{"id":orden.id_orden_trabajo}) %>
+                <%- include('partes/modalTerminarOrden.ejs',{"id":orden.id_orden_trabajo}) %>                                   
              <% }) %>
             </tbody>
           </table>

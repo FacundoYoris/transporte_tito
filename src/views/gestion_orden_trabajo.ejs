@@ -6,13 +6,17 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">    
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
     <%- include('partes/header.ejs') %>
-    <title>CRUD</title>
+    <title>GESTIÓN DE ORDENES DE TRABAJO</title>
 </head>
 <body>
   <%- include('partes/navegacion.ejs') %>
       <main>
       <div  eblclass="container">    
-        <a href="/orden-de-trabajo/create" class="btn btn-outline-primary mt-4"><i class='bx bxs-plus-circle bx-md'></i></a>
+
+        <!-- Boton ver orden -->  
+        <button type="button" class="btn btn-outline-primary mt-4" data-bs-toggle="modal" data-bs-target="#crearOrden">
+          <i class='bx bxs-plus-circle bx-md'></i>
+        </button>
             
       <table class="table table-bordered table-striped text-center mt-4">
         <thead>
@@ -43,11 +47,24 @@
                 <td class="p-1"><%= orden.tiempo_esperado %></td>
                 <td class="p-1"><%= orden.descripción_problematica %></td>
                 <td class="p-1">
-                  <a href="#" class="btn btn-outline-primary"><i class='bx bx-show bx-sm'></i></a>
+                  <!-- Boton ver orden -->  
+                  <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#verOrden<%= orden.id_orden_trabajo %>">
+                    <i class='bx bx-show bx-sm'></i>
+                  </button>
+                  <!-- Boton editar orden -->  
+                  <!-- <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#editarOrden<%= orden.id_orden_trabajo %>">
+                    <i class='bx bx-edit-alt bx-sm'></i>
+                  </button> -->
                   <a href="/orden-de-trabajo/edit/<%= orden.id_orden_trabajo %>" class="btn btn-outline-info"><i class='bx bx-edit-alt bx-sm'></i></a>
-                  <a href="/orden-de-trabajo/delete/<%= orden.id_orden_trabajo %>" class="btn btn-outline-danger"><i class='bx bx-trash bx-sm bx-flip-horizontal' style='color:#0f1010' ></i></a>                  
+                  <!-- Boton ver orden -->  
+                  <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#eliminarOrden<%= orden.id_orden_trabajo %>">
+                    <i class='bx bx-trash bx-sm bx-flip-horizontal' style='color:#0f1010' ></i>
+                  </button>
                 </td>
-            </tr>                                   
+            </tr>
+            <%- include('partes/modalCrearOrden.ejs') %>
+            <%- include('partes/modalEliminarOrden.ejs',{"id":orden.id_orden_trabajo}) %> 
+            <%- include('partes/modalVerOrden.ejs',{"id":orden.id_orden_trabajo}) %>                         
          <% }) %>
         </tbody>
       </table>

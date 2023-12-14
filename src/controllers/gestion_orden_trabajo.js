@@ -42,7 +42,7 @@ const update = (req, res)=>{
       }
    })
 };
-const cambiarEstado = (req, res)=>{
+const cambiarEstadoPendienteEnProceso = (req, res)=>{
    const id = req.body.id;
    connection.query('UPDATE orden_trabajo SET ? WHERE id_orden_trabajo = ?', [{estado: "En proceso"},id],(error,results)=>{
       if(error){
@@ -52,9 +52,32 @@ const cambiarEstado = (req, res)=>{
       }
    })
 };
+const cambiarEstadoEnProcesoTerminada = (req, res)=>{
+   const id = req.body.id;
+   connection.query('UPDATE orden_trabajo SET ? WHERE id_orden_trabajo = ?', [{estado: "Finalizada"},id],(error,results)=>{
+      if(error){
+         console.log(error);
+      }else{
+         res.redirect('/orden-de-trabajo/en-proceso');
+      }
+   })
+};
+const eliminarOrden = (req, res)=>{
+   const id = req.body.id;
+   connection.query('DELETE FROM orden_trabajo WHERE id_orden_trabajo = ?', [id], (error, results)=>{
+       
+       if(error){
+           throw error;
+       }else{
+           res.redirect('/orden-de-trabajo/generar-orden');
+       }
 
+       });
+};
 export default {
    save, 
    update,
-   cambiarEstado,
+   cambiarEstadoPendienteEnProceso,
+   cambiarEstadoEnProcesoTerminada,
+   eliminarOrden,
 };
