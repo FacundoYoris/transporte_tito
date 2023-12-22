@@ -3,20 +3,43 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Finalizar orden de trabajo</h5>
+          <!-- <h5 class="modal-title" id="exampleModalLabel">Finalizar orden de trabajo</h5> -->
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           ¿Estás seguro que deseas dar como finalizada la orden de trabajo?
         </div>
-        <div class="modal-footer">
+        <!-- <div class="modal-footer">
           <form action="/cambiar-estado-enProceso-Terminada" method="post">
             <input id="id" name="id" value="<%=id%>" hidden>
+            <label for="user" class="form-label mt-2">Solución</label>
+            <input type="text" class="form-control" id="descripcionSolucion" name="descripcionSolucion" tabindex="1">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
             <button type="submit" class="btn btn-primary" tabindex="5">Finalizar orden</button>
           </form>
           
+        </div> -->
+        <div class="modal-footer">
+          <div class="container mt-4">     
+              <div class="card border-secondary">  
+                  <div class="card-header bg-primary text-white">Finalizar orden de trabajo</div>
+                  <div class="card-body">
+                      <form action="/cambiar-estado-enProceso-Terminada" method="POST">
+                        <input id="id" name="id" value="<%=id%>" hidden>
+                          <div class="mb-3">
+                          <label for="user" class="form-label mt-2">Solución</label>
+                          <input type="text" class="form-control" id="descripcionSolucion" name="descripcionSolucion" tabindex="1">
+                          </div>   
+                          <div class="mb-3">
+                          </div>        
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                          <button type="submit" class="btn btn-primary" tabindex="5">Finalizar orden</button>
+                      </form>
+                  </div>
+              </div>        
+          </div>
         </div>
       </div>
     </div>
   </div>
+

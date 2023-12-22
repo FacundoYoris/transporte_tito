@@ -6,12 +6,26 @@ router.get('/', (req, res) => res.render('inicio_sesion.ejs', {"x": false }))
 
 //Cuando el servidor este en la pagina inicial ejecutar inicio_sesion.ejs
 router.get('/estadistica', (req, res) => res.render('estadistica.ejs', {"login": req.session.loggedImAdmin}))
+
+router.get('/busqueda', (req, res) => res.render('buscador.ejs', {"login": req.session.loggedImAdmin}))
+
+router.get('/almacen/stock', (req, res) => res.render('stock.ejs', {"login": req.session.loggedImAdmin}))
 router.get('/orden-de-trabajo', (req, res) => { 
     connection.query('SELECT * FROM orden_trabajo', (error, results)=>{
         if(error){
             throw error;
         }else{
             res.render('orden_trabajo.ejs', {results: results,"login": req.session.loggedImAdmin});
+        }
+
+    })
+})
+router.get('/stock-disponible', (req, res) => { 
+    connection.query('SELECT * FROM stock', (error, results)=>{
+        if(error){
+            throw error;
+        }else{
+            res.json({results: results});
         }
 
     })
@@ -72,7 +86,7 @@ router.get('/orden-de-trabajo/edit/:id', (req, res) => {
         if(error){
             throw error;
         }else{
-            res.render('edit.ejs', {orden: results[0]});
+            res.json({orden: results[0]});
         }
 
         });
@@ -93,15 +107,6 @@ router.post('/orden-de-trabajo/delete', save.eliminarOrden);
 export default router
 
 
-
-
-
-
-
-
-
-
-
 //RUTA PARA ELIMINAR UNA ORDEN
 // router.get('/orden-de-trabajo/delete/:id', (req, res) => {
 //     const id = req.params.id;
@@ -113,5 +118,19 @@ export default router
 //             res.redirect('/orden-de-trabajo/generar-orden');
 //         }
 
+//         });
+// });
+
+
+// //RUTA PARA EDITAR LOS REGISTROS
+// router.get('/orden-de-trabajo/edit/:id', (req, res) => {
+//     const id = req.params.id;
+//     connection.query('SELECT * FROM orden_trabajo WHERE id_orden_trabajo = ?',[id], (error, results)=>{
+        
+//         if(error){
+//             throw error;
+//         }else{
+//             res.json(results[0]);
+//         }
 //         });
 // });

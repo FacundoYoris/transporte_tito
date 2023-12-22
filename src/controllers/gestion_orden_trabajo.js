@@ -54,7 +54,8 @@ const cambiarEstadoPendienteEnProceso = (req, res)=>{
 };
 const cambiarEstadoEnProcesoTerminada = (req, res)=>{
    const id = req.body.id;
-   connection.query('UPDATE orden_trabajo SET ? WHERE id_orden_trabajo = ?', [{estado: "Finalizada"},id],(error,results)=>{
+   const descripcionSolucion= req.body.descripcionSolucion;
+   connection.query('UPDATE orden_trabajo SET ? WHERE id_orden_trabajo = ?', [{estado: "Finalizada", descripcion_solucion: descripcionSolucion},id],(error,results)=>{
       if(error){
          console.log(error);
       }else{

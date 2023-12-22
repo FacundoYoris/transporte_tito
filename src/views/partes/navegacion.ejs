@@ -19,7 +19,7 @@
                 <ul>
                     <li><a href="#" id="selected"></a></li>
                     <li><a href="/estadistica">Estadísticas</a></li>
-                    <li><a href="/orden-de-trabajo">Órdenes de trabajo</a>
+                    <li><a href="/orden-de-trabajo">Ordenes de trabajo</a>
                         <ul>
                             <li><a href="/orden-de-trabajo/pendiente">Pendientes</a></li>
                             <li><a href="/orden-de-trabajo/en-proceso">En proceso</a></li>
@@ -28,11 +28,16 @@
                     </li>
                     
                     <li><a href="/terceros">Terceros</a></li>
-                    <li><a href="/almacen">Almacen</a></li>
+                    <li><a href="/almacen">Almacen</a>
+                        <ul>
+                            <li><a href="#">Activos</a></li>
+                            <li><a href="/almacen/stock">Stock</a></li>
+                        </ul>
+                    </li>
                     <% if (login){ %>
                     <li class="gestion_mantenimiento"><a href="/gestion-mantenimiento">Gestión de mantenimiento</a>
                         <ul>
-                            <li><a href="/orden-de-trabajo/generar-orden">Generar órden de trabajo</a></li>
+                            <li><a href="/orden-de-trabajo/generar-orden">Nueva orden de trabajo</a></li>
                             <li><a href="#">Tarea restringida 2</a></li>
                             <li><a href="#">Tarea restringida 3</a></li>
                         </ul>
