@@ -11,18 +11,21 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
     <%- include('partes/header.ejs') %>
     <style>
-    td .bxs-bell {
-      font-size: 24px;
-    }
+    #botonAgregarStock {
+        font-size: 2em;
+      }
     </style>
     <title>GESTIÓN DE ORDENES DE TRABAJO</title>
 </head>
 <body>
   <%- include('partes/navegacion.ejs') %>
-  
-      <main>
-        <div id="titulo">CONTROL DE STOCK</div>
+    <main>
+      <div id="titulo">CONTROL DE STOCK</div>
       <div  eblclass="container">    
+        <!-- Boton agregar item -->  
+        <button type="button" class="btn btn-outline-secondary  mt-4" data-bs-toggle="modal" data-bs-target="#agregarItem" id="botonAgregarStock">
+            <i class='bx bxs-add-to-queue bx-tada' ></i>
+        </button>
 
       <table class="table table-bordered table-striped text-center mt-4" id="tabla">
         <thead>
@@ -31,27 +34,43 @@
             <th scope="col" class="p-1">ITEM</th>
             <th scope="col" class="p-1">CANTIDAD</th>
             <th scope="col" class="p-1">ESTADO</th>
+            <th scope="col" class="p-1">Cantidad de advertencia</th>
+            <th scope="col" class="p-1">Cantidad crítica</th>
+            <th scope="col" class="p-1">ACCIONES</th>
           </tr>
         </thead>
         <tbody>
           <!-- //Los results que yo paso en el index.js, acá los uso con la variable orden declarada dentro del forEach                                  -->
-          <% results.forEach((orden)=>{ %>             
+          <% results.forEach((item)=>{ %>             
             <tr >  
-                <td class="p-1"><%= orden.idstock %></td>  
-                <td class="p-1"><%= orden.item %></td>
-                <td class="p-1"><%= orden.cantidad %></td>
-                <% if (orden.cantidad > orden.CantidadAdvertencia) { %>
+                <td class="p-1"><%= item.idstock %></td>  
+                <td class="p-1"><%= item.item %></td>
+                <td class="p-1"><%= item.cantidad %></td>
+                <% if (item.cantidad > item.CantidadAdvertencia) { %>
                   <td class="p-1"><i class='bx bxs-bell' style="color:green"></i></td>
                 <% } %>
-                <% if (orden.cantidad > orden.CantidadCritica && orden.cantidad <= orden.CantidadAdvertencia) { %>
+                <% if (item.cantidad > item.CantidadCritica && item.cantidad <= item.CantidadAdvertencia) { %>
                   <td class="p-1"><i class='bx bxs-bell' style="color:rgba(242, 242, 64, 0.996)"></i></td>
                 <% } %>
-                <% if (orden.cantidad <= orden.CantidadCritica) { %>
+                <% if (item.cantidad <= item.CantidadCritica) { %>
                   <td class="p-1"><i class='bx bxs-bell' style="color:rgb(255, 0, 0)"></i></td>
                 <% } %>
-                <!-- <td class="p-1"><i class='bx bx-trash bx-sm bx-flip-horizontal' style='color:#0f1010' ></i></td>
-                <td class="p-1"><i class='bx bx-trash bx-sm bx-flip-horizontal' style='color:#0f1010' ></i></td> -->
-            </tr>                        
+                <td class="p-1"><%= item.CantidadAdvertencia %></td>
+                <td class="p-1"><%= item.CantidadCritica %></td>
+                <td class="p-1">
+                  <!-- Boton editar stock -->  
+                   <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#editarStock<%= item.idstock %>">
+                    <i class='bx bx-edit-alt bx-sm'></i>
+                  </button>
+                  <!-- Boton eliminar item -->  
+                  <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#eliminarItem<%= item.idstock %>">
+                    <i class='bx bx-trash bx-sm bx-flip-horizontal' style='color:#0f1010' ></i>
+                  </button>
+                </td>
+            </tr>
+            <%- include('partes/modalAgregarItem.ejs') %>
+            <%- include('partes/modalEditarStock.ejs',{"id":item.idstock, "datos":item}) %>
+            <%- include('partes/modalEliminarItem.ejs',{"id":item.idstock}) %>                        
          <% }) %>
         </tbody>
       </table>

@@ -12,6 +12,7 @@ a{
     text-decoration: none;
 }
 a:hover{
+    text-decoration: none;
     color: white;
 }
 header{
@@ -21,7 +22,16 @@ header{
     left: 0;
     background: #fff;
 }
-
+#titulo {
+    text-align: center;  /* Centra el contenido dentro del contenedor */
+    font-size: 30px;
+    margin-bottom: 5px;
+    padding-top: 5px;
+    color:rgba(128, 128, 128, 0.53);
+    text-align: solid;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.233);
+    
+ }
 /*HEADER SUPERIOR*/
 
 .header__superior{
@@ -172,7 +182,7 @@ nav ul li ul li a:hover{
 
 main{
     background: #f0f0f0;
-    padding: 40px 20px;
+    padding: 20px 20px;
     margin-top: 194px;
 }
 

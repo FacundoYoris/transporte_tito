@@ -7,9 +7,29 @@ router.get('/', (req, res) => res.render('inicio_sesion.ejs', {"x": false }))
 //Cuando el servidor este en la pagina inicial ejecutar inicio_sesion.ejs
 router.get('/estadistica', (req, res) => res.render('estadistica.ejs', {"login": req.session.loggedImAdmin}))
 
-router.get('/busqueda', (req, res) => res.render('buscador.ejs', {"login": req.session.loggedImAdmin}))
+// router.get('/busqueda', (req, res) => res.render('buscador.ejs', {"login": req.session.loggedImAdmin}))
 
-router.get('/almacen/stock', (req, res) => res.render('stock.ejs', {"login": req.session.loggedImAdmin}))
+
+router.get('/almacen/stock', (req, res) => { 
+    connection.query('SELECT * FROM stock', (error, results)=>{
+        if(error){
+            throw error;
+        }else{
+            res.render('stock.ejs', {results: results,"login": req.session.loggedImAdmin});
+        }
+
+    })
+})
+router.get('/modificar-stock', (req, res) => { 
+    connection.query('SELECT * FROM stock', (error, results)=>{
+        if(error){
+            throw error;
+        }else{
+            res.render('modificarStock.ejs', {results: results,"login": req.session.loggedImAdmin});
+        }
+
+    })
+})
 router.get('/orden-de-trabajo', (req, res) => { 
     connection.query('SELECT * FROM orden_trabajo', (error, results)=>{
         if(error){
@@ -103,6 +123,11 @@ router.post('/update', save.update);
 router.post('/cambiar-estado-pendiente-enProceso', save.cambiarEstadoPendienteEnProceso);
 router.post('/cambiar-estado-enProceso-Terminada', save.cambiarEstadoEnProcesoTerminada);
 router.post('/orden-de-trabajo/delete', save.eliminarOrden);
+
+import saveItem from '../controllers/gestion_stock.js';
+router.post('/saveItem', saveItem.saveItem);
+router.post('/updateStock', saveItem.updateStock);
+router.post('/modificar-stock/delete', saveItem.eliminarItem);
 
 export default router
 
