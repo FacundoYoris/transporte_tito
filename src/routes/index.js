@@ -117,6 +117,8 @@ router.get('/almacen', (req, res) => res.render('almacen.ejs', {"login": req.ses
 router.get('/gestion-mantenimiento', (req, res) => res.render('gestion_mantenimiento.ejs', {"login": req.session.loggedImAdmin}))
 router.get('/terceros', (req, res) => res.render('terceros.ejs', {"login": req.session.loggedImAdmin}))
 router.get('/administrar-usuario', (req, res) => res.render('administrar_usuario.ejs', {"login": req.session.loggedImAdmin}))
+router.get('/orden-de-trabajo/rangeDates', (req,res) => res.render('nuevaTablaFiltrada.ejs', {"login": req.session.loggedImAdmin}))
+
 import save from '../controllers/gestion_orden_trabajo.js';
 router.post('/save', save.save);
 router.post('/update', save.update);
@@ -128,6 +130,10 @@ import saveItem from '../controllers/gestion_stock.js';
 router.post('/saveItem', saveItem.saveItem);
 router.post('/updateStock', saveItem.updateStock);
 router.post('/modificar-stock/delete', saveItem.eliminarItem);
+
+import actualizarPorFechas from '../controllers/actualizarTabla.js';
+router.post('/actualizarTablaFechas', actualizarPorFechas.rangoFechas);
+
 
 export default router
 
