@@ -32,6 +32,18 @@ header{
     border-bottom: 1px solid rgba(0, 0, 0, 0.233);
     
  }
+ table{
+    box-shadow: 5px 10px 5px rgba(0, 0, 0, 0.72);
+}
+#titulo{
+    color: rgba(0, 0, 0, 0.392);
+    margin-bottom: 25px;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.719);
+}
+#titulo-container{
+    padding-right: 30px;
+}
+
 /*HEADER SUPERIOR*/
 
 .header__superior{
@@ -83,7 +95,7 @@ nav ul li{
 }
 
 nav > ul > li:first-child > a{
-    background-image: url(../img/home.png);
+    background-image: url();
     background-size: 24px;
     background-repeat: no-repeat;
     background-position: center center;
@@ -91,7 +103,7 @@ nav > ul > li:first-child > a{
 }
 
 nav > ul > li:first-child:hover > a{
-    background-image: url(../img/home.png);
+    background-image: url();
     background-size: 24px;
     background-repeat: no-repeat;
     background-position: center center;
@@ -177,6 +189,7 @@ nav ul li ul li a:hover{
     font-size: 14px;
     box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
 }
+
 
 /*ARTICULO*/
 
@@ -290,4 +303,22 @@ article p{
 
 .oculto{
     display: none;
+}
+.containerFormulario{
+    margin-left: 0;
+    padding-left: 0;
+    }
+    .row {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  width: 100%;
+}
+#tabla{
+z-index: -1;
+}
+.container__menu{
+    position: fixed;
+    top: 0;
+    z-index: 1500;
 }

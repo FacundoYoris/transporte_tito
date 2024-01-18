@@ -14,12 +14,13 @@
                         <input id="id" name="id" value="<%= datos.id_orden_trabajo%>" hidden>
                           <div class="mb-3">
                           <label for="user" class="form-label">Tipo</label>
-                              <select id="tipo" name="tipo" class="form-select" aria-label="Default select example" tabindex="2" >
-                                <option <%= datos.tipo == 'One shoot' ? "selected" : '' %> value="One shoot">One shoot</option>
-                                <option <%= datos.tipo == 'Periódico' ? "selected" : '' %> value="Periódico">Periódico</option>                    
+                              <select id="select" name="select" class="form-select" aria-label="Default select example" tabindex="2" >
+                                <option <%= datos.tipo == '' ? "selected" : '' %> value="">Seleccionar tipo</option>
+                                <option <%= datos.tipo == 'Correctiva' ? "selected" : '' %> value="Correctiva">Correctiva</option>
+                                <option <%= datos.tipo == 'Programada' ? "selected" : '' %> value="Programada">Programada</option>                    
                               </select>
-                          <!-- <label for="user" class="form-label mt-2">Intervalo de tiempo en horas(ESTO DEBERÍA DESAPARECER DEPENDIENDO DE LA OPCIÓN)</label>
-                          <input type="text" class="form-control" id="lapso" name="lapso" tabindex="1"> -->
+                          <label for="user" class="form-label mt-2" id="intPeriodica">Repetir cada (cantidad de horas) </label>
+                          <input type="text" class="form-control"  id="lapPeriodica" name="lapPeriodica" tabindex="1" value="0">
                           <label for="user" class="form-label mt-2">Tarea</label>
                           <input type="text" class="form-control" id="tarea" name="tarea" tabindex="1" value="<%= datos.actividad%>">
                           <label for="user" class="form-label mt-2">Fecha inicio</label>
@@ -28,8 +29,7 @@
                           <input type="text" class="form-control" id="activo" name="activo" tabindex="1" value="<%= datos.activo %>">
                           <label for="user" class="form-label mt-2">Responsable</label>
                           <input type="text" class="form-control" id="Responsable" name="Responsable" tabindex="1" value="<%= datos.responsable %>"> 
-                          <label for="user" class="form-label mt-2">Tiempo esperado en horas</label>
-                          <input type="text" class="form-control" id="tiempo_esperado" name="tiempo_esperado" tabindex="1" value="<%= datos.tiempo_esperado %>">
+    
                           <label for="user" class="form-label mt-2">Prioridad</label>
                           <select id="Prioridad" name="Prioridad" class="form-select" aria-label="Default select example" tabindex="2">
                             <option <%= datos.prioridad == 'Alta' ? "selected" : '' %> value="Alta">Alta</option>
@@ -42,7 +42,8 @@
                           <div class="mb-3">
                           
                           </div>        
-                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                          <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Cancelar</button> -->
+                          <a href="/orden-de-trabajo/generar-orden" class="btn btn-secondary">Cancelar</a> 
                           <button type="submit" class="btn btn-primary" tabindex="5">Guardar</button>
                           <!-- <button type="submit" class="btn btn-primary" tabindex="5">Guardar</button>
                           <a href="/orden-de-trabajo/generar-orden" class="btn btn-secondary">Cancelar</a> -->

@@ -2,7 +2,15 @@ import { Router } from 'express'
 import connection from '../database/db.js'
 const router = Router()
 
+
+
 router.get('/', (req, res) => res.render('inicio_sesion.ejs', {"x": false }))
+
+import login from '../controllers/login.js'
+router.post('/login', login.login);
+router.get('/cerrarSesion', login.logout);
+
+
 
 //Cuando el servidor este en la pagina inicial ejecutar inicio_sesion.ejs
 router.get('/estadistica', (req, res) => res.render('estadistica.ejs', {"login": req.session.loggedImAdmin}))
@@ -20,6 +28,18 @@ router.get('/almacen/stock', (req, res) => {
 
     })
 })
+
+router.get('/almacen/activos', (req, res) => { 
+    connection.query('SELECT * FROM activos', (error, results)=>{
+        if(error){
+            throw error;
+        }else{
+            res.render('activos.ejs', {results: results,"login": req.session.loggedImAdmin});
+        }
+
+    })
+})
+
 router.get('/modificar-stock', (req, res) => { 
     connection.query('SELECT * FROM stock', (error, results)=>{
         if(error){
@@ -95,6 +115,13 @@ router.get('/orden-de-trabajo/generar-orden', (req, res) => {
     })
 })
 
+// import mostrarIntervalo from '../controllers/mostrarIntervalo.js'
+// router.post('/cambiarTipo', mostrarIntervalo.cambiarTipo());
+
+
+
+
+
 //RUTA PARA CREAR LOS REGISTROS.
 router.get('/orden-de-trabajo/create', (req, res) => res.render('create.ejs'))
 
@@ -119,6 +146,8 @@ router.get('/terceros', (req, res) => res.render('terceros.ejs', {"login": req.s
 router.get('/administrar-usuario', (req, res) => res.render('administrar_usuario.ejs', {"login": req.session.loggedImAdmin}))
 router.get('/orden-de-trabajo/rangeDates', (req,res) => res.render('nuevaTablaFiltrada.ejs', {"login": req.session.loggedImAdmin}))
 
+
+
 import save from '../controllers/gestion_orden_trabajo.js';
 router.post('/save', save.save);
 router.post('/update', save.update);
@@ -133,6 +162,10 @@ router.post('/modificar-stock/delete', saveItem.eliminarItem);
 
 import actualizarPorFechas from '../controllers/actualizarTabla.js';
 router.post('/actualizarTablaFechas', actualizarPorFechas.rangoFechas);
+router.post('/actualizarTablaFechas-EnProceso', actualizarPorFechas.rangoFechasEnProceso);
+router.post('/actualizarTablaFechas-Pendientes', actualizarPorFechas.rangoFechasPendientes);
+router.post('/actualizarTablaFechas-Finalizadas', actualizarPorFechas.rangoFechasFinalizadas);
+router.post('/actualizarTablaFechas-Gestion', actualizarPorFechas.rangoFechasGestion);
 
 
 export default router

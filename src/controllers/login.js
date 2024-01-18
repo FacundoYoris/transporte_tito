@@ -11,14 +11,27 @@ const login = (req, res) => {
       } else if (rows.length === 0) {
         res.render("inicio_sesion", {"x": true});
       } else {
+        req.session.logueado=true;
         const privilegio = rows[0].privilegio;
         if (privilegio === 1) {
           req.session.loggedImAdmin = true;
         } else {
           req.session.loggedImAdmin = false;
         }
+        req.session.userName = username;
         res.redirect('/estadistica');
       }
     });
   };
-  export default login;
+  const logout = (req,res) => {
+    req.session.destroy(()=>{
+      res.redirect('/');
+    });
+  }
+
+  export default
+  {
+    login,
+    logout,
+
+  } 

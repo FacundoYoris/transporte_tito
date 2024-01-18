@@ -1,4 +1,4 @@
-//APP.JS SE HACE TODA LA COMUNICACIÓN ENTRE PAGINAS
+
 import dotenv from 'dotenv';
 dotenv.config({path: './env/.env'});
 import express from 'express'
@@ -32,6 +32,23 @@ app.use(
 		}
 	})
 )
+const checkSessionMiddleware = (req, res, next) => {
+    // Verifica si esta logueado existe en la sesión (o donde lo almacenes)
+    if (req.session.logueado) {
+        next(); // Si existe, continúa con la siguiente función de middleware o ruta
+    } else {
+        // Si no existe, redirige a la ruta '/login'
+		if(req.path == '/login' || req.path == '/cerrarSesion'){
+			next();
+		}else{
+			res.render('inicio_sesion.ejs', {"x": false });
+
+		}
+	}
+};
+// Usa el middleware en todas las rutas
+app.use(checkSessionMiddleware);
+
 app.use(indexRoutes)
 const puerto = process.env.PORT || 3000;
 app.listen(puerto, ()=>{
@@ -42,8 +59,7 @@ app.listen(puerto, ()=>{
 
 import connection from './database/db.js'
 
-import login from './controllers/login.js'
-app.post('/login', login);
+
 
 
 
