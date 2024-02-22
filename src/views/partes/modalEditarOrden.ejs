@@ -8,25 +8,33 @@
       <div class="modal-footer">
           <div class="container mt-10">     
               <div class="card border-secondary">  
-                  <div class="card-header bg-primary text-white">Editar orden de trabajo</div>
+                  <div class="card-header bg-primary text-white">Editar orden de trabajo número:<strong class="p1"> <%= datos.id_orden_trabajo%></strong></div>
                   <div class="card-body">
                       <form action="/update" method="POST">
                         <input id="id" name="id" value="<%= datos.id_orden_trabajo%>" hidden>
                           <div class="mb-3">
                           <label for="user" class="form-label">Tipo</label>
                               <select id="select" name="select" class="form-select" aria-label="Default select example" tabindex="2" >
-                                <option <%= datos.tipo == '' ? "selected" : '' %> value="">Seleccionar tipo</option>
+                                <option <%= datos.tipo == ' ' ? "selected" : '' %> value="">Seleccionar tipo</option>
                                 <option <%= datos.tipo == 'Correctiva' ? "selected" : '' %> value="Correctiva">Correctiva</option>
                                 <option <%= datos.tipo == 'Programada' ? "selected" : '' %> value="Programada">Programada</option>                    
                               </select>
                           <label for="user" class="form-label mt-2" id="intPeriodica">Repetir cada (cantidad de horas) </label>
-                          <input type="text" class="form-control"  id="lapPeriodica" name="lapPeriodica" tabindex="1" value="0">
+                          <input type="text" class="form-control"  id="lapPeriodica" name="lapPeriodica" tabindex="1" value="<%= datos.lapsoProgramada%>">
+                          <label for="user" class="form-label">Estado</label>
+                              <select id="estado" name="estado" class="form-select" aria-label="Default select example" tabindex="2" >
+                                <option <%= datos.estado == 'Pendiente' ? "selected" : '' %> value="Pendiente">Pendiente</option>
+                                <option <%= datos.estado == 'En proceso' ? "selected" : '' %> value="En proceso">En proceso</option>
+                                <option <%= datos.estado == 'Finalizada' ? "selected" : '' %> value="Finalizada">Finalizada</option>                    
+                              </select>
                           <label for="user" class="form-label mt-2">Tarea</label>
-                          <input type="text" class="form-control" id="tarea" name="tarea" tabindex="1" value="<%= datos.actividad%>">
+                          <textarea class="form-control" id="tarea" name="tarea" tabindex="1" style="height: 80px; resize: none;"><%= datos.actividad%></textarea>
                           <label for="user" class="form-label mt-2">Fecha inicio</label>
                           <input type="datetime-local" class="form-control" id="fecha" name="fecha" tabindex="1" value="<%= datos.fecha_inicio %>">
                           <label for="user" class="form-label mt-2">Activo</label>
                           <input type="text" class="form-control" id="activo" name="activo" tabindex="1" value="<%= datos.activo %>">
+                          <label for="user" class="form-label mt-2">Elemento</label>
+                          <input type="text" class="form-control" id="elemento" name="elemento" tabindex="1" value="<%= datos.elemento %>">
                           <label for="user" class="form-label mt-2">Responsable</label>
                           <input type="text" class="form-control" id="Responsable" name="Responsable" tabindex="1" value="<%= datos.responsable %>"> 
     
@@ -37,7 +45,11 @@
                             <option <%= datos.prioridad == 'Baja' ? "selected" : '' %> value="Baja">Baja</option>
                           </select>
                           <label for="user" class="form-label mt-2">Descripción del problema</label>
-                          <input type="text" class="form-control" id="descripción" name="descripcion" tabindex="1" value="<%= datos.descripción_problematica %>">
+                          <textarea class="form-control" id="descripción" name="descripcion" tabindex="1" style="height: 80px; resize: none;"><%= datos.descripción_problematica %></textarea>
+                          <% if(datos.estado == "Finalizada") {%>
+                            <label for="user" class="form-label mt-2">Solución</label>
+                          <textarea class="form-control" id="descripcionSolucion" name="descripcionSolucion" tabindex="1" style="height: 80px; resize: none;"><%= datos.descripcion_solucion %></textarea>
+                          <% }%>
                           </div>   
                           <div class="mb-3">
                           

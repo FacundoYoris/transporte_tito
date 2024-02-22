@@ -26,9 +26,8 @@
                 <th scope="col" class="p-1">ESTADO</th>
                 <th scope="col" class="p-1">PRIORIDAD</th>
                 <th scope="col" class="p-1">TIPO</th>
-                <th scope="col" class="p-1">FECHA INICIO</th>
+                <th scope="col" class="p-1">INICIO PROGRAMADO</th>
                 <th scope="col" class="p-1">ACTIVO</th>
-                <th scope="col" class="p-1">TIEMPO ESPERADO</th>
                 <th scope="col" class="p-1">DESCRIPCIÓN</th>
                 <th scope="col" class="p-1">ACCIONES</th>
               </tr>
@@ -44,21 +43,20 @@
                     <td class="p-1"><%= orden.tipo %></td>
                     <td class="p-1"><%= orden.fecha_inicio %></td>
                     <td class="p-1"><%= orden.activo %></td>  
-                    <td class="p-1"><%= orden.tiempo_esperado %></td>
                     <td class="p-1"><%= orden.descripción_problematica %></td>
                     <td class="p-1">
                       <!-- Boton ver orden -->  
                       <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#verOrden<%= orden.id_orden_trabajo %>">
                         <i class='bx bx-show bx-sm'></i>
                       </button>
-                      <!-- Boton aceptar orden -->  
+                      <!-- Boton terminar orden -->  
                       <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#terminarOrden<%= orden.id_orden_trabajo %>">
                         <i class='bx bx-check-double bx-sm' style="color: rgb(0, 0, 0);"></i>
                       </button>
                     </td>
                 </tr> 
                 <%- include('partes/modalVerOrden.ejs',{"id":orden.id_orden_trabajo,"datos":orden}) %>
-                <%- include('partes/modalTerminarOrden.ejs',{"id":orden.id_orden_trabajo}) %>                                   
+                <%- include('partes/modalTerminarOrden.ejs',{"id":orden.id_orden_trabajo, "tipo": orden.tipo, "fechaI": orden.fecha_inicio, "cantidadHoras": orden.lapsoProgramada,"inicioReal":orden.fecha_inicio_real}) %>                                   
              <% }) %>
             </tbody>
           </table>

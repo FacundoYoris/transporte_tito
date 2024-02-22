@@ -8,12 +8,96 @@
     <title>ESTADÍSTICAS</title>
     <%- include('partes/header.ejs') %>
 </head>
+<style>
+   main{
+    display:inline-block;
+    flex-wrap: wrap;
+    width: 100%;
+    text-align: center;
+   }
+    .div1{
+        background-color:white ;
+        border-radius: 5px;
+        margin-left:10px;
+    }
+    .div2{
+        background-color:blue;
+        border-radius: 5px;
+        margin-left:10px;
+    }
+    .div3{
+        background-color:yellow ;
+        border-radius: 5px;
+        margin-left:10px;
+    }
+    .div4{
+        background-color: green ;
+        border-radius: 5px;
+        margin-left:10px;
+    }
+    .div5{
+        background-color: pink ;
+        border-radius: 5px;
+        margin-left:10px;
+    }
+    .div6{
+        background-color: gray ;
+        border-radius: 5px;
+        margin-left:10px;
+    }
+    .div7{
+        background-color: blueviolet;
+        border-radius: 5px;
+        margin-left:10px;
+    }
+    .div8{
+        background-color:burlywood ;
+        border-radius: 5px;
+        margin-left:10px;
+    }
+    #myChart {
+  width: 6px;
+  height: 6px;
+  background-color: #ffffff;
+}
+</style>
+
 <body>
     <%- include('partes/navegacion.ejs', {login} ) %>
     <main>
-        <H1>ESTADÍSTICAS</H1>
+        <div class="container">
+            <div class="div1">
+                <canvas id="myChart" ></canvas>
+            </div>
+            <div class="div2">2</div>
+            <div class="div3">3</div>
+            <div class="div4">4</div>
+            <div class="div5">5</div>
+            <div class="div6">6</div>
+            <div class="div7">7</div>
+            <div class="div8">8</div>
+          </div>
     </main>
     <script src="/inicio_sesion.js"></script>
     <script src="/actualizarPagina.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+    <script>
+        var ctx = document.getElementById("myChart").getContext("2d");
+        var data = {
+        labels: ["Opción 1", "Opción 2", "Opción 3"],
+        datasets: [
+            {
+            label: "Porcentaje",
+            data: [30, 25, 45],
+            backgroundColor: ["#ff0000", "#00ff00", "#0000ff"]
+            }
+        ]
+        };
+        var myChart = new Chart(ctx, {
+        type: "pie",
+        data: data
+        });
+    </script>
 </body>
+
 </html>

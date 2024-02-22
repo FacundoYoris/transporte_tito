@@ -26,3 +26,25 @@ $(document).ready(function () {
         lengthMenu: [ [5,10, 25, -1], [5,10, 25, "todos"] ],
     });
 });
+
+
+// const Button = ({ texto, texto1, deDondeVengo}) =>{
+//     <form action="/actualizarTablaFechas-Gestion" method="POST" id="formularioFiltroFechas">
+//     <div class="container containerFormulario">
+//       <div class="row">
+//         <div class="col-sm-2 max-width-150">
+//           <label for="user" class="form-label mt-2"><strong>Fecha inicio</strong></label>
+//           <input type="date" class="form-control" id="fechaInicio" name="fechaInicio" tabindex="1">
+//         </div>
+//         <div class="col-sm-2 max-width-150">
+//           <label for="user" class="form-label mt-2"><strong>Fecha fin</strong></label>
+//           <input type="date" class="form-control" id="fechaFin" name="fechaFin" tabindex="1">
+//         </div>
+//       {deDondeVengo === ""} }
+
+//       </div> 
+//     </div>
+//   </form>
+// }
+
+// <Button TEXT1={"BOTON PARA CONFIRMAR"}

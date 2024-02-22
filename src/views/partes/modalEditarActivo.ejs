@@ -1,0 +1,37 @@
+<!-- Cartel para editar orden -->
+<div class="modal fade" id="editarActivo<%=id%>"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-footer">
+            <div class="container mt-10">     
+                <div class="card border-secondary">  
+                    <div class="card-header bg-secondary text-white">Editar stock</div>
+                    <div class="card-body">
+                        <form action="/updateActivo" method="POST">
+                          <input id="id" name="id" value="<%= datos.idactivos%>" hidden>
+                            <div class="mb-3">
+                            <label for="user" class="form-label mt-2">Planta</label>
+                            <input type="text" class="form-control" id="planta" name="planta" tabindex="1" value="<%= datos.planta %>">
+                            <label for="user" class="form-label mt-2">Sector</label>
+                            <input type="text" class="form-control" id="sector" name="sector" tabindex="1" value="<%= datos.sector %>">
+                            <label for="user" class="form-label mt-2">Activo</label>
+                            <input type="text" class="form-control" id="activo" name="activo" tabindex="1" value="<%= datos.nombre %>"> 
+                            <label for="user" class="form-label mt-2">Estado</label>
+                            <input type="text" class="form-control" id="estado" name="estado" tabindex="1" value="<%= datos.estado %>">
+                            </div>   
+                            <div class="mb-3">
+                            
+                            </div>        
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary" tabindex="5">Guardar</button>
+                        </form>
+                    </div>
+                </div>        
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

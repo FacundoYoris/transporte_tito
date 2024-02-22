@@ -9,6 +9,8 @@
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">
      <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
      <%- include('partes/header.ejs') %>
+    
+
     <title>Ordenes de trabajo</title>
 </head>
 <body>
@@ -27,9 +29,9 @@
                 <th scope="col" class="p-1">ESTADO</th>
                 <th scope="col" class="p-1">PRIORIDAD</th>
                 <th scope="col" class="p-1">TIPO</th>
-                <th scope="col" class="p-1">FECHA INICIO</th>
+                <th scope="col" class="p-1">INICIO PROGRAMADO</th>
                 <th scope="col" class="p-1">ACTIVO</th>
-                <th scope="col" class="p-1">TIEMPO ESPERADO</th>
+                <!-- <th scope="col" class="p-1">TIEMPO ESPERADO</th> -->
                 <th scope="col" class="p-1">DESCRIPCIÓN</th>
                 <th scope="col" class="p-1">ACCIONES</th>
               </tr>
@@ -45,7 +47,7 @@
                     <td class="p-1"><%= orden.tipo %></td>
                     <td class="p-1"><%= orden.fecha_inicio %></td>
                     <td class="p-1"><%= orden.activo %></td>  
-                    <td class="p-1"><%= orden.tiempo_esperado %></td>
+                    <!-- <td class="p-1"><%= orden.tiempo_esperado %></td> -->
                     <td class="p-1"><%= orden.descripción_problematica %></td>
                     <td class="p-1">
                       <!-- Boton ver orden -->  

@@ -26,7 +26,7 @@
             <th scope="col" class="p-1">SECTOR</th>
             <th scope="col" class="p-1">ACTIVO</th>
             <th scope="col" class="p-1">ESTADO</th>
-            <th scope="col" class="p-1">ACCIONES</th>
+            
           </tr>
         </thead>
         <tbody>
@@ -37,14 +37,8 @@
                 <td class="p-1"><%= activo.sector %></td>
                 <td class="p-1"><%= activo.nombre %></td>
                 <td class="p-1"><%= activo.estado %></td>  
-                <td class="p-1">
-                  <!-- Boton ver orden -->  
-                  <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#verOrden<%= activo.idstock %>">
-                    <i class='bx bx-show bx-sm'></i>
-                  </button>
-                </td>
-            </tr>
-            <%- include('partes/modalVerOrden.ejs',{"id":orden.id_orden_trabajo,"datos":orden}) %>                               
+                
+            </tr>                              
          <% }) %>
         </tbody>
       </table>

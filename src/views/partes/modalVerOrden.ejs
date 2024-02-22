@@ -28,35 +28,46 @@
                             <strong>Prioridad:</strong> <%= datos.prioridad %>
                           </li>
                           <li class="list-group-item">
-                            <strong>Activo involucrado:</strong> <%= datos.activo %>
+                            <strong>Activo:</strong> <%= datos.activo %>
                           </li>
                           <li class="list-group-item">
-                            <strong>Sector:</strong> [Sector]
+                            <strong>Elemento involucrado:</strong> <%= datos.elemento %>
                           </li>
+                          <!-- <li class="list-group-item">
+                            <strong>Sector:</strong> [Sector]
+                          </li> -->
                           <li class="list-group-item">
                             <strong>Responsable:</strong> <%= datos.responsable %>
                           </li>
                           <li class="list-group-item">
                             <strong>Creador:</strong> <%= datos.usuario_creador %>
                           </li>
+                          <%if(datos.estado=="Pendiente"){%>
                           <li class="list-group-item">
-                            <strong>Fecha inicio:</strong> <%= datos.fecha_inicio %>
+                            <strong>Inicio programado:</strong> <%= datos.fecha_inicio %>
+                          </li>
+                          <%}%>
+                          <%if(datos.estado!="Pendiente"){%>
+                          <li class="list-group-item">
+                            <strong>Fecha inicio:</strong> <%= datos.fecha_inicio_real %>
                           </li>
                           <li class="list-group-item">
-                            <strong>Fecha fin:</strong> [Fecha fin]
+                            <strong>Fecha fin:</strong>  <%= datos.fecha_fin %>
                           </li>
+                          <%}%>
+                          <%if(datos.estado=="Finalizada"){%>
                           <li class="list-group-item">
-                            <strong>Tiempo estimado:</strong> <%= datos.tiempo_esperado %>
+                            <strong>Duración:</strong> <%= datos.horas_totales %> [hs]
                           </li>
-                          <li class="list-group-item">
-                            <strong>Tiempo real:</strong> [Tiempo real]
-                          </li>
+                          <%}%>
                           <li class="list-group-item">
                             <strong>Problema:</strong> <%= datos.descripción_problematica %>
                           </li>
+                          <%if(datos.estado=="Finalizada"){%>
                           <li class="list-group-item">
                             <strong>Solución:</strong> <%= datos.descripcion_solucion %>
                           </li>
+                          <%}%>
                         </ul>
                       </div>
                     </div>

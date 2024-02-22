@@ -40,6 +40,17 @@ router.get('/almacen/activos', (req, res) => {
     })
 })
 
+router.get('/modificar-activos', (req, res) => { 
+    connection.query('SELECT * FROM activos', (error, results)=>{
+        if(error){
+            throw error;
+        }else{
+            res.render('modificarActivo.ejs', {results: results,"login": req.session.loggedImAdmin});
+        }
+
+    })
+})
+
 router.get('/modificar-stock', (req, res) => { 
     connection.query('SELECT * FROM stock', (error, results)=>{
         if(error){
@@ -50,6 +61,8 @@ router.get('/modificar-stock', (req, res) => {
 
     })
 })
+
+
 router.get('/orden-de-trabajo', (req, res) => { 
     connection.query('SELECT * FROM orden_trabajo', (error, results)=>{
         if(error){
@@ -109,15 +122,12 @@ router.get('/orden-de-trabajo/generar-orden', (req, res) => {
         if(error){
             throw error;
         }else{
+            //ACA DEBERÏA FORMATEAR LA FECHA QUE VIENE DEL RESULTS PARA QUE EN EL CALENDARIO APAREZCA BIEN CUANDO SE LA EDITA. SI NO NO APARECE
             res.render('gestion_orden_trabajo.ejs', {results: results,"login": req.session.loggedImAdmin});
         }
 
     })
 })
-
-// import mostrarIntervalo from '../controllers/mostrarIntervalo.js'
-// router.post('/cambiarTipo', mostrarIntervalo.cambiarTipo());
-
 
 
 
@@ -139,12 +149,21 @@ router.get('/orden-de-trabajo/edit/:id', (req, res) => {
         });
 });
 
+router.get('/terceros', (req, res) =>{
+    connection.query('SELECT * FROM terceros', (error, results)=>{
+        if(error){
+            throw error;
+        }else{
+            res.render('terceros.ejs', {results: results,"login": req.session.loggedImAdmin});
+        }
+    });
+});
 
 router.get('/almacen', (req, res) => res.render('almacen.ejs', {"login": req.session.loggedImAdmin}))
 router.get('/gestion-mantenimiento', (req, res) => res.render('gestion_mantenimiento.ejs', {"login": req.session.loggedImAdmin}))
-router.get('/terceros', (req, res) => res.render('terceros.ejs', {"login": req.session.loggedImAdmin}))
 router.get('/administrar-usuario', (req, res) => res.render('administrar_usuario.ejs', {"login": req.session.loggedImAdmin}))
 router.get('/orden-de-trabajo/rangeDates', (req,res) => res.render('nuevaTablaFiltrada.ejs', {"login": req.session.loggedImAdmin}))
+
 
 
 
@@ -159,6 +178,16 @@ import saveItem from '../controllers/gestion_stock.js';
 router.post('/saveItem', saveItem.saveItem);
 router.post('/updateStock', saveItem.updateStock);
 router.post('/modificar-stock/delete', saveItem.eliminarItem);
+
+import activo from '../controllers/gestion_activo.js';
+router.post('/saveActivo', activo.saveActivo);
+router.post('/eliminarActivo', activo.eliminarActivo);
+router.post('/updateActivo', activo.updateActivo);
+
+import tercero from '../controllers/gestion_tercero.js';
+router.post('/saveTercero', tercero.saveTercero);
+router.post('/updateTercero', tercero.updateTercero);
+router.post('/eliminarTercero',tercero.eliminarTercero);
 
 import actualizarPorFechas from '../controllers/actualizarTabla.js';
 router.post('/actualizarTablaFechas', actualizarPorFechas.rangoFechas);

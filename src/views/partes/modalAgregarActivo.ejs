@@ -1,0 +1,38 @@
+<!-- Cartel de confirmar finalización de  orden -->
+<div class="modal fade" id="agregarActivo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-footer">
+            <div class="container mt-10">     
+                <div class="card border-secondary">  
+                    <div class="card-header bg-secondary text-white">Nuevo item</div>
+                    <div class="card-body">
+                        <form action="/saveActivo" method="POST">
+                            <div class="mb-3">
+                            <label for="user" class="form-label mt-2">Planta</label>
+                            <input type="text" class="form-control" id="planta" name="planta" tabindex="1">
+                            <label for="user" class="form-label mt-2">Sector</label>
+                            <input type="text" class="form-control" id="sector" name="sector" tabindex="1">
+                            <label for="user" class="form-label mt-2">Activo</label>
+                            <input type="text" class="form-control" id="activo" name="activo" tabindex="1">
+                            <label for="user" class="form-label mt-2">Estado</label>
+                            <select id="estado" name="estado" class="form-select" aria-label="Default select example" tabindex="2">
+                              <option value="Disponible" selected>Disponible</option>
+                              <option value="No disponible">No disponible</option>
+                            </select>
+                            </div>   
+                            <div class="mb-3">
+                            </div>        
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary" tabindex="5">Guardar</button>
+                        </form>
+                    </div>
+                </div>        
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

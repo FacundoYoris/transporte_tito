@@ -39,6 +39,7 @@ const rangoFechas = (req, res)=>{
        }
     })
  };
+ 
 
  const rangoFechasPendientes = (req, res)=>{
    const fechaInicio = req.body.fechaInicio;

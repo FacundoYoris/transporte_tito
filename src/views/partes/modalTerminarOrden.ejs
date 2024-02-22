@@ -26,9 +26,14 @@
                   <div class="card-body">
                       <form action="/cambiar-estado-enProceso-Terminada" method="POST">
                         <input id="id" name="id" value="<%=id%>" hidden>
+                        <input id="tipo" name="tipo" value="<%=tipo%>" hidden>
+                        <input id="fechaI" name="fechaI" value="<%=fechaI%>" hidden>
+                        <input id="horas" name="horas" value="<%=cantidadHoras%>" hidden>
+                        <input id="inicioReal" name="inicioReal" value="<%=inicioReal%>" hidden>
+                        
                           <div class="mb-3">
                           <label for="user" class="form-label mt-2">Observaciones</label>
-                          <input type="text" class="form-control" id="descripcionSolucion" name="descripcionSolucion" tabindex="1">
+                          <textarea class="form-control" id="descripcionSolucion" name="descripcionSolucion" tabindex="1" style="height: 80px; resize: none;"></textarea>
                           </div>   
                           <div class="mb-3">
                           </div>        

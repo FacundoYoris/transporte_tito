@@ -23,11 +23,14 @@
       <div id="titulo-container">
         <div id="titulo">CONTROL DE STOCK</div>
       </div>
-      <div  eblclass="container">    
+      <div  eblclass="container">
+
+
         <!-- Boton agregar item -->  
         <button type="button" class="btn btn-outline-secondary  mt-4" data-bs-toggle="modal" data-bs-target="#agregarItem" id="botonAgregarStock">
             <i class='bx bxs-add-to-queue bx-tada' ></i>
         </button>
+       
 
       <table class="table table-bordered table-striped text-center mt-4" id="tabla">
         <thead>
@@ -72,7 +75,7 @@
             </tr>
             <%- include('partes/modalAgregarItem.ejs') %>
             <%- include('partes/modalEditarStock.ejs',{"id":item.idstock, "datos":item}) %>
-            <%- include('partes/modalEliminarItem.ejs',{"id":item.idstock}) %>                        
+            <%- include('partes/modalEliminarItem.ejs',{"id":item.idstock, "nombreItem":item.item}) %>                        
          <% }) %>
         </tbody>
       </table>
