@@ -14,7 +14,9 @@
     <title>Ordenes de trabajo</title>
 </head>
 <body>
+  <div id="menu">
     <%- include('partes/navegacion.ejs') %>
+  </div>
     
     <main >
       <div id="titulo-container">
@@ -32,7 +34,7 @@
                 <th scope="col" class="p-1">INICIO PROGRAMADO</th>
                 <th scope="col" class="p-1">ACTIVO</th>
                 <!-- <th scope="col" class="p-1">TIEMPO ESPERADO</th> -->
-                <th scope="col" class="p-1">DESCRIPCIÓN</th>
+                <!-- <th scope="col" class="p-1">DESCRIPCIÓN</th> -->
                 <th scope="col" class="p-1">ACCIONES</th>
               </tr>
             </thead>
@@ -48,7 +50,7 @@
                     <td class="p-1"><%= orden.fecha_inicio %></td>
                     <td class="p-1"><%= orden.activo %></td>  
                     <!-- <td class="p-1"><%= orden.tiempo_esperado %></td> -->
-                    <td class="p-1"><%= orden.descripción_problematica %></td>
+                    <!-- <td class="p-1"><%= orden.descripción_problematica %></td> -->
                     <td class="p-1">
                       <!-- Boton ver orden -->  
                       <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#verOrden<%= orden.id_orden_trabajo %>">

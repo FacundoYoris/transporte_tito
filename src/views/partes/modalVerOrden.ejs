@@ -51,11 +51,12 @@
                           <li class="list-group-item">
                             <strong>Fecha inicio:</strong> <%= datos.fecha_inicio_real %>
                           </li>
+                          
+                          <%}%>
+                          <%if(datos.estado=="Finalizada"){%>
                           <li class="list-group-item">
                             <strong>Fecha fin:</strong>  <%= datos.fecha_fin %>
                           </li>
-                          <%}%>
-                          <%if(datos.estado=="Finalizada"){%>
                           <li class="list-group-item">
                             <strong>Duración:</strong> <%= datos.horas_totales %> [hs]
                           </li>

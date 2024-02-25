@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">    
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
-    
+    <link href="https://cdn.datatables.net/fixedheader/3.1.6/css/fixedHeader.dataTables.min.css">
     <!-- BOOTSTRAP -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
@@ -24,7 +24,9 @@
     <title>GESTIÓN DE ORDENES DE TRABAJO</title>
 </head>
 <body>
+  <div id="menu">
   <%- include('partes/navegacion.ejs') %>
+  </div>
       <main>
       <div id="titulo">ORDENES DE TRABAJO</div>
       <div  eblclass="container">    
@@ -34,7 +36,7 @@
           <i class='bx bxs-plus-circle bx-md'></i>
         </button>
 
-      <table class="table table-bordered table-striped text-center mt-4" id="tabla">
+      <table class="table table-bordered table-striped text-center mt-4 display" id="tabla">
         <thead>
           <tr class="bg-primary text-white">
             <th scope="col" class="p-1">ID</th>
@@ -42,13 +44,11 @@
             <th scope="col" class="p-1">ESTADO</th>
             <th scope="col" class="p-1">PRIORIDAD</th>
             <th scope="col" class="p-1">RESPONSABLE</th>
-            <!-- <th scope="col" class="p-1">TIPO</th> -->
             <th scope="col" class="p-1">INICIO PROGRAMADO</th>
             <th scope="col" class="p-1">ACTIVO</th>
-            <!-- <th scope="col" class="p-1">TIEMPO ESPERADO</th> -->
-            <!-- <th scope="col" class="p-1">DESCRIPCIÓN</th> -->
             <th scope="col" class="p-1">ACCIONES</th>
           </tr>
+
         </thead>
         <tbody>
           <!-- //Los results que yo paso en el index.js, acá los uso con la variable orden declarada dentro del forEach-->
@@ -59,11 +59,8 @@
                 <td class="p-1"><%= orden.estado %></td>
                 <td class="p-1"><%= orden.prioridad %></td>
                 <td class="p-1"><%= orden.responsable %></td>
-                <!-- <td class="p-1"><%= orden.tipo %></td> -->
                 <td class="p-1"><%= orden.fecha_inicio %></td>
-                <td class="p-1"><%= orden.activo %></td>  
-                <!-- <td class="p-1"><%= orden.tiempo_esperado %></td> -->
-                <!-- <td class="p-1"><%= orden.descripción_problematica %></td> -->
+                <td class="p-1"><%= orden.activo %></td>
                 <td class="p-1">
                   <!-- Boton ver orden -->
                   <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#verOrden<%= orden.id_orden_trabajo %>">
@@ -73,7 +70,6 @@
                    <button type="button" class="btn btn-outline-info"  data-bs-toggle="modal" data-bs-target="#editarOrden<%= orden.id_orden_trabajo %>">
                     <i class='bx bx-edit-alt bx-sm'></i>
                   </button>
-                  <!-- <a href="/orden-de-trabajo/edit/<%= orden.id_orden_trabajo %>" class="btn btn-outline-info"><i class='bx bx-edit-alt bx-sm'></i></a> -->
                   <!-- Boton eliminar orden -->  
                   <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#eliminarOrden<%= orden.id_orden_trabajo %>">
                     <i class='bx bx-trash bx-sm bx-flip-horizontal' style='color:#0f1010' ></i>
@@ -84,7 +80,7 @@
             <%- include('partes/modalEliminarOrden.ejs',{"id":orden.id_orden_trabajo}) %> 
             <%- include('partes/modalVerOrden.ejs',{"id":orden.id_orden_trabajo, "datos":orden}) %>                         
          <% }) %>
-        </tbody>
+          </tbody>
       </table>
       </div>
     </main>                      
@@ -116,7 +112,13 @@
                           <label for="user" class="form-label mt-2">Fecha inicio</label>
                           <input type="datetime-local" class="form-control" id="fecha" name="fecha" tabindex="1">
                           <label for="user" class="form-label mt-2">Activo</label>
-                          <input type="text" class="form-control" id="activo" name="activo" tabindex="1">
+                          <!-- <input type="text" class="form-control" id="activo" name="activo" tabindex="1"> -->
+                          <select id="activo" name="activo" class="form-select" tabindex="1">
+                            <option value="">Seleccionar activo</option>
+                            <% activos.forEach(activo => { %>
+                                <option value="<%= activo.nombre %>"><%= activo.nombre %></option>
+                            <% }); %>
+                        </select>
                           <label for="user" class="form-label mt-2">Elemento involucrado</label>
                           <input type="text" class="form-control" id="elemento" name="elemento" tabindex="1">
                           <label for="user" class="form-label mt-2">Responsable</label>
@@ -152,11 +154,12 @@
 <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
 <!-- DATATABLES -->
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
-
+<script src="https://cdn.datatables.net/fixedheader/3.1.6/js/dataTables.fixedHeader.min.js"></script> 
 <!-- BOOTSTRAP -->
 <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
 <script src="/buscarFiltrarTabla.js"></script>
 <script src="/ocultarIntervalo.js"></script>
 <script src="/actualizarPagina.js"></script>
+
 </body>
 </html>

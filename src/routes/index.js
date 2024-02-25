@@ -118,18 +118,24 @@ router.get('/orden-de-trabajo/en-proceso', (req, res) => {
 })
 
 router.get('/orden-de-trabajo/generar-orden', (req, res) => { 
-    connection.query('SELECT * FROM orden_trabajo', (error, results)=>{
-        if(error){
-            throw error;
-        }else{
-            //ACA DEBERÏA FORMATEAR LA FECHA QUE VIENE DEL RESULTS PARA QUE EN EL CALENDARIO APAREZCA BIEN CUANDO SE LA EDITA. SI NO NO APARECE
-            res.render('gestion_orden_trabajo.ejs', {results: results,"login": req.session.loggedImAdmin});
+    // Consulta para obtener los activos distintos
+    connection.query('SELECT DISTINCT nombre FROM activos', (errorActivos, activos) => {
+        if (errorActivos) {
+            throw errorActivos;
+        } else {
+            // Consulta para obtener todas las órdenes de trabajo
+            connection.query('SELECT * FROM orden_trabajo', (errorOrdenes, results) => {
+                if (errorOrdenes) {
+                    throw errorOrdenes;
+                } else {
+                    
+                    // Renderizar la plantilla 'gestion_orden_trabajo.ejs' y pasar los resultados de ambas consultas y los datos de inicio de sesión
+                    res.render('gestion_orden_trabajo.ejs', { results: results, activos: activos, login: req.session.loggedImAdmin });
+                }
+            });
         }
-
-    })
-})
-
-
+    });
+});
 
 
 //RUTA PARA CREAR LOS REGISTROS.

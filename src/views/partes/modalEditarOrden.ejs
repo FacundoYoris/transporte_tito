@@ -29,10 +29,24 @@
                               </select>
                           <label for="user" class="form-label mt-2">Tarea</label>
                           <textarea class="form-control" id="tarea" name="tarea" tabindex="1" style="height: 80px; resize: none;"><%= datos.actividad%></textarea>
+
                           <label for="user" class="form-label mt-2">Fecha inicio</label>
                           <input type="datetime-local" class="form-control" id="fecha" name="fecha" tabindex="1" value="<%= datos.fecha_inicio %>">
+
+
                           <label for="user" class="form-label mt-2">Activo</label>
-                          <input type="text" class="form-control" id="activo" name="activo" tabindex="1" value="<%= datos.activo %>">
+
+                          <select id="activo" name="activo" class="form-select" tabindex="1">
+                            <option value="">Seleccionar activo</option>
+                            <% activos.forEach(activo => { %>
+                              <option  value="<%= activo.nombre %>"><%= activo.nombre %></option>
+                            <% }); %>
+                          </select>
+
+
+                          
+                          <!-- <input type="text" class="form-control" id="activo" name="activo" tabindex="1" value="<%= datos.activo %>"> -->
+
                           <label for="user" class="form-label mt-2">Elemento</label>
                           <input type="text" class="form-control" id="elemento" name="elemento" tabindex="1" value="<%= datos.elemento %>">
                           <label for="user" class="form-label mt-2">Responsable</label>
