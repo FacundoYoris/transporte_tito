@@ -6,6 +6,7 @@ const rangoFechas = (req, res)=>{
     const fechaInicio = req.body.fechaInicio;
     const fechaFin = req.body.fechaFin;
     
+    
     const inicio = fechaInicio.split('-');
     const anioInicio=inicio[0];
     const mesInicio=inicio[1];
@@ -24,9 +25,9 @@ const rangoFechas = (req, res)=>{
           console.log(error);
        }else{
          for (let i = 0; i < results.length; i++) {
-            const anio = results[i].fecha_inicio.split('/')[2].split(' ')[0];
-            const mes = results[i].fecha_inicio.split('/')[1];
-            const dia = results[i].fecha_inicio.split('/')[0];
+            const dia = results[i].fecha_inicio.split('-')[2].split('T')[0];
+            const mes = results[i].fecha_inicio.split('-')[1];
+            const anio = results[i].fecha_inicio.split('-')[0];
             const segundosActual = new Date(anio,mes,dia).getTime();
             if(segundosActual >= segundosInicio && segundosActual <= segundosFin){
                ordenesFiltradas.push(results[i]);
@@ -63,9 +64,9 @@ const rangoFechas = (req, res)=>{
          console.log(error);
       }else{
         for (let i = 0; i < results.length; i++) {
-           const anio = results[i].fecha_inicio.split('/')[2].split(' ')[0];
-           const mes = results[i].fecha_inicio.split('/')[1];
-           const dia = results[i].fecha_inicio.split('/')[0];
+         const dia = results[i].fecha_inicio.split('-')[2].split('T')[0];
+         const mes = results[i].fecha_inicio.split('-')[1];
+         const anio = results[i].fecha_inicio.split('-')[0];
            const segundosActual = new Date(anio,mes,dia).getTime();
            if(segundosActual >= segundosInicio && segundosActual <= segundosFin){
               ordenesFiltradas.push(results[i]);
@@ -101,15 +102,15 @@ const rangoFechasEnProceso = (req, res)=>{
          console.log(error);
       }else{
         for (let i = 0; i < results.length; i++) {
-           const anio = results[i].fecha_inicio.split('/')[2].split(' ')[0];
-           const mes = results[i].fecha_inicio.split('/')[1];
-           const dia = results[i].fecha_inicio.split('/')[0];
+            const dia = results[i].fecha_inicio_real.split('-')[2].split('T')[0];
+            const mes = results[i].fecha_inicio_real.split('-')[1];
+            const anio = results[i].fecha_inicio_real.split('-')[0];
            const segundosActual = new Date(anio,mes,dia).getTime();
            if(segundosActual >= segundosInicio && segundosActual <= segundosFin){
               ordenesFiltradas.push(results[i]);
            }
            if(i==results.length-1){
-              res.render('nuevaTablaFiltrada.ejs', { results: ordenesFiltradas,"login": req.session.loggedImAdmin});
+              res.render('nuevaTablaFiltradaEnProceso.ejs', { results: ordenesFiltradas,"login": req.session.loggedImAdmin});
            }
          }
      
@@ -139,15 +140,15 @@ const rangoFechasFinalizadas = (req, res)=>{
          console.log(error);
       }else{
         for (let i = 0; i < results.length; i++) {
-           const anio = results[i].fecha_inicio.split('/')[2].split(' ')[0];
-           const mes = results[i].fecha_inicio.split('/')[1];
-           const dia = results[i].fecha_inicio.split('/')[0];
+            const dia = results[i].fecha_fin.split('-')[2].split('T')[0];
+            const mes = results[i].fecha_fin.split('-')[1];
+            const anio = results[i].fecha_fin.split('-')[0];
            const segundosActual = new Date(anio,mes,dia).getTime();
            if(segundosActual >= segundosInicio && segundosActual <= segundosFin){
               ordenesFiltradas.push(results[i]);
            }
            if(i==results.length-1){
-              res.render('nuevaTablaFiltrada.ejs', { results: ordenesFiltradas,"login": req.session.loggedImAdmin});
+              res.render('nuevaTablaFiltradaFinalizada.ejs', { results: ordenesFiltradas,"login": req.session.loggedImAdmin});
            }
          }
      
@@ -177,9 +178,9 @@ const rangoFechasGestion = (req, res)=>{
          console.log(error);
       }else{
         for (let i = 0; i < results.length; i++) {
-           const anio = results[i].fecha_inicio.split('/')[2].split(' ')[0];
-           const mes = results[i].fecha_inicio.split('/')[1];
-           const dia = results[i].fecha_inicio.split('/')[0];
+            const dia = results[i].fecha_inicio.split('-')[2].split('T')[0];
+            const mes = results[i].fecha_inicio.split('-')[1];
+            const anio = results[i].fecha_inicio.split('-')[0];
            const segundosActual = new Date(anio,mes,dia).getTime();
            if(segundosActual >= segundosInicio && segundosActual <= segundosFin){
               ordenesFiltradas.push(results[i]);

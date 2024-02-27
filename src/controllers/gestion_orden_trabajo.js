@@ -1,3 +1,4 @@
+import moment from "moment";
 import connection from "../database/db.js";
 import express from 'express';
 
@@ -12,22 +13,10 @@ const save = (req, res) => {
    const lapso = req.body.lapsoPeriodica;
    const elemento = req.body.elemento;
    
-   //formatear fecha 
-   const dateDB = new Date(req.body.fecha);//Toma la fecha que viene del formulario
-   let year = dateDB.getFullYear();//filtra el año
-   let month = dateDB.getMonth() + 1;//filtra el mes (tira siempre un mes menos, empieza desde el cero)
-   let day  = dateDB.getDate(); // filtra el dia
-   let hour = dateDB.getHours(); //filtra la hora
-   let minute = dateDB.getMinutes(); //filtra los minutos
-   month = (month < 10 ? "0" : "") + month; //Le da formato "0X si es menor a 10"
-   day = (day < 10 ? "0" : "") + day; 
-   hour = (hour < 10 ? "0" : "") + hour;
-   minute = (minute < 10 ? "0" : "") + minute;
-   const fechaFormateada = `${day}/${month}/${year} ${hour}:${minute}`;
    connection.query('INSERT INTO orden_trabajo SET ?', {
      tipo: tipo,
      actividad: tarea,
-     fecha_inicio: fechaFormateada,
+     fecha_inicio: fecha,
      activo: activo,
      responsable: Responsable,
      prioridad: Prioridad,
@@ -69,7 +58,8 @@ const update = (req, res)=>{
    hour = (hour < 10 ? "0" : "") + hour;
    minute = (minute < 10 ? "0" : "") + minute;
    const fechaFormateada = `${day}/${month}/${year} ${hour}:${minute}`;
-   connection.query('UPDATE orden_trabajo SET ? WHERE id_orden_trabajo = ?', [{estado:estado,tipo: tipo, actividad: tarea, fecha_inicio:fechaFormateada, activo:activo, responsable:Responsable,  prioridad:Prioridad, usuario_creador: req.session.userName, descripción_problematica:descripcion,lapsoProgramada:lapso,descripcion_solucion:solucion,elemento:elemento},id],(error,results)=>{
+   //ACá cambié fechaFormateada por req.body.fecha
+   connection.query('UPDATE orden_trabajo SET ? WHERE id_orden_trabajo = ?', [{estado:estado,tipo: tipo, actividad: tarea, fecha_inicio:req.body.fecha, activo:activo, responsable:Responsable,  prioridad:Prioridad, usuario_creador: req.session.userName, descripción_problematica:descripcion,lapsoProgramada:lapso,descripcion_solucion:solucion,elemento:elemento},id],(error,results)=>{
       if(error){
          console.log(error);
       }else{
@@ -82,20 +72,9 @@ const cambiarEstadoPendienteEnProceso = (req, res)=>{
    const id = req.body.id;
 
    const fechaInicioReal = new Date(); //Este formato tira tres horas adelantado por la zona horaria.
-   const fechaInicioRealMilisegundos = fechaInicioReal.getTime();
-   const fechaInicioRealCorrecta = new Date(fechaInicioRealMilisegundos); //Por alguna razon luego utilizando los get se corrige el error de las tres horas
-
-   let yearInicioReal = fechaInicioRealCorrecta.getFullYear();
-   let monthInicioReal = fechaInicioRealCorrecta.getMonth() + 1;
-   let dayInicioReal  = fechaInicioRealCorrecta.getDate();
-   let hourInicioReal = fechaInicioRealCorrecta.getHours();
-   let minuteInicioReal = fechaInicioRealCorrecta.getMinutes();
-   monthInicioReal = (monthInicioReal < 10 ? "0" : "") + monthInicioReal;
-   dayInicioReal = (dayInicioReal < 10 ? "0" : "") + dayInicioReal;
-   hourInicioReal = (hourInicioReal < 10 ? "0" : "") + hourInicioReal;
-   minuteInicioReal = (minuteInicioReal < 10 ? "0" : "") + minuteInicioReal;
-   const fechaInicioRealFormateada = `${dayInicioReal}/${monthInicioReal}/${yearInicioReal} ${hourInicioReal}:${minuteInicioReal}`;
-   connection.query('UPDATE orden_trabajo SET ? WHERE id_orden_trabajo = ?', [{estado: "En proceso",fecha_inicio_real:fechaInicioRealFormateada},id],(error,results)=>{
+   var fechaMoment = moment(fechaInicioReal,'YYYY-MM-DD HH:mm:ss.SSS').format('YYYY-MM-DDTHH:mm');
+   console.log(fechaMoment);
+   connection.query('UPDATE orden_trabajo SET ? WHERE id_orden_trabajo = ?', [{estado: "En proceso",fecha_inicio_real:fechaMoment},id],(error,results)=>{
       if(error){
          console.log(error);
       }else{
@@ -109,41 +88,29 @@ const cambiarEstadoEnProcesoTerminada = (req, res)=>{
    const id = req.body.id;
    const tipo = req.body.tipo; 
    const descripcionSolucion= req.body.descripcionSolucion;
-   const fechaInicio = req.body.fechaI;
+   const fechaInicio = req.body.fechaI; //Tipo varchar
    const lapsoHorasMilisegundos = req.body.horas  * 3600000;//Se pasa la cantidad de horas a milisegundos para luego sumarlo a la fecha
-   const fechaInicioReal = req.body.inicioReal;
-   
+   const fechaInicioReal = req.body.inicioReal;//Tipo varchar formato aaaa/mm/ddThh:mm
+ 
    //Formateando la fecha de fin del tipo Date al formato con el que la guardo en la base de datos (dd/mm/aaaa)
    const fechaFin = new Date(); //Este formato tira tres horas adelantado por la zona horaria(acá en visual. En la consola tira bien).
    const fechaFinMilisegundos = fechaFin.getTime();
-   const fechaFinCorrecta = new Date(fechaFinMilisegundos); //Por alguna razon luego utilizando los get se corrige el error de las tres horas
-   //Acá fechaFinCorrecta es lo mismo que fechaFin nada más que antes usaba un lapso de corrección que no era necesario y como lo utilicé luego lo dejé
-   let yearFin = fechaFinCorrecta.getFullYear();
-   let monthFin = fechaFinCorrecta.getMonth() + 1;
-   let dayFin  = fechaFinCorrecta.getDate();
-   let hourFin = fechaFinCorrecta.getHours();
-   let minuteFin = fechaFinCorrecta.getMinutes();
-   monthFin = (monthFin < 10 ? "0" : "") + monthFin;
-   dayFin = (dayFin < 10 ? "0" : "") + dayFin;
-   hourFin = (hourFin < 10 ? "0" : "") + hourFin;
-   minuteFin = (minuteFin < 10 ? "0" : "") + minuteFin;
-   const fechaFinFormateada = `${dayFin}/${monthFin}/${yearFin} ${hourFin}:${minuteFin}`;
+   var fechaMomentFin = moment(fechaFin,'YYYY-MM-DD HH:mm:ss.SSS').format('YYYY-MM-DDTHH:mm');
 
-   //Tiempo total de duración de la O.T = (fechaFinMilisegundos) - (fechaInicioRealMilisegundos)
-   //Sacando los milisegundos de la fecha de inicio real.
-   const diaInicioR=  fechaInicioReal.split("/")[0];
-   const mesInicioR=  fechaInicioReal.split("/")[1]-1;
-   const anioInicioR=  fechaInicioReal.split("/")[2].split(" ")[0];
-   const horaInicioR=  fechaInicioReal.split("/")[2].split(" ")[1].split(":")[0];
-   const minInicioR=  fechaInicioReal.split("/")[2].split(" ")[1].split(":")[1];
-   const fechaInicioRealFormatoDate = new Date(anioInicioR,mesInicioR,diaInicioR,horaInicioR,minInicioR);
-   const milisegundosFechaInicioReal = fechaInicioRealFormatoDate.getTime();
+   // Extraer partes de la cadena porque es de tipo varchar en la base de datos
+      var year = fechaInicioReal.substring(0, 4);
+      var month = fechaInicioReal.substring(5, 7) - 1; // Restar 1 ya que los meses van de 0 a 11
+      var day = fechaInicioReal.substring(8, 10);
+      var hour = fechaInicioReal.substring(11, 13);
+      var minute = fechaInicioReal.substring(14, 16);
+// Crear un objeto Date
+      var fechaInicioRealTipoDate = new Date(year, month, day, hour, minute);//La paso a formato date
+      const milisegundosFechaInicioReal = fechaInicioRealTipoDate.getTime();
    
    const duracionOT = (fechaFinMilisegundos - milisegundosFechaInicioReal)/3600000; //Duración en horas que tardó la orden de trabajo
-   
 
    if(tipo == "Correctiva"){
-      connection.query('UPDATE orden_trabajo SET ? WHERE id_orden_trabajo = ?', [{estado: "Finalizada", descripcion_solucion: descripcionSolucion, fecha_fin: fechaFinFormateada,horas_totales:duracionOT},id],(error,results)=>{
+      connection.query('UPDATE orden_trabajo SET ? WHERE id_orden_trabajo = ?', [{estado: "Finalizada", descripcion_solucion: descripcionSolucion, fecha_fin: fechaMomentFin,horas_totales:duracionOT},id],(error,results)=>{
          if(error){
             console.log(error);
          }else{
@@ -152,22 +119,14 @@ const cambiarEstadoEnProcesoTerminada = (req, res)=>{
       })
    }else{
       const nuevaFechaInicio = new Date(fechaFinMilisegundos +  lapsoHorasMilisegundos); //Fecha de inicio nueva = fecha en la que termina mas la cantidad de horas(en milisegundos) en la que se repite la O.T programada
-      let nuevaFechaInicioyear = nuevaFechaInicio.getFullYear();
-      let nuevaFechaIniciomonth = nuevaFechaInicio.getMonth() + 1;
-      let nuevaFechaInicioday  = nuevaFechaInicio.getDate();
-      let nuevaFechaIniciohour = nuevaFechaInicio.getHours();
-      let nuevaFechaIniciominute = nuevaFechaInicio.getMinutes();
-      nuevaFechaIniciomonth = (nuevaFechaIniciomonth < 10 ? "0" : "") + nuevaFechaIniciomonth;
-      nuevaFechaInicioday = (nuevaFechaInicioday < 10 ? "0" : "") + nuevaFechaInicioday;
-      nuevaFechaIniciohour = (nuevaFechaIniciohour < 10 ? "0" : "") + nuevaFechaIniciohour;
-      nuevaFechaIniciominute = (nuevaFechaIniciominute < 10 ? "0" : "") + nuevaFechaIniciominute;
-      const nuevaFechaFormateada = `${nuevaFechaInicioday}/${nuevaFechaIniciomonth}/${nuevaFechaInicioyear} ${nuevaFechaIniciohour}:${nuevaFechaIniciominute}`;
-      //La nueva fecha formateada ya esta en el formato correcto, solamente faltan los siguientes pasos:
+      let fechaMomentInicio = moment(nuevaFechaInicio, "ddd MMM DD YYYY HH:mm:ss [GMT]Z (Z)").format("YYYY-MM-DDTHH:mm");
+   
       //Insertar en la tabla de ordenes Programadas finalizadas la nueva orden 
       connection.query('INSERT INTO ot_programada_finalizada SET ?', {
          id_orden_programada: id,
-         fecha_inicio: fechaInicio,
-         fecha_fin: fechaFinFormateada,
+         fecha_inicio: fechaMomentInicio,
+         fecha_inicio_real:fechaInicioReal,
+         fecha_fin: fechaMomentFin,
          observacion: descripcionSolucion,
          horas_totales:duracionOT,
        }, (error, results) => {
@@ -175,7 +134,8 @@ const cambiarEstadoEnProcesoTerminada = (req, res)=>{
            console.log(error);
          } else {
            //Actualizar la orden de trabajo para que se resetee con la nueva fecha de inicio y pase a estado pendiente.
-            connection.query('UPDATE orden_trabajo SET ? WHERE id_orden_trabajo = ?', [{estado: "Pendiente", fecha_inicio: nuevaFechaFormateada,fecha_inicio_real:fechaInicioReal},id],(error,results)=>{
+           //ACÄ CAMBIO NUEVAFECHAINICIO FORMATEADA POR NUEVA FECHA INICIO
+            connection.query('UPDATE orden_trabajo SET ? WHERE id_orden_trabajo = ?', [{estado: "Pendiente", fecha_inicio: fechaMomentInicio},id],(error,results)=>{
             if(error){
                console.log(error);
             }else{
@@ -209,3 +169,24 @@ export default {
    cambiarEstadoEnProcesoTerminada,
    eliminarOrden,
 };
+
+
+
+
+
+
+
+
+
+// //formatear fecha 
+   // const dateDB = new Date(req.body.fecha);//Toma la fecha que viene del formulario
+   // let year = dateDB.getFullYear();//filtra el año
+   // let month = dateDB.getMonth() + 1;//filtra el mes (tira siempre un mes menos, empieza desde el cero)
+   // let day  = dateDB.getDate(); // filtra el dia
+   // let hour = dateDB.getHours(); //filtra la hora
+   // let minute = dateDB.getMinutes(); //filtra los minutos
+   // month = (month < 10 ? "0" : "") + month; //Le da formato "0X si es menor a 10"
+   // day = (day < 10 ? "0" : "") + day; 
+   // hour = (hour < 10 ? "0" : "") + hour;
+   // minute = (minute < 10 ? "0" : "") + minute;
+   // const fechaFormateada = `${day}/${month}/${year} ${hour}:${minute}`;

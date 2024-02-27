@@ -33,7 +33,7 @@ $(document).ready(function(){
     
 
     $('#tabla thead tr:eq(1) th').each( function (i) {
-    if(i!=3 && i!=7){
+    if(i<7){
         var title = $(this).text(); //es el nombre de la columna
         $(this).html( '<input type="text" placeholder="'+title+'..." />' );
  
@@ -49,7 +49,6 @@ $(document).ready(function(){
     } );
     
     $('#tabla thead tr:eq(1) th:last-child').text('');
-    $('#tabla thead tr:eq(1) th:nth-child(4)').text('');
     $('#tabla thead tr:eq(1) input[type="text"]').css('width', '100%');
     var $searchInputs = $('#tabla thead tr:eq(1) input[type="text"]');
     $searchInputs.css({

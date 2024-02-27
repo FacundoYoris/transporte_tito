@@ -1,3 +1,5 @@
+
+//EL SIGUIENTE CÓDIGO ANDA BIEN PERO CUANDO SE LE PONE EL SCROLLY ME DESALINEA EL ENCABEZADO DE LA TABLA CON EL BUSCAR
 $(document).ready(function(){
     var table = $('#tabla').DataTable({
        orderCellsTop: true,
@@ -20,9 +22,9 @@ $(document).ready(function(){
                         last: "Ultimo"
                     },
                 },
-                lengthMenu: [ [5,10, 25, -1], [5,10, 25, "todos"] ],
+                lengthMenu: [ [-1,5,10, 25], ["todos",5,10, 25] ],
                 columnDefs: [
-                    { targets: [1,2,3,4,5,6,7], orderable: false }
+                    { targets: [1,2,3,4,6,7], orderable: false }
                 ],
     });
 
@@ -55,6 +57,20 @@ $(document).ready(function(){
     });
     var $searchContainer = $('#tabla thead tr:eq(1)');
     $searchContainer.css('max-width', '100px');
+
+    // TODO ESTO ES PARA CAMBIAR EL FORMATO DE LA FECHA.
+    $('#tabla tbody tr').each(function() {
+        var fecha = $(this).find('td:eq(5)').text(); // Obtener la fecha de la columna 5
+        var fechaFormateada = moment(fecha, 'YYYY-MM-DDTHH:mm').format('DD - MM - YYYY HH:mm'); // Formatear la fecha
+        $(this).find('td:eq(5)').text(fechaFormateada); // Establecer la fecha formateada en la columna 5
+    });
+
+    // Desactivar la ordenación para las celdas de encabezado clonadas
+    $('#tabla thead tr:eq(1) th').each(function () {
+        $(this).removeClass('sorting sorting_asc sorting_desc').addClass('no-sort');
+    });
+    
+    
 });
 
 
@@ -67,24 +83,7 @@ $(document).ready(function(){
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//ESTE CÓDIGO ME ARREGLA LO DESALINEADO PERO SE ROMPEN LOS BUSCADORES Xd
 // $(document).ready(function () {
 //     var table = $('#tabla').DataTable({
 //         orderCellsTop: true,

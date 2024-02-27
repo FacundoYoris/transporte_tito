@@ -21,9 +21,7 @@ $(document).ready(function(){
                     },
                 },
                 lengthMenu: [ [5,10, 25, -1], [5,10, 25, "todos"] ],
-                columnDefs: [
-                    { targets: [0,1,2,3], orderable: false }
-                ],
+               
     });
 
     //Creamos una fila en el head de la tabla y lo clonamos para cada columna
@@ -50,4 +48,6 @@ $(document).ready(function(){
         'width': '100%',
         'min-width': '100px' // Puedes ajustar este valor según tus necesidades
     });
+    // Formatear la segunda columna centrada
+    $('#tabla tbody tr td:nth-child(2)').css('text-align', 'center');
 });

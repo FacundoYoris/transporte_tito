@@ -25,11 +25,9 @@
             <th scope="col" class="p-1">TAREA</th>
             <th scope="col" class="p-1">ESTADO</th>
             <th scope="col" class="p-1">PRIORIDAD</th>
-            <!-- <th scope="col" class="p-1">TIPO</th> -->
-            <th scope="col" class="p-1">FECHA INICIO</th>
+            <th scope="col" class="p-1">RESPONSABLE</th>
+            <th scope="col" class="p-1">INICIO PROGRAMADO</th>
             <th scope="col" class="p-1">ACTIVO</th>
-            <!-- <th scope="col" class="p-1">TIEMPO ESPERADO</th> -->
-            <!-- <th scope="col" class="p-1">DESCRIPCIÓN</th> -->
             <th scope="col" class="p-1">ACCIONES</th>
           </tr>
         </thead>
@@ -41,11 +39,9 @@
                 <td class="p-1"><%= orden.actividad %></td>
                 <td class="p-1"><%= orden.estado %></td>
                 <td class="p-1"><%= orden.prioridad %></td>  
-                <!-- <td class="p-1"><%= orden.tipo %></td> -->
+                <td class="p-1"><%= orden.responsable %></td>
                 <td class="p-1"><%= orden.fecha_inicio %></td>
-                <td class="p-1"><%= orden.activo %></td>  
-                <!-- <td class="p-1"><%= orden.tiempo_esperado %></td> -->
-                <!-- <td class="p-1"><%= orden.descripción_problematica %></td> -->
+                <td class="p-1"><%= orden.activo %></td> 
                 <td class="p-1">
                   <!-- Boton ver orden -->  
                   <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#verOrden<%= orden.id_orden_trabajo %>">
@@ -67,6 +63,7 @@
   <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
   <!-- BOOTSTRAP -->
   <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
   <script src="/buscarFiltrarTabla.js"></script>
   <script src="/actualizarPagina.js"></script>
 </body>

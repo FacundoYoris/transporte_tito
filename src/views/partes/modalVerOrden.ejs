@@ -1,9 +1,9 @@
 <!-- Modal para ver una orden -->
-<div class="modal fade" id="verOrden<%=id%>"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="verOrden<%=id%>"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="Recargar()"></button>
       </div>
       <div class="modal-footer">
           <div class="container mt-15">     
@@ -42,20 +42,20 @@
                           <li class="list-group-item">
                             <strong>Creador:</strong> <%= datos.usuario_creador %>
                           </li>
-                          <%if(datos.estado=="Pendiente"){%>
+                          
                           <li class="list-group-item">
-                            <strong>Inicio programado:</strong> <%= datos.fecha_inicio %>
+                            <strong>Inicio programado:</strong> <div id="fechaInicio" style="display: inline;"><%= datos.fecha_inicio %></div>
                           </li>
-                          <%}%>
+                          
                           <%if(datos.estado!="Pendiente"){%>
                           <li class="list-group-item">
-                            <strong>Fecha inicio:</strong> <%= datos.fecha_inicio_real %>
+                            <strong >Fecha inicio: </strong><div id="fechaInicioReal" style="display: inline;"><%= datos.fecha_inicio_real %></div>
                           </li>
                           
                           <%}%>
                           <%if(datos.estado=="Finalizada"){%>
                           <li class="list-group-item">
-                            <strong>Fecha fin:</strong>  <%= datos.fecha_fin %>
+                            <strong>Fecha fin:</strong> <div id="fechaFin" style="display: inline;"><%= datos.fecha_fin %></div>
                           </li>
                           <li class="list-group-item">
                             <strong>Duración:</strong> <%= datos.horas_totales %> [hs]
