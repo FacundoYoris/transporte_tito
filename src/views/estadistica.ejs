@@ -2,104 +2,141 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/estadistica.css">
-    <title>ESTADÍSTICAS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bootstrap Grid Example</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <!-- FullCalendar CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.9.0/main.min.css" rel="stylesheet">
     <%- include('partes/header.ejs') %>
 </head>
-<style>
-   main{
-    display:inline-block;
-    flex-wrap: wrap;
-    width: 100%;
-    text-align: center;
-   }
-    .div1{
-        background-color:white ;
-        border-radius: 5px;
-        margin-left:10px;
-    }
-    .div2{
-        background-color:blue;
-        border-radius: 5px;
-        margin-left:10px;
-    }
-    .div3{
-        background-color:yellow ;
-        border-radius: 5px;
-        margin-left:10px;
-    }
-    .div4{
-        background-color: green ;
-        border-radius: 5px;
-        margin-left:10px;
-    }
-    .div5{
-        background-color: pink ;
-        border-radius: 5px;
-        margin-left:10px;
-    }
-    .div6{
-        background-color: gray ;
-        border-radius: 5px;
-        margin-left:10px;
-    }
-    .div7{
-        background-color: blueviolet;
-        border-radius: 5px;
-        margin-left:10px;
-    }
-    .div8{
-        background-color:burlywood ;
-        border-radius: 5px;
-        margin-left:10px;
-    }
-    #myChart {
-  width: 6px;
-  height: 6px;
-  background-color: #ffffff;
-}
-</style>
 
 <body>
     <div id="menu">
         <%- include('partes/navegacion.ejs', {login}) %>
     </div>
-    <main>
-        <div class="container">
-            <div class="div1">
-                <canvas id="myChart" ></canvas>
+    <main id="mainEstadistica">
+        <div class="container-fluid">
+            <div class="row" style="height: 50%;">
+              <!-- Cuadro uno (mitad superior de la pantalla) -->
+              <div class="col-md-12">
+                <div class="card h-100">
+                  <div class="card-body">
+                    <h5 class="card-title">Calendario</h5>
+                    <!-- Calendario FullCalendar -->
+                    <div id="calendario"></div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="div2">2</div>
-            <div class="div3">3</div>
-            <div class="div4">4</div>
-            <div class="div5">5</div>
-            <div class="div6">6</div>
-            <div class="div7">7</div>
-            <div class="div8">8</div>
+            <div class="row" style="height: 50%;">
+              <!-- Cuadro dos (mitad inferior de la pantalla) -->
+              <div class="col-md-12">
+                <div class="row">
+                  <!-- Primer cuadro horizontal (gráfico de barras) -->
+                  <div class="col-md-4">
+                    <div class="card h-100">
+                      <div class="card-body">
+                        <h5 class="card-title">Gráfico de Barras</h5>
+                        <canvas id="graficoBarras"></canvas>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Segundo cuadro horizontal (gráfico de torta) -->
+                  <div class="col-md-4">
+                    <div class="card h-100">
+                      <div class="card-body">
+                        <h5 class="card-title">Gráfico de Torta</h5>
+                        <canvas id="graficoTorta"></canvas>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Tercer cuadro horizontal (vacío) -->
+                  <div class="col-md-4">
+                    <div class="card h-100">
+                      <div class="card-body">
+                        <h5 class="card-title">Vacío</h5>
+                        <!-- Este cuadro está vacío según tu especificación -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
     </main>
-    <script src="/inicio_sesion.js"></script>
-    <script src="/actualizarPagina.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
-    <script>
-        var ctx = document.getElementById("myChart").getContext("2d");
-        var data = {
-        labels: ["Opción 1", "Opción 2", "Opción 3"],
-        datasets: [
-            {
-            label: "Porcentaje",
-            data: [30, 25, 45],
-            backgroundColor: ["#ff0000", "#00ff00", "#0000ff"]
+    <!-- Bootstrap JS y librería Chart.js -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <!-- FullCalendar JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.9.0/main.min.js"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Scripts para crear los gráficos -->
+  <script>
+    // Datos para el gráfico de barras
+    var datosBarras = {
+      labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio'],
+      datasets: [{
+        label: 'Ventas',
+        data: [12, 19, 3, 5, 2, 3],
+        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+        borderColor: 'rgba(54, 162, 235, 1)',
+        borderWidth: 1
+      }]
+    };
+
+    // Configuración del gráfico de barras
+    var configBarras = {
+      type: 'bar',
+      data: datosBarras,
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true
             }
-        ]
-        };
-        var myChart = new Chart(ctx, {
-        type: "pie",
-        data: data
-        });
-    </script>
+          }]
+        }
+      }
+    };
+
+    // Crear el gráfico de barras
+    var ctxBarras = document.getElementById('graficoBarras').getContext('2d');
+    new Chart(ctxBarras, configBarras);
+
+    // Datos para el gráfico de torta
+    var datosTorta = {
+      labels: ['Rojo', 'Azul', 'Verde'],
+      datasets: [{
+        data: [30, 50, 20],
+        backgroundColor: ['red', 'blue', 'green']
+      }]
+    };
+
+    // Configuración del gráfico de torta
+    var configTorta = {
+      type: 'pie',
+      data: datosTorta
+    };
+
+    // Crear el gráfico de torta
+    var ctxTorta = document.getElementById('graficoTorta').getContext('2d');
+    new Chart(ctxTorta, configTorta);
+
+    // Inicializar el calendario
+    document.addEventListener('DOMContentLoaded', function() {
+      var calendarEl = document.getElementById('calendario');
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        events: 'https://api.example.com/events' // URL para obtener los eventos del calendario
+      });
+      calendar.render();
+    });
+  </script>
 </body>
 
 </html>

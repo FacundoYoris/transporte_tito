@@ -1,7 +1,14 @@
+
+
+//NO USO ESTE ARCHIVO -> USO buscarFiltrarTablaStock.js TANTO PARA STOCK COMO PARA MODIFICAR STOCK
+
+
+
+
 $(document).ready(function(){
     var table = $('#tabla').DataTable({
        orderCellsTop: true,
-       fixedHeader: true,
+       responsive: true,
        language: {
                     processing: "Tratamiento en curso...",
                     search: "Buscar&nbsp;:",
@@ -20,9 +27,9 @@ $(document).ready(function(){
                         last: "Ultimo"
                     },
                 },
-                lengthMenu: [ [5,10, 25, -1], [5,10, 25, "todos"] ],
+                lengthMenu: [ [5,10, 25, -1], [5,10, 25, "Mostrar todo"] ],
                 columnDefs: [
-                    { targets: [3,6], orderable: false }
+                    { targets: [6,7], orderable: false }
                 ],
     });
 
@@ -34,8 +41,8 @@ $(document).ready(function(){
     if(i!=7){
         var title = $(this).text(); //es el nombre de la columna
         $(this).html( '<input type="text" placeholder="'+title+'..." />' );
- 
-        $( 'input', this ).on( 'keyup change', function () {
+        $('input', this).on('click', function (e) {e.stopPropagation(); // Evitar que el evento de clic se propague a la columna para ordenar
+        }).on( 'keyup change', function () {
             if ( table.column(i).search() !== this.value ) {
                 table
                     .column(i)

@@ -40,9 +40,9 @@
             <th scope="col" class="p-1">ID</th>
             <th scope="col" class="p-1">ITEM</th>
             <th scope="col" class="p-1">CANTIDAD</th>
-            <th scope="col" class="p-1">ESTADO</th>
             <th scope="col" class="p-1">CANTIDAD DE ADVERTENCIA</th>
             <th scope="col" class="p-1">CANTIDAD CRÍTICA</th>
+            <th scope="col" class="p-1">ESTADO</th>
             <th scope="col" class="p-1">ACCIONES</th>
           </tr>
         </thead>
@@ -53,6 +53,8 @@
                 <td class="p-1"><%= item.idstock %></td>  
                 <td class="p-1"><%= item.item %></td>
                 <td class="p-1"><%= item.cantidad %></td>
+                <td class="p-1"><%= item.CantidadAdvertencia %></td>
+                <td class="p-1"><%= item.CantidadCritica %></td>
                 <% if (item.cantidad > item.CantidadAdvertencia) { %>
                   <td class="p-1"><i class='bx bxs-bell' style="color:green"></i></td>
                 <% } %>
@@ -62,8 +64,6 @@
                 <% if (item.cantidad <= item.CantidadCritica) { %>
                   <td class="p-1"><i class='bx bxs-bell' style="color:rgb(255, 0, 0)"></i></td>
                 <% } %>
-                <td class="p-1"><%= item.CantidadAdvertencia %></td>
-                <td class="p-1"><%= item.CantidadCritica %></td>
                 <td class="p-1">
                   <!-- Boton editar stock -->  
                    <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#editarStock<%= item.idstock %>">
@@ -91,7 +91,7 @@
     <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
     <!-- DATATABLES -->
     <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/fixedheader/3.1.6/js/dataTables.fixedHeader.min.js"></script> 
+    <!-- <script src="https://cdn.datatables.net/fixedheader/3.1.6/js/dataTables.fixedHeader.min.js"></script>  -->
     <!-- BOOTSTRAP -->
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
     <script src="/buscarFiltrarTablaStock.js"></script>

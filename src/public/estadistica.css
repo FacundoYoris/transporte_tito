@@ -267,7 +267,26 @@ article p{
     position: fixed;
     top: 0;
     z-index: 1000;
-  }
+    
+}
+#mainEstadistica{
+    display: flex; /* Utiliza flexbox */
+  justify-content: center; /* Centra horizontalmente los elementos hijos */
+  align-items: center; /* Centra verticalmente los elementos hijos */
+  height: 100vh; /* Opcional: ajusta la altura al 100% del viewport */
+  background-color: rgb(255, 255, 255);
+}
+
+/* Estilo para el contenedor de la tabla */
+.table-container {
+    max-width: 100%; /* Tamaño máximo para el contenedor */
+    overflow-x: auto; /* Habilitar desplazamiento horizontal si es necesario */
+}
+
+/* Estilo para la tabla */
+.table {
+    min-width: 100%; /* Asegurar que la tabla ocupe el ancho completo del contenedor */
+}
 @media screen and (max-width: 720px){
 
     .search input{
