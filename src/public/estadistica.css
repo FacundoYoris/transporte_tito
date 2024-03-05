@@ -238,7 +238,21 @@ article p{
     
   }
  
-
+  #chartdiv {
+    width: 100%;
+    
+    margin: 0 auto;
+    max-height: 400px;
+  }
+  #myChart {
+    width: 100%;
+    
+    margin: 0 auto;
+    max-height: 400px;
+  }
+  .card-body {
+    height: 100%;
+  }
 
   
 /*ELEMENTOS RESPONSIVOS*/
@@ -268,13 +282,6 @@ article p{
     top: 0;
     z-index: 1000;
     
-}
-#mainEstadistica{
-    display: flex; /* Utiliza flexbox */
-  justify-content: center; /* Centra horizontalmente los elementos hijos */
-  align-items: center; /* Centra verticalmente los elementos hijos */
-  height: 100vh; /* Opcional: ajusta la altura al 100% del viewport */
-  background-color: rgb(255, 255, 255);
 }
 
 /* Estilo para el contenedor de la tabla */
@@ -349,9 +356,7 @@ article p{
         opacity: 1;
     }
 
-    main{
-        margin-top: 158px;
-    }
+    
     
 
 }

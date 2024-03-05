@@ -2,141 +2,307 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bootstrap Grid Example</title>
-  <!-- Bootstrap CSS -->
-  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-  <!-- FullCalendar CSS -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.9.0/main.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bootstrap Grid Example</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FullCalendar CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.1/main.min.css" rel="stylesheet">
+    <!-- Incluir el header -->
     <%- include('partes/header.ejs') %>
+    <style>
+        #chartd{
+            width: 100%;
+            height: 500px;
+        }
+    </style>
 </head>
 
 <body>
     <div id="menu">
+        <!-- Incluir la navegación -->
         <%- include('partes/navegacion.ejs', {login}) %>
     </div>
+    
     <main id="mainEstadistica">
+        
         <div class="container-fluid">
-            <div class="row" style="height: 50%;">
-              <!-- Cuadro uno (mitad superior de la pantalla) -->
-              <div class="col-md-12">
-                <div class="card h-100">
-                  <div class="card-body">
-                    <h5 class="card-title">Calendario</h5>
-                    <!-- Calendario FullCalendar -->
-                    <div id="calendario"></div>
-                  </div>
+            <div class="row">
+                <div class="col-md-12 text-center">  
+                    <div class="card h-100"></div>
+                        <div id="titulo-container" style="padding-top: 5px; padding-right: 0px;">
+                            <div id="titulo">ESTADÍSTICAS</div>
+                        </div>
                 </div>
-              </div>
             </div>
-            <div class="row" style="height: 50%;">
-              <!-- Cuadro dos (mitad inferior de la pantalla) -->
-              <div class="col-md-12">
-                <div class="row">
-                  <!-- Primer cuadro horizontal (gráfico de barras) -->
-                  <div class="col-md-4">
+
+            <div class="row">  
+                <div class="col-md-12 text-center">  
                     <div class="card h-100">
-                      <div class="card-body">
-                        <h5 class="card-title">Gráfico de Barras</h5>
-                        <canvas id="graficoBarras"></canvas>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- Segundo cuadro horizontal (gráfico de torta) -->
-                  <div class="col-md-4">
-                    <div class="card h-100">
-                      <div class="card-body">
-                        <h5 class="card-title">Gráfico de Torta</h5>
-                        <canvas id="graficoTorta"></canvas>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- Tercer cuadro horizontal (vacío) -->
-                  <div class="col-md-4">
-                    <div class="card h-100">
-                      <div class="card-body">
-                        <h5 class="card-title">Vacío</h5>
-                        <!-- Este cuadro está vacío según tu especificación -->
-                      </div>
-                    </div>
-                  </div>
+                        <div class="card-body">
+                            <div style="max-width: 1350px;max-height: 400px; margin: auto" id='calendario'></div>
+                        </div>
                 </div>
-              </div>
+                </div>
             </div>
-          </div>
+            
+            <div class="row" style="margin-top: 5px;">  
+                <div class="col-md-4">  
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <canvas id="myChart" style="width: 100%; height: 300px; background-color: white;border: solid 1px; border-radius: 5px;"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">  
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div id="chartdiv" style="width: 100%; height: 300px; background-color: white;border: solid 1px; border-radius: 5px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">  
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div id="chartd" style="width: 100%; height: 300px; background-color: white;border: solid 1px; border-radius: 5px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" style="margin-top: 5px;">  
+                <div class="col-md-6">  
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <canvas id="" style="width: 100%; height: 300px; background-color: white;border: solid 1px; border-radius: 5px;"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">  
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div id="" style="width: 100%; height: 300px; background-color: white;border: solid 1px; border-radius: 5px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
     <!-- Bootstrap JS y librería Chart.js -->
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  <!-- FullCalendar JS -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.9.0/main.min.js"></script>
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.1/umd/popper.min.js"></script>
+    <!-- FullCalendar JS para el calendario-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
+    <!-- Librerias para grafico de torta version copada -->
+    <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
 
-  <!-- Scripts para crear los gráficos -->
-  <script>
-    // Datos para el gráfico de barras
-    var datosBarras = {
-      labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio'],
-      datasets: [{
-        label: 'Ventas',
-        data: [12, 19, 3, 5, 2, 3],
-        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-        borderColor: 'rgba(54, 162, 235, 1)',
-        borderWidth: 1
-      }]
-    };
-
-    // Configuración del gráfico de barras
-    var configBarras = {
-      type: 'bar',
-      data: datosBarras,
-      options: {
-        scales: {
-          yAxes: [{
-            ticks: {
-              beginAtZero: true
+    <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/themes/dark.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/actualizarPagina.js"></script>
+    
+    <!-- Scripts para crear los gráficos y el calendario -->
+    <!-- Gráfico de barras -->
+    <script>
+      var ctx = document.getElementById('myChart')
+      var myChart = new Chart(ctx, {
+          type:'bar',
+          data:{
+              labels: ['Pendientes','En proceso','Finalizadas'],
+              datasets: [{
+                  label: 'ORDENES DE TRABAJO',
+                  backgroundColor: ['#FF000090','#1f794e', '#00FF00', '#509c7f', '#1f794e', '#34444c', '#90CAF9', '#64B5F6', '#42A5F5', '#2196F3', '#0D47A1'],
+                  borderColor: ['white'],
+                  borderWidth:5
+              }]
+          },
+          options:{
+              scales:{
+                  y:{
+                      beginAtZero:true
+                  }
+              },
+              plugins: {
+        legend: {
+            labels: {
+                boxWidth: 0 // Establece el ancho del cuadro de leyenda en 0 para ocultar los cuadrados de color
             }
-          }]
         }
-      }
-    };
+    }
+          }
+      })
 
-    // Crear el gráfico de barras
-    var ctxBarras = document.getElementById('graficoBarras').getContext('2d');
-    new Chart(ctxBarras, configBarras);
+      let url = '/orden-de-trabajo-graficoBarras'
+      fetch(url)
+          .then( response => response.json() )
+          .then( datos => mostrar(datos) ) //En datos obtengo la cantidad de pendientes, en proceso y finalizadas.
+          .catch( error => console.log(error) )
 
-    // Datos para el gráfico de torta
-    var datosTorta = {
-      labels: ['Rojo', 'Azul', 'Verde'],
-      datasets: [{
-        data: [30, 50, 20],
-        backgroundColor: ['red', 'blue', 'green']
-      }]
-    };
 
-    // Configuración del gráfico de torta
-    var configTorta = {
-      type: 'pie',
-      data: datosTorta
-    };
+          const mostrar = (articulos) =>{
+            myChart.data.datasets[0].data = [articulos.pendientes, articulos.enProceso, articulos.finalizadas];
+            myChart.update();
+        }       
 
-    // Crear el gráfico de torta
-    var ctxTorta = document.getElementById('graficoTorta').getContext('2d');
-    new Chart(ctxTorta, configTorta);
 
-    // Inicializar el calendario
-    document.addEventListener('DOMContentLoaded', function() {
-      var calendarEl = document.getElementById('calendario');
-      var calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        events: 'https://api.example.com/events' // URL para obtener los eventos del calendario
-      });
-      calendar.render();
-    });
-  </script>
+
+    </script>
+    <!-- Calendario -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendario');
+
+        fetch('/datos-calendario')
+            .then(response => response.json())
+            .then(eventos => {
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                    // Configuración del calendario
+                    initialView: 'dayGridMonth',
+                    events: eventos,
+                    locale: 'es', // Establece el idioma en español
+                    EventContent: function (info){
+                        
+                    }
+                
+                });
+                
+                calendar.render();
+            })
+            .catch(error => console.error('Error al obtener los datos del calendario:', error));
+        
+        });
+
+    </script>
+    <!-- Gráfico de tortas amcharts -->
+    <script>
+       am4core.ready(function() {
+    // Themes begin
+    am4core.useTheme(am4themes_animated);
+    // Themes end
+    
+    var chart = am4core.create("chartdiv", am4charts.PieChart3D);
+    chart.width = am4core.percent(100); // Establece el ancho del gráfico al 100% del contenedor
+    chart.height = am4core.percent(100); // Establece la altura del gráfico al 100% del contenedor
+    chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
+    
+    var series = chart.series.push(new am4charts.PieSeries3D());
+    series.dataFields.value = "litres";
+    series.dataFields.category = "country";
+    
+    chart.legend = new am4charts.Legend();
+
+    let url3 = '/orden-de-trabajo-graficoTorta';
+    fetch(url3)
+        .then(response => response.json())
+        .then(datos => grafica(datos))
+        .catch(error => console.log(error));
+    
+    const grafica = (datos) => {
+        chart.data = [
+            {
+                country: "Correctivas",
+                litres: datos.correctiva,
+                
+            },
+            {
+                country: "Programadas",
+                litres: datos.programada,
+                
+            }
+        ];
+
+        // Posiciona las etiquetas de las leyendas
+        series.labels.template.wrap = true;
+        series.labels.template.maxWidth = 130; // Ajusta el ancho máximo para evitar que se desborden
+        series.labels.template.truncate = true; // Trunca las etiquetas si son demasiado largas
+        series.labels.template.adapter.add("radius", function(radius, target) {
+            if (target.dataItem && target.dataItem.dataContext) {
+            if (target.dataItem.dataContext.country === "Correctivas") {
+                return am4core.percent(-10); // Cambia el radio para "Correctivas"
+            } else if (target.dataItem.dataContext.country === "Programadas") {
+                return am4core.percent(-25); // Cambia el radio para "Programadas"
+            }
+            }   
+            return radius;
+        });
+        series.labels.template.adapter.add("text", function(text, target) {
+            if (target.dataItem && target.dataItem.dataContext) {
+                if (target.dataItem.dataContext.country === "Correctivas") {
+                    return "[font-weight:bold]Correctivas[/]: " + target.dataItem.value;
+                } else if (target.dataItem.dataContext.country === "Programadas") {
+                    return "[font-weight:bold]Programadas[/]: " + target.dataItem.value;
+                }
+            }
+            return text;
+        });
+        
+    }
+}); // end am4core.ready()
+
+    </script>
+     <!-- Gráfico de barras 3d--> 
+    <script>
+        am4core.ready(function() {
+        
+        // Themes begin
+        am4core.useTheme(am4themes_animated);
+        // Themes end
+        
+        // Create chart instance
+        var chart = am4core.create("chartd", am4charts.XYChart3D);
+        let url5 = '/orden-de-trabajo-graficoBarras'
+      fetch(url5)
+          .then( response => response.json() )
+          .then( datos => mostrar(datos) ) //En datos obtengo la cantidad de pendientes, en proceso y finalizadas.
+          .catch( error => console.log(error) )
+
+
+          const mostrar = (articulos) =>{
+           // Add data
+        chart.data = [{
+            "Orden de trabajo": "Pendiente",
+            "cantidad": articulos.pendientes
+        }, {
+            "Orden de trabajo": "En proceso",
+            "cantidad": articulos.enProceso
+        }, {
+            "Orden de trabajo": "Finalizada",
+            "cantidad": articulos.finalizadas
+        }];
+        }
+        
+        
+        // Create axes
+        var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+        categoryAxis.dataFields.category = "Orden de trabajo";
+        categoryAxis.renderer.grid.template.location = 0;
+        categoryAxis.renderer.minGridDistance = 30;
+        
+        var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+        valueAxis.title.text = "ORDENES DE TRABAJO";
+        valueAxis.renderer.labels.template.adapter.add("text", function(text) {
+          return text;
+        });
+        
+        // Create series
+        var series = chart.series.push(new am4charts.ColumnSeries3D());
+        series.dataFields.valueY = "cantidad";
+        series.dataFields.categoryX = "Orden de trabajo";
+        series.name = "";
+        series.clustered = false;
+        series.columns.template.tooltipText = "Cantidad O.D.T {category}: [bold]{valueY}[/]";
+        series.columns.template.fillOpacity = 0.9;
+        
+        
+        }); // end am4core.ready()
+    </script>
 </body>
-
 </html>

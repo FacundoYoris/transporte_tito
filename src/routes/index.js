@@ -73,6 +73,106 @@ router.get('/orden-de-trabajo', (req, res) => {
 
     })
 })
+// router.get('/orden-de-trabajo-grafico', (req, res) => { //ESTO ES DE PRUEBA PARA LOS GRAFICOS, SI NO SIRVE SE PUEDE BORRAR
+//     connection.query('SELECT * FROM orden_trabajo', (error, results)=>{
+//         if(error){
+//             throw error;
+//         }else{
+//             res.json(results);
+//         }
+
+//     })
+// })
+
+router.get('/orden-de-trabajo-graficoBarras', (req, res) => {
+    // Realiza la consulta a la base de datos para obtener la cantidad de órdenes de trabajo de cada tipo
+    connection.query(
+        'SELECT estado, COUNT(*) AS cantidad FROM orden_trabajo GROUP BY estado',
+        (error, results, fields) => {
+            if (error) {
+                console.error('Error al ejecutar la consulta:', error);
+                res.status(500).send('Error en el servidor');
+                return;
+            }
+
+            // Procesa los resultados y construye el objeto de respuesta
+            const data = {
+                pendientes: 0,
+                enProceso: 0,
+                finalizadas: 0
+            };
+
+            results.forEach(row => {
+                if (row.estado === 'Pendiente') {
+                    data.pendientes = row.cantidad;
+                } else if (row.estado === 'En proceso') {
+                    data.enProceso = row.cantidad;
+                } else if (row.estado === 'Finalizada') {
+                    data.finalizadas = row.cantidad;
+                }
+            });
+
+            // Envía los datos al cliente en formato JSON
+            res.json(data);
+        }
+    );
+});
+router.get('/orden-de-trabajo-graficoTorta', (req, res) => {
+    // Realiza la consulta a la base de datos para obtener la cantidad de órdenes de trabajo de cada tipo
+    connection.query(
+        'SELECT tipo, COUNT(*) AS cantidad FROM orden_trabajo GROUP BY tipo',
+        (error, results, fields) => {
+            if (error) {
+                console.error('Error al ejecutar la consulta:', error);
+                res.status(500).send('Error en el servidor');
+                return;
+            }
+
+            // Procesa los resultados y construye el objeto de respuesta
+            const data = {
+                correctiva: 0,
+                programada: 0
+            };
+
+            results.forEach(row => {
+                if (row.tipo === 'Correctiva') {
+                    data.correctiva = row.cantidad;
+                } else if (row.tipo === 'Programada') {
+                    data.programada = row.cantidad;
+                }
+            });
+            
+
+            // Envía los datos al cliente en formato JSON
+            res.json(data);
+        }
+    );
+});
+
+
+router.get('/datos-calendario', (req, res) => {
+    // Realiza la consulta a la base de datos para obtener los datos del calendario
+    connection.query(
+        'SELECT actividad AS title, fecha_inicio AS start FROM orden_trabajo',
+        (error, results, fields) => {
+            if (error) {
+                console.error('Error al ejecutar la consulta:', error);
+                res.status(500).send('Error en el servidor');
+                return;
+            }
+
+            // Procesa los resultados y construye el objeto de eventos del calendario
+            const eventos = results.map(row => ({
+                title: row.title,
+                start: row.start
+            }));
+            // Envía los datos al cliente en formato JSON
+            res.json(eventos);
+        }
+    );
+});
+
+
 router.get('/stock-disponible', (req, res) => { 
     connection.query('SELECT * FROM stock', (error, results)=>{
         if(error){
