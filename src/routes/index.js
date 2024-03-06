@@ -73,16 +73,7 @@ router.get('/orden-de-trabajo', (req, res) => {
 
     })
 })
-// router.get('/orden-de-trabajo-grafico', (req, res) => { //ESTO ES DE PRUEBA PARA LOS GRAFICOS, SI NO SIRVE SE PUEDE BORRAR
-//     connection.query('SELECT * FROM orden_trabajo', (error, results)=>{
-//         if(error){
-//             throw error;
-//         }else{
-//             res.json(results);
-//         }
 
-//     })
-// })
 
 router.get('/orden-de-trabajo-graficoBarras', (req, res) => {
     // Realiza la consulta a la base de datos para obtener la cantidad de órdenes de trabajo de cada tipo
@@ -95,28 +86,79 @@ router.get('/orden-de-trabajo-graficoBarras', (req, res) => {
                 return;
             }
 
-            // Procesa los resultados y construye el objeto de respuesta
-            const data = {
-                pendientes: 0,
-                enProceso: 0,
-                finalizadas: 0
-            };
+            // Consulta adicional para contar la cantidad total de filas en la tabla ot_programada_finalizada
+            connection.query(
+                'SELECT COUNT(*) AS total FROM ot_programada_finalizada',
+                (error2, results2, fields2) => {
+                    if (error2) {
+                        console.error('Error al ejecutar la consulta:', error2);
+                        res.status(500).send('Error en el servidor');
+                        return;
+                    }
 
-            results.forEach(row => {
-                if (row.estado === 'Pendiente') {
-                    data.pendientes = row.cantidad;
-                } else if (row.estado === 'En proceso') {
-                    data.enProceso = row.cantidad;
-                } else if (row.estado === 'Finalizada') {
-                    data.finalizadas = row.cantidad;
+                    // Procesa los resultados y construye el objeto de respuesta
+                    const data = {
+                        pendientes: 0,
+                        enProceso: 0,
+                        finalizadas: 0,
+                        totalFinalizadas: results2[0].total // Total de filas en ot_programada_finalizada
+                    };
+                    
+                    results.forEach(row => {
+                        if (row.estado === 'Pendiente') {
+                            data.pendientes = row.cantidad;
+                        } else if (row.estado === 'En proceso') {
+                            data.enProceso = row.cantidad;
+                        } else if (row.estado === 'Finalizada') {
+                            data.finalizadas = row.cantidad + data.totalFinalizadas;
+                        }
+                    });
+                    
+                    // Envía los datos al cliente en formato JSON
+                    res.json(data);
                 }
-            });
-
-            // Envía los datos al cliente en formato JSON
-            res.json(data);
+            );
         }
     );
 });
+
+
+router.get('/orden-de-trabajo-graficoPorcentaje', (req, res) => {
+    // Realiza la consulta a la base de datos para obtener la cantidad de órdenes de trabajo con el tipo "Correctiva"
+    connection.query(
+        'SELECT COUNT(*) AS total_correctivas FROM orden_trabajo WHERE tipo = "Correctiva"',
+        (error1, results1, fields1) => {
+            if (error1) {
+                console.error('Error al ejecutar la consulta:', error1);
+                res.status(500).send('Error en el servidor');
+                return;
+            }
+
+            // Realiza la consulta a la base de datos para obtener la cantidad de órdenes de trabajo con el tipo "Correctiva" y estado "Finalizada"
+            connection.query(
+                'SELECT COUNT(*) AS total_correctivas_finalizadas FROM orden_trabajo WHERE tipo = "Correctiva" AND estado = "Finalizada"',
+                (error2, results2, fields2) => {
+                    if (error2) {
+                        console.error('Error al ejecutar la consulta:', error2);
+                        res.status(500).send('Error en el servidor');
+                        return;
+                    }
+
+                    // Procesa los resultados y construye el objeto de respuesta
+                    const data = {
+                        totalCorrectivas: results1[0].total_correctivas,
+                        totalCorrectivasFinalizadas: results2[0].total_correctivas_finalizadas
+                    };
+
+                    // Envía los datos al cliente en formato JSON
+                    res.json(data);
+                }
+            );
+        }
+    );
+});
+
+
 router.get('/orden-de-trabajo-graficoTorta', (req, res) => {
     // Realiza la consulta a la base de datos para obtener la cantidad de órdenes de trabajo de cada tipo
     connection.query(

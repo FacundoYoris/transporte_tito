@@ -3,19 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bootstrap Grid Example</title>
+    <title>PANEL DE ESTADÍSTICAS</title>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- FullCalendar CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.1/main.min.css" rel="stylesheet">
     <!-- Incluir el header -->
     <%- include('partes/header.ejs') %>
-    <style>
-        #chartd{
-            width: 100%;
-            height: 500px;
-        }
-    </style>
+    
 </head>
 
 <body>
@@ -41,6 +36,7 @@
                     <div class="card h-100">
                         <div class="card-body">
                             <div style="max-width: 1350px;max-height: 400px; margin: auto" id='calendario'></div>
+                            <div id="tooltip" class="evento-tooltip"></div>
                         </div>
                 </div>
                 </div>
@@ -50,7 +46,7 @@
                 <div class="col-md-4">  
                     <div class="card h-100">
                         <div class="card-body">
-                            <canvas id="myChart" style="width: 100%; height: 300px; background-color: white;border: solid 1px; border-radius: 5px;"></canvas>
+                            <div id="porcentajeCumplimiento" style="width: 100%; height: 300px; background-color: white;border: solid 1px; border-radius: 5px;"></div>
                         </div>
                     </div>
                 </div>
@@ -74,7 +70,7 @@
                 <div class="col-md-6">  
                     <div class="card h-100">
                         <div class="card-body">
-                            <canvas id="" style="width: 100%; height: 300px; background-color: white;border: solid 1px; border-radius: 5px;"></canvas>
+                            <canvas id="myChart" style="width: 100%; height: 300px; background-color: white;border: solid 1px; border-radius: 5px;"></canvas>
                         </div>
                     </div>
                 </div>
@@ -110,7 +106,38 @@
     <script src="/actualizarPagina.js"></script>
     
     <!-- Scripts para crear los gráficos y el calendario -->
-    <!-- Gráfico de barras -->
+    <!-- Calendario -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendario');
+            var tooltipEl = document.getElementById('tooltip');
+
+            fetch('/datos-calendario')
+                .then(response => response.json())
+                .then(eventos => {
+                    var calendar = new FullCalendar.Calendar(calendarEl, {
+                        // Configuración del calendario
+                        initialView: 'dayGridMonth',
+                        events: eventos,
+                        locale: 'es', // Establece el idioma en español
+                        eventMouseEnter: function(info) {
+                            var tooltipContent = '<strong>' + info.event.title + '</strong>';
+                            tooltipEl.innerHTML = tooltipContent;
+                            tooltipEl.style.top = (info.jsEvent.clientY + 10) + 'px'; // Posiciona el tooltip debajo del cursor
+                            tooltipEl.style.left = (info.jsEvent.clientX + 10) + 'px'; // Posiciona el tooltip a la derecha del cursor
+                            tooltipEl.style.display = 'block';
+                        },
+                        eventMouseLeave: function(info) {
+                            tooltipEl.style.display = 'none';
+                        }
+                    });
+                    
+                    calendar.render();
+                })
+                .catch(error => console.error('Error al obtener los datos del calendario:', error));
+        });
+    </script>
+    <!-- Gráfico de barras ESTE HAY QUE BORRARLO PORQUE ES FEO-->
     <script>
       var ctx = document.getElementById('myChart')
       var myChart = new Chart(ctx, {
@@ -153,32 +180,6 @@
         }       
 
 
-
-    </script>
-    <!-- Calendario -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-        var calendarEl = document.getElementById('calendario');
-
-        fetch('/datos-calendario')
-            .then(response => response.json())
-            .then(eventos => {
-                var calendar = new FullCalendar.Calendar(calendarEl, {
-                    // Configuración del calendario
-                    initialView: 'dayGridMonth',
-                    events: eventos,
-                    locale: 'es', // Establece el idioma en español
-                    EventContent: function (info){
-                        
-                    }
-                
-                });
-                
-                calendar.render();
-            })
-            .catch(error => console.error('Error al obtener los datos del calendario:', error));
-        
-        });
 
     </script>
     <!-- Gráfico de tortas amcharts -->
@@ -302,7 +303,154 @@
         series.columns.template.fillOpacity = 0.9;
         
         
-        }); // end am4core.ready()
+        }); // end am4core.ready() 
     </script>
+    <!-- Grafico porcentaje cumplimiento correctivas-->
+    <script>
+        am5.ready(function() {
+        
+        // Create root element
+        // https://www.amcharts.com/docs/v5/getting-started/#Root_element
+        var root = am5.Root.new("porcentajeCumplimiento");
+        
+        // Set themes
+        // https://www.amcharts.com/docs/v5/concepts/themes/
+        root.setThemes([
+          am5themes_Animated.new(root)
+        ]);
+        // Create title
+        var title = root.container.children.push(
+        am5.Label.new(root, {
+            text: "CORRECTIVAS FINALIZADAS",
+            fontSize: 12,
+            fontWeight: "bold",
+            
+        })
+        );
+        // Create chart
+        // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/
+        // start and end angle must be set both for chart and series
+         var chart = root.container.children.push(
+        am5percent.PieChart.new(root, {
+            layout: root.verticalLayout
+        })
+    );
+        
+        // Create series
+        // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/#Series
+        // start and end angle must be set both for chart and series
+        var series0 = chart.series.push(
+          am5percent.PieSeries.new(root, {
+            valueField: "value",
+            categoryField: "category",
+            alignLabels: false,
+            radius: am5.percent(100),
+            innerRadius: am5.percent(80)
+          })
+        );
+        
+        series0.states.create("hidden", {
+          startAngle: 180,
+          endAngle: 180
+        });
+        
+        series0.slices.template.setAll({
+          fillOpacity: 0.5,
+          strokeOpacity: 0,
+          templateField: "settings"
+        });
+        
+        series0.slices.template.states.create("hover", { scale: 1 });
+        series0.slices.template.states.create("active", { shiftRadius:0 });
+        
+        series0.labels.template.setAll({
+          templateField: "settings"
+        });
+        
+        series0.ticks.template.setAll({
+          templateField: "settings"
+        });
+        
+        series0.labels.template.setAll({
+          textType: "circular",
+          radius: 30
+        });
+        let url6 = '/orden-de-trabajo-graficoPorcentaje'
+        fetch(url6)
+          .then( response => response.json() )
+          .then( datos => cargarDatos(datos) ) //En datos obtengo la cantidad de pendientes, en proceso y finalizadas.
+          .catch( error => console.log(error) )
+        // Set data
+        // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/#Setting_data
+        const cargarDatos = (odt) =>{
+            series0.data.setAll([
+          {
+            category: "Correctivas finalizadas",
+            value: odt.totalCorrectivasFinalizadas
+          },
+          {
+            category: "Restantes",
+            value: odt.totalCorrectivas - odt.totalCorrectivasFinalizadas,
+            settings: { forceHidden: true }
+          }
+        ]);
+        // Set data
+        // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/#Setting_data
+            series1.data.setAll([{
+            category: "Finalizadas",
+            value: odt.totalCorrectivasFinalizadas
+            }, {
+            category: "Pendientes + en proceso",
+            value: odt.totalCorrectivas - odt.totalCorrectivasFinalizadas,
+            sliceSettings: { fill: am5.color(0xdedede) }
+            }]);
+        }       
+        
+        
+        // Create series
+        // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/#Series
+        // start and end angle must be set both for chart and series
+        var series1 = chart.series.push(
+          am5percent.PieSeries.new(root, {
+            radius: am5.percent(95),
+            innerRadius: am5.percent(85),
+            valueField: "value",
+            categoryField: "category",
+            alignLabels: false
+          })
+        );
+        
+        series1.states.create("hidden", {
+          startAngle: 180,
+          endAngle: 180
+        });
+        
+        series1.slices.template.setAll({
+          templateField: "sliceSettings",
+          strokeOpacity: 0
+        });
+        
+        series1.labels.template.setAll({
+          textType: "circular"
+        });
+        
+        series1.labels.template.adapters.add("radius", function (radius, target) {
+          var dataItem = target.dataItem;
+          var slice = dataItem.get("slice");
+          return -(slice.get("radius") - slice.get("innerRadius")) / 2 - 10;
+        });
+        
+        series1.slices.template.states.create("hover", { scale: 1 });
+        series1.slices.template.states.create("active", { shiftRadius:0 });
+        
+        series1.ticks.template.setAll({
+          forceHidden: true
+        });
+        
+        
+        
+        }); // end am5.ready()
+    </script>
+
 </body>
 </html>
