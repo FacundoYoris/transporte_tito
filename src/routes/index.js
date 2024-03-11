@@ -11,12 +11,23 @@ router.post('/login', login.login);
 router.get('/cerrarSesion', login.logout);
 
 
+router.get('/estadistica', (req, res) => { 
+    connection.query('SELECT * FROM stock WHERE cantidad <= CantidadCritica', (error1, results)=>{
+        if(error1){
+            throw error1;
+        }else{
+            connection.query('SELECT * FROM orden_trabajo WHERE estado = ? ORDER BY fecha_inicio', ['Pendiente'] , (error, pendientes)=>{
+                if(error){
+                    throw error;
+                }else{
+                    
+                    res.render('estadistica.ejs', {pendientes: pendientes,results: results,"login": req.session.loggedImAdmin});
+                }
+            })
+        }
 
-//Cuando el servidor este en la pagina inicial ejecutar inicio_sesion.ejs
-router.get('/estadistica', (req, res) => res.render('estadistica.ejs', {"login": req.session.loggedImAdmin}))
-
-// router.get('/busqueda', (req, res) => res.render('buscador.ejs', {"login": req.session.loggedImAdmin}))
-
+    })
+})
 
 router.get('/almacen/stock', (req, res) => { 
     connection.query('SELECT * FROM stock', (error, results)=>{

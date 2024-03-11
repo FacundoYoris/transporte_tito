@@ -8,6 +8,7 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- FullCalendar CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.1/main.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
     <!-- Incluir el header -->
     <%- include('partes/header.ejs') %>
     
@@ -60,7 +61,7 @@
                 <div class="col-md-4">  
                     <div class="card h-100">
                         <div class="card-body">
-                            <div id="chartd" style="width: 100%; height: 300px; background-color: white;border: solid 1px; border-radius: 5px;"></div>
+                            <div id="barras3D" style="width: 100%; height: 300px; background-color: white;border: solid 1px; border-radius: 5px;"></div>
                         </div>
                     </div>
                 </div>
@@ -68,16 +69,75 @@
 
             <div class="row" style="margin-top: 5px;">  
                 <div class="col-md-6">  
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <canvas id="myChart" style="width: 100%; height: 300px; background-color: white;border: solid 1px; border-radius: 5px;"></canvas>
+                    <div class="card h-100 text-center">
+                        <div class="card-body"  > 
+                            <div id="" style="width: 100%; height: 300px; background-color: white;border: solid 1px; border-radius: 5px;overflow-y: auto; overflow-x: auto">
+                                <div class="row">
+                                    <div class="col-md-12 " style="margin-top: 10px;">
+                                        <p style="color: black; font-family:Arial, Helvetica, sans-serif ; font-size: 13px; font-weight: bold;" >STOCK AGOTADO</p>
+                                    </div>
+                                </div>
+                                <div class="row" >
+                                    <div class="col-md-12 text-center" style="margin-left: 2%;" >  
+                                    <table class="table table-bordered table-striped text-center " id="tabla" style="max-height: 80%;" >
+                                        <thead>
+                                            <tr class="bg-primary text-white">
+                                                <th scope="col" class="p-1">ID</th>
+                                                <th scope="col" class="p-1">ITEM</th>
+                                                <th scope="col" class="p-1">CANTIDAD</th>
+                                                <th scope="col" class="p-1">CANTIDAD MÍNIMA</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                           
+                                            <% results.forEach((stock)=>{ %>             
+                                            <tr>  
+                                                <td class="p-1"><%= stock.idstock %></td>  
+                                                <td class="p-1"><%= stock.item %></td>
+                                                <td class="p-1"><%= stock.cantidad %></td>
+                                                <td class="p-1"><%= stock.CantidadAdvertencia %></td>
+                                            </tr>                              
+                                            <% }) %>
+                                        </tbody>
+                                    </table>
+                                    </div>    
+                                </div>
+                            </div>                        
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6">  
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <div id="" style="width: 100%; height: 300px; background-color: white;border: solid 1px; border-radius: 5px;"></div>
+                    <div class="card h-100 text-center">
+                        <div class="card-body"  > 
+                            <div id="" style="width: 100%; height: 300px; background-color: white;border: solid 1px; border-radius: 5px;overflow-y: auto;overflow-x: auto; ">
+                                <div class="row">
+                                    <div class="col-md-12 " style="margin-top: 10px;">
+                                        <p style="color: black; font-family:Arial, Helvetica, sans-serif ; font-size: 13px; font-weight: bold;" >RESPONSABLE - TAREA ASOCIADA</p>
+                                    </div>
+                                </div>
+                                <div class="row" >
+                                    <div class="col-md-12 text-center" style="margin-left: 2%;" >  
+                                    <table class="table table-bordered table-striped text-center " id="tabla1" style="max-height: 80%;" >
+                                        <thead>
+                                            <tr class="bg-primary text-white">
+                                              <th scope="col" class="p-1">RESPONSABLE</th>
+                                              <th scope="col" class="p-1">TAREA ASOCIADA</th>
+                                              <th scope="col" class="p-1">INICIO PROGRAMADO</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>                     
+                                            <% pendientes.forEach((orden)=>{ %>             
+                                              <tr>  
+                                                  <td class="p-1"><%= orden.responsable %></td>
+                                                  <td class="p-1 text-center"><%= orden.id_orden_trabajo %></td> 
+                                                  <td class="p-1"><%= orden.fecha_inicio %></td>
+                                              </tr>                                
+                                           <% }) %>
+                                          </tbody>
+                                    </table>
+                                    </div>    
+                                </div>
+                            </div>                        
                         </div>
                     </div>
                 </div>
@@ -86,6 +146,11 @@
     </main>
     <!-- Bootstrap JS y librería Chart.js -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+     <!-- JQUERY -->
+     <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+     <!-- DATATABLES -->
+     <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+     <script src="https://cdn.datatables.net/fixedheader/3.1.6/js/dataTables.fixedHeader.min.js"></script> 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.1/umd/popper.min.js"></script>
@@ -104,6 +169,7 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="/actualizarPagina.js"></script>
+    <script src="/buscarFiltrarTablaEstadistica.js"></script>
     
     <!-- Scripts para crear los gráficos y el calendario -->
     <!-- Calendario -->
@@ -137,54 +203,9 @@
                 .catch(error => console.error('Error al obtener los datos del calendario:', error));
         });
     </script>
-    <!-- Gráfico de barras ESTE HAY QUE BORRARLO PORQUE ES FEO-->
-    <script>
-      var ctx = document.getElementById('myChart')
-      var myChart = new Chart(ctx, {
-          type:'bar',
-          data:{
-              labels: ['Pendientes','En proceso','Finalizadas'],
-              datasets: [{
-                  label: 'ORDENES DE TRABAJO',
-                  backgroundColor: ['#FF000090','#1f794e', '#00FF00', '#509c7f', '#1f794e', '#34444c', '#90CAF9', '#64B5F6', '#42A5F5', '#2196F3', '#0D47A1'],
-                  borderColor: ['white'],
-                  borderWidth:5
-              }]
-          },
-          options:{
-              scales:{
-                  y:{
-                      beginAtZero:true
-                  }
-              },
-              plugins: {
-        legend: {
-            labels: {
-                boxWidth: 0 // Establece el ancho del cuadro de leyenda en 0 para ocultar los cuadrados de color
-            }
-        }
-    }
-          }
-      })
-
-      let url = '/orden-de-trabajo-graficoBarras'
-      fetch(url)
-          .then( response => response.json() )
-          .then( datos => mostrar(datos) ) //En datos obtengo la cantidad de pendientes, en proceso y finalizadas.
-          .catch( error => console.log(error) )
-
-
-          const mostrar = (articulos) =>{
-            myChart.data.datasets[0].data = [articulos.pendientes, articulos.enProceso, articulos.finalizadas];
-            myChart.update();
-        }       
-
-
-
-    </script>
     <!-- Gráfico de tortas amcharts -->
     <script>
-       am4core.ready(function() {
+      am4core.ready(function() {
     // Themes begin
     am4core.useTheme(am4themes_animated);
     // Themes end
@@ -227,13 +248,22 @@
         series.labels.template.adapter.add("radius", function(radius, target) {
             if (target.dataItem && target.dataItem.dataContext) {
             if (target.dataItem.dataContext.country === "Correctivas") {
-                return am4core.percent(-10); // Cambia el radio para "Correctivas"
+                return am4core.percent(0); // Cambia el radio para "Correctivas"
             } else if (target.dataItem.dataContext.country === "Programadas") {
-                return am4core.percent(-25); // Cambia el radio para "Programadas"
+                return am4core.percent(0); // Cambia el radio para "Programadas"
             }
             }   
             return radius;
         });
+        series.labels.template.rotation = -90;
+        // series.labels.template.adapter.add("rotation", function(rotation, target) {
+        //     if (target.dataItem && target.dataItem.dataContext) {
+        //         if (target.dataItem.dataContext.country === "Correctivas") {
+        //             return 90; // Rotar "Correctivas" en sentido opuesto
+        //         }
+        //     }
+        //     return rotation; // Mantener rotación predeterminada para otras etiquetas
+        // });
         series.labels.template.adapter.add("text", function(text, target) {
             if (target.dataItem && target.dataItem.dataContext) {
                 if (target.dataItem.dataContext.country === "Correctivas") {
@@ -244,30 +274,53 @@
             }
             return text;
         });
-        
+
+        // Agregar adaptadores para ajustar dx y dy para cada etiqueta individualmente
+        series.labels.template.adapter.add("dx", function(dx, target) {
+            if (target.dataItem && target.dataItem.dataContext) {
+                if (target.dataItem.dataContext.country === "Correctivas") {
+                    // Ajuste horizontal para "Correctivas"
+                    return 7;
+                } else if (target.dataItem.dataContext.country === "Programadas") {
+                    // Ajuste horizontal para "Programadas"
+                    return -7;
+                }
+            }
+            return dx;
+        });
+
+        series.labels.template.adapter.add("dy", function(dy, target) {
+            if (target.dataItem && target.dataItem.dataContext) {
+                if (target.dataItem.dataContext.country === "Correctivas") {
+                    // Ajuste vertical para "Correctivas"
+                    return 30;
+                } else if (target.dataItem.dataContext.country === "Programadas") {
+                    // Ajuste vertical para "Programadas"
+                    return -80;
+                }
+            }
+            return dy;
+        });
     }
 }); // end am4core.ready()
 
     </script>
      <!-- Gráfico de barras 3d--> 
     <script>
-        am4core.ready(function() {
-        
-        // Themes begin
-        am4core.useTheme(am4themes_animated);
-        // Themes end
-        
-        // Create chart instance
-        var chart = am4core.create("chartd", am4charts.XYChart3D);
-        let url5 = '/orden-de-trabajo-graficoBarras'
-      fetch(url5)
-          .then( response => response.json() )
-          .then( datos => mostrar(datos) ) //En datos obtengo la cantidad de pendientes, en proceso y finalizadas.
-          .catch( error => console.log(error) )
+       am4core.ready(function() {
+    // Crear instancia del gráfico
+    var chart = am4core.create("barras3D", am4charts.XYChart3D);
 
+    // Fetch data from URL
+    let url5 = '/orden-de-trabajo-graficoBarras'
+    fetch(url5)
+        .then(response => response.json())
+        .then(datos => mostrar(datos))
+        .catch(error => console.log(error));
 
-          const mostrar = (articulos) =>{
-           // Add data
+    // Función para mostrar los datos
+    const mostrar = (articulos) => {
+        // Añadir datos
         chart.data = [{
             "Orden de trabajo": "Pendiente",
             "cantidad": articulos.pendientes
@@ -278,32 +331,47 @@
             "Orden de trabajo": "Finalizada",
             "cantidad": articulos.finalizadas
         }];
+    }
+
+    // Crear ejes
+    var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+    categoryAxis.dataFields.category = "Orden de trabajo";
+    categoryAxis.renderer.grid.template.location = 0;
+    categoryAxis.renderer.minGridDistance = 30;
+
+    var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+    valueAxis.title.text = "ORDENES DE TRABAJO";
+    valueAxis.title.fontWeight = "bold";
+    valueAxis.title.fontFamily ="arial";
+    valueAxis.renderer.labels.template.adapter.add("text", function(text) {
+        return text;
+    });
+
+    // Crear series
+    var series = chart.series.push(new am4charts.ColumnSeries3D());
+    series.dataFields.valueY = "cantidad";
+    series.dataFields.categoryX = "Orden de trabajo";
+    series.name = "";
+    series.clustered = false;
+    series.columns.template.tooltipText = "Cantidad O.D.T {category}: [bold]{valueY}[/]";
+    series.columns.template.fillOpacity = 0.9;
+
+    // Cambiar la orientación de las etiquetas del eje X cuando el ancho de la pantalla sea menor o igual a 1288px
+    var mediaquery = window.matchMedia("(max-width: 1288px)");
+    function handleOrientationChange(event) {
+        if (event.matches) {
+            categoryAxis.renderer.labels.template.rotation = -90;
+            categoryAxis.renderer.labels.template.horizontalCenter = "right";
+            categoryAxis.renderer.labels.template.verticalCenter = "middle";
+        } else {
+            categoryAxis.renderer.labels.template.rotation = 0;
+            categoryAxis.renderer.labels.template.horizontalCenter = "middle";
+            categoryAxis.renderer.labels.template.verticalCenter = "middle";
         }
-        
-        
-        // Create axes
-        var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
-        categoryAxis.dataFields.category = "Orden de trabajo";
-        categoryAxis.renderer.grid.template.location = 0;
-        categoryAxis.renderer.minGridDistance = 30;
-        
-        var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-        valueAxis.title.text = "ORDENES DE TRABAJO";
-        valueAxis.renderer.labels.template.adapter.add("text", function(text) {
-          return text;
-        });
-        
-        // Create series
-        var series = chart.series.push(new am4charts.ColumnSeries3D());
-        series.dataFields.valueY = "cantidad";
-        series.dataFields.categoryX = "Orden de trabajo";
-        series.name = "";
-        series.clustered = false;
-        series.columns.template.tooltipText = "Cantidad O.D.T {category}: [bold]{valueY}[/]";
-        series.columns.template.fillOpacity = 0.9;
-        
-        
-        }); // end am4core.ready() 
+    }
+    mediaquery.addListener(handleOrientationChange);
+    handleOrientationChange(mediaquery);
+});
     </script>
     <!-- Grafico porcentaje cumplimiento correctivas-->
     <script>
@@ -324,6 +392,7 @@
             text: "CORRECTIVAS FINALIZADAS",
             fontSize: 12,
             fontWeight: "bold",
+            fontFamily: "Arial",
             
         })
         );
@@ -454,3 +523,27 @@
 
 </body>
 </html>
+
+
+
+
+
+
+<!-- <table class="table table-bordered table-striped text-center mt-4" id="tabla">
+    <thead>
+      <tr class="bg-primary text-white">
+        <th scope="col" class="p-1">RESPONSABLE</th>
+        <th scope="col" class="p-1">TAREA ASOCIADA</th>
+        <th scope="col" class="p-1">INICIO PROGRAMADO</th>
+      </tr>
+    </thead>
+    <tbody>                     
+      <% pendientes.forEach((orden)=>{ %>             
+        <tr>  
+            <td class="p-1"><%= orden.responsable %></td>
+            <td class="p-1"><%= orden.id_orden_trabajo %></td> 
+            <td class="p-1"><%= orden.fecha_inicio %></td>
+        </tr>                                
+     <% }) %>
+    </tbody>
+  </table> -->

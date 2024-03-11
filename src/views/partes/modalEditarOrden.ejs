@@ -25,7 +25,11 @@
                               <select id="estado" name="estado" class="form-select" aria-label="Default select example" tabindex="2" >
                                 <option <%= datos.estado == 'Pendiente' ? "selected" : '' %> value="Pendiente">Pendiente</option>
                                 <option <%= datos.estado == 'En proceso' ? "selected" : '' %> value="En proceso">En proceso</option>
-                                <option <%= datos.estado == 'Finalizada' ? "selected" : '' %> value="Finalizada">Finalizada</option>                    
+                                <option <%= datos.estado == 'Finalizada' ? "selected" : '' %> value="Finalizada">
+                                  
+                                  
+                                  Finalizada
+                                </option>                    
                               </select>
                           <label for="user" class="form-label mt-2">Tarea</label>
                           <textarea class="form-control" id="tarea" name="tarea" tabindex="1" style="height: 80px; resize: none;"><%= datos.actividad%></textarea>
@@ -39,14 +43,12 @@
                           <select id="activo" name="activo" class="form-select" tabindex="1">
                             <option value="">Seleccionar activo</option>
                             <% activos.forEach(activo => { %>
-                              <option  value="<%= activo.nombre %>"><%= activo.nombre %></option>
+                              <option  <%= datos.activo == activo.nombre ? "selected" : '' %>
+                                value="<%= activo.nombre %>" >
+                                <%= activo.nombre %>      
+                              </option>
                             <% }); %>
                           </select>
-
-
-                          
-                          <!-- <input type="text" class="form-control" id="activo" name="activo" tabindex="1" value="<%= datos.activo %>"> -->
-
                           <label for="user" class="form-label mt-2">Elemento</label>
                           <input type="text" class="form-control" id="elemento" name="elemento" tabindex="1" value="<%= datos.elemento %>">
                           <label for="user" class="form-label mt-2">Responsable</label>

@@ -46,18 +46,18 @@ const update = (req, res)=>{
    const solucion = req.body.descripcionSolucion;
    const elemento = req.body.elemento;
 
-   //formatear fecha 
-   const dateDB = new Date(req.body.fecha);//Toma la fecha que viene del formulario
-   let year = dateDB.getFullYear();//filtra el año
-   let month = dateDB.getMonth() + 1;//filtra el mes (tira siempre un mes menos, empieza desde el cero)
-   let day  = dateDB.getDate(); // filtra el dia
-   let hour = dateDB.getHours(); //filtra la hora
-   let minute = dateDB.getMinutes(); //filtra los minutos
-   month = (month < 10 ? "0" : "") + month; //Le da formato "0X si es menor a 10"
-   day = (day < 10 ? "0" : "") + day; 
-   hour = (hour < 10 ? "0" : "") + hour;
-   minute = (minute < 10 ? "0" : "") + minute;
-   const fechaFormateada = `${day}/${month}/${year} ${hour}:${minute}`;
+   // //formatear fecha 
+   // const dateDB = new Date(req.body.fecha);//Toma la fecha que viene del formulario
+   // let year = dateDB.getFullYear();//filtra el año
+   // let month = dateDB.getMonth() + 1;//filtra el mes (tira siempre un mes menos, empieza desde el cero)
+   // let day  = dateDB.getDate(); // filtra el dia
+   // let hour = dateDB.getHours(); //filtra la hora
+   // let minute = dateDB.getMinutes(); //filtra los minutos
+   // month = (month < 10 ? "0" : "") + month; //Le da formato "0X si es menor a 10"
+   // day = (day < 10 ? "0" : "") + day; 
+   // hour = (hour < 10 ? "0" : "") + hour;
+   // minute = (minute < 10 ? "0" : "") + minute;
+   // const fechaFormateada = `${day}/${month}/${year} ${hour}:${minute}`;
    //ACá cambié fechaFormateada por req.body.fecha
    connection.query('UPDATE orden_trabajo SET ? WHERE id_orden_trabajo = ?', [{estado:estado,tipo: tipo, actividad: tarea, fecha_inicio:req.body.fecha, activo:activo, responsable:Responsable,  prioridad:Prioridad, usuario_creador: req.session.userName, descripción_problematica:descripcion,lapsoProgramada:lapso,descripcion_solucion:solucion,elemento:elemento},id],(error,results)=>{
       if(error){

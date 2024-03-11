@@ -13,7 +13,7 @@
               <div class="card border-secondary">  
                   <div class="card-header bg-primary text-white">Nueva orden de trabajo</div>
                   <div class="card-body">
-                      <form action="/save" method="POST">
+                      <form action="/save" method="POST" id="myForm" onsubmit="return validarFormulario()">
                           <div class="mb-3">
                           <label for="user" class="form-label">Tipo</label>
                               <select id="tipo" name="tipo" class="form-select" aria-label="Default select example" tabindex="2">

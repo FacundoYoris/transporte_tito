@@ -58,14 +58,15 @@ header{
     position: fixed;
     background-color: black;
     color: white;
-    border: 3px solid rgb(134, 134, 140);
+    border: 3px solid rgb(0, 0, 0);
     padding: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     display: none;
     z-index: 9999;
-    font-family: 'Times New Roman', Times, serif;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
     border-radius: 7px;
     max-width: 200px;
+    opacity: 0.9;
 }
 /*HEADER SUPERIOR*/
 

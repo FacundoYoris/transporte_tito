@@ -7,6 +7,7 @@ const login = (req, res) => {
   
     database.query('SELECT * FROM usuarios WHERE usuario = ? AND contraseña = ?', [username, password], (err, rows) => {
       if (err) {
+        alert("Error al conectarse con la base de datos");
         res.send(err);
       } else if (rows.length === 0) {
         res.render("inicio_sesion", {"x": true});
