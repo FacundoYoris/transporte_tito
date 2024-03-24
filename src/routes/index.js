@@ -3,31 +3,48 @@ import connection from '../database/db.js'
 const router = Router()
 
 
-
+//Desde la raíz se va hacia el formulario para completar el login
 router.get('/', (req, res) => res.render('inicio_sesion.ejs', {"x": false }))
-
+//Se importa el archivo login.js de controllers para verificar en su función login si el usuario tiene un usuario y contraseña válido
 import login from '../controllers/login.js'
 router.post('/login', login.login);
+//Se ejecuta en login.js la función logout, la cual cierra la sesión actual
 router.get('/cerrarSesion', login.logout);
 
-
+//Cuando se va a la ruta de estadísticas, se toman todos los datos necesarios para los gráficos y se los manda a estadistica.ejs
 router.get('/estadistica', (req, res) => { 
-    connection.query('SELECT * FROM stock WHERE cantidad <= CantidadCritica', (error1, results)=>{
-        if(error1){
-            throw error1;
-        }else{
-            connection.query('SELECT * FROM orden_trabajo WHERE estado = ? ORDER BY fecha_inicio', ['Pendiente'] , (error, pendientes)=>{
-                if(error){
-                    throw error;
-                }else{
-                    
-                    res.render('estadistica.ejs', {pendientes: pendientes,results: results,"login": req.session.loggedImAdmin});
-                }
-            })
-        }
+    // Obtener la fecha actual
+    const fechaActual = new Date();
 
-    })
-})
+    // Consulta para obtener los registros de stock
+    connection.query('SELECT * FROM stock WHERE cantidad <= CantidadCritica', (error1, results) => {
+        if (error1) {
+            throw error1;
+        } else {
+            // Consulta para obtener las órdenes de trabajo pendientes
+            connection.query('SELECT * FROM orden_trabajo WHERE estado = ? ORDER BY fecha_inicio', ['Pendiente'], (error, pendientes) => {
+                if (error) {
+                    throw error;
+                } else {
+                    // Filtrar órdenes correctivas pendientes con fecha_inicio menor a la fecha actual
+                    const correctivasPendientesAtrasadas = pendientes.filter(orden => orden.tipo === 'Correctiva' && new Date(orden.fecha_inicio) < fechaActual);
+
+                    // Filtrar órdenes programadas pendientes con fecha_inicio menor a la fecha actual
+                    const programadasPendientesAtrasadas = pendientes.filter(orden => orden.tipo === 'Programada' && new Date(orden.fecha_inicio) < fechaActual);
+                    // Renderizar la plantilla con todos los datos
+                    res.render('estadistica.ejs', {
+                        pendientes: pendientes,
+                        results: results,
+                        correctivasPendientesAtrasadas: correctivasPendientesAtrasadas,
+                        programadasPendientesAtrasadas: programadasPendientesAtrasadas,
+                        login: req.session.loggedImAdmin
+                    });
+                }
+            });
+        }
+    });
+});
+
 
 router.get('/almacen/stock', (req, res) => { 
     connection.query('SELECT * FROM stock', (error, results)=>{
@@ -89,46 +106,34 @@ router.get('/orden-de-trabajo', (req, res) => {
 router.get('/orden-de-trabajo-graficoBarras', (req, res) => {
     // Realiza la consulta a la base de datos para obtener la cantidad de órdenes de trabajo de cada tipo
     connection.query(
-        'SELECT estado, COUNT(*) AS cantidad FROM orden_trabajo GROUP BY estado',
+        'SELECT estado, COUNT(*) AS cantidad FROM orden_trabajo WHERE tipo = "Correctiva" GROUP BY estado',
         (error, results, fields) => {
             if (error) {
                 console.error('Error al ejecutar la consulta:', error);
                 res.status(500).send('Error en el servidor');
                 return;
             }
-
-            // Consulta adicional para contar la cantidad total de filas en la tabla ot_programada_finalizada
-            connection.query(
-                'SELECT COUNT(*) AS total FROM ot_programada_finalizada',
-                (error2, results2, fields2) => {
-                    if (error2) {
-                        console.error('Error al ejecutar la consulta:', error2);
-                        res.status(500).send('Error en el servidor');
-                        return;
-                    }
-
-                    // Procesa los resultados y construye el objeto de respuesta
-                    const data = {
-                        pendientes: 0,
-                        enProceso: 0,
-                        finalizadas: 0,
-                        totalFinalizadas: results2[0].total // Total de filas en ot_programada_finalizada
-                    };
+            // Procesa los resultados y construye el objeto de respuesta
+            const data = {
+                pendientes: 0,
+                enProceso: 0,
+                finalizadas: 0,
+            };
                     
-                    results.forEach(row => {
-                        if (row.estado === 'Pendiente') {
-                            data.pendientes = row.cantidad;
-                        } else if (row.estado === 'En proceso') {
-                            data.enProceso = row.cantidad;
-                        } else if (row.estado === 'Finalizada') {
-                            data.finalizadas = row.cantidad + data.totalFinalizadas;
-                        }
-                    });
-                    
-                    // Envía los datos al cliente en formato JSON
-                    res.json(data);
+            results.forEach(row => {
+                if (row.estado === 'Pendiente') {
+                    data.pendientes = row.cantidad;
+                } else if (row.estado === 'En proceso') {
+                    data.enProceso = row.cantidad;
+                } else if (row.estado === 'Finalizada') {
+                    data.finalizadas = row.cantidad;
                 }
-            );
+            });
+            
+            // Envía los datos al cliente en formato JSON
+            res.json(data);
+                
+            
         }
     );
 });
@@ -323,66 +328,49 @@ router.get('/gestion-mantenimiento', (req, res) => res.render('gestion_mantenimi
 router.get('/administrar-usuario', (req, res) => res.render('administrar_usuario.ejs', {"login": req.session.loggedImAdmin}))
 router.get('/orden-de-trabajo/rangeDates', (req,res) => res.render('nuevaTablaFiltrada.ejs', {"login": req.session.loggedImAdmin}))
 
-
-
+router.get('/modificarDatosPersonales', (req,res) => res.render('modificarDatosPersonales.ejs',{"login": req.session.loggedImAdmin}))
+router.get('/newPassword', (req,res) =>{
+    const userActual = req.session.userName
+    connection.query('SELECT * FROM usuarios WHERE usuario = ?',[userActual], (error, results)=>{
+        if(error){
+            throw error;
+        }else{    
+            res.render('newPassword.ejs', {"login": req.session.loggedImAdmin,"dato":results});
+        }
+        });
+    
+});
 
 import save from '../controllers/gestion_orden_trabajo.js';
-router.post('/save', save.save);
-router.post('/update', save.update);
-router.post('/cambiar-estado-pendiente-enProceso', save.cambiarEstadoPendienteEnProceso);
-router.post('/cambiar-estado-enProceso-Terminada', save.cambiarEstadoEnProcesoTerminada);
-router.post('/orden-de-trabajo/delete', save.eliminarOrden);
+router.post('/save', save.save);//Guardar una nueva orden de trabajo
+router.post('/update', save.update);//Editar una orden de trabajo
+router.post('/cambiar-estado-pendiente-enProceso', save.cambiarEstadoPendienteEnProceso);//Cuando se presiona para empezar la orden cambiar su estado de pendiente a en proceso
+router.post('/cambiar-estado-enProceso-Terminada', save.cambiarEstadoEnProcesoTerminada);//Cuando se presiona para finalizar la orden que esta en proceso pasa a finalizada y se guarda su solución
+router.post('/orden-de-trabajo/delete', save.eliminarOrden);//Eliminar una orden de trabajo
+router.post('/modificarDatosPersonales', save.modificarDatosPersonales);
 
 import saveItem from '../controllers/gestion_stock.js';
-router.post('/saveItem', saveItem.saveItem);
-router.post('/updateStock', saveItem.updateStock);
-router.post('/modificar-stock/delete', saveItem.eliminarItem);
+router.post('/saveItem', saveItem.saveItem);//Guardar nueva componente de stock
+router.post('/updateStock', saveItem.updateStock);//Editar el stock
+router.post('/modificar-stock/delete', saveItem.eliminarItem);//Borrar un elemento de stock
 
 import activo from '../controllers/gestion_activo.js';
-router.post('/saveActivo', activo.saveActivo);
-router.post('/eliminarActivo', activo.eliminarActivo);
-router.post('/updateActivo', activo.updateActivo);
+router.post('/saveActivo', activo.saveActivo);//Guardar un activo
+router.post('/eliminarActivo', activo.eliminarActivo);//Eliminar un activo
+router.post('/updateActivo', activo.updateActivo);//Modificar un activo
 
 import tercero from '../controllers/gestion_tercero.js';
-router.post('/saveTercero', tercero.saveTercero);
-router.post('/updateTercero', tercero.updateTercero);
-router.post('/eliminarTercero',tercero.eliminarTercero);
+router.post('/saveTercero', tercero.saveTercero);//Cargar persona que produce algún servicio
+router.post('/updateTercero', tercero.updateTercero);//Editar los datos de la persona
+router.post('/eliminarTercero',tercero.eliminarTercero);//Eliminar todos los datos de la perosna
 
 import actualizarPorFechas from '../controllers/actualizarTabla.js';
-router.post('/actualizarTablaFechas', actualizarPorFechas.rangoFechas);
-router.post('/actualizarTablaFechas-EnProceso', actualizarPorFechas.rangoFechasEnProceso);
-router.post('/actualizarTablaFechas-Pendientes', actualizarPorFechas.rangoFechasPendientes);
-router.post('/actualizarTablaFechas-Finalizadas', actualizarPorFechas.rangoFechasFinalizadas);
-router.post('/actualizarTablaFechas-Gestion', actualizarPorFechas.rangoFechasGestion);
+router.post('/actualizarTablaFechas', actualizarPorFechas.rangoFechas);//Nueva tabla que posee solo las fechas que se encuentran en un rango de fecha en específico
+router.post('/actualizarTablaFechas-EnProceso', actualizarPorFechas.rangoFechasEnProceso);//IDEM pero con solo las ordenes de trabajo en proceso
+router.post('/actualizarTablaFechas-Pendientes', actualizarPorFechas.rangoFechasPendientes);//IDEM pero solo con las ordenes de trabajo pendientes
+router.post('/actualizarTablaFechas-Finalizadas', actualizarPorFechas.rangoFechasFinalizadas);//IDEM pero solo con las ordenes de trabajo finalizadas
+router.post('/actualizarTablaFechas-Gestion', actualizarPorFechas.rangoFechasGestion);//Verificar si esto esta en uso o no
 
 
 export default router
 
-
-//RUTA PARA ELIMINAR UNA ORDEN
-// router.get('/orden-de-trabajo/delete/:id', (req, res) => {
-//     const id = req.params.id;
-//     connection.query('DELETE FROM orden_trabajo WHERE id_orden_trabajo = ?', [id], (error, results)=>{
-        
-//         if(error){
-//             throw error;
-//         }else{
-//             res.redirect('/orden-de-trabajo/generar-orden');
-//         }
-
-//         });
-// });
-
-
-// //RUTA PARA EDITAR LOS REGISTROS
-// router.get('/orden-de-trabajo/edit/:id', (req, res) => {
-//     const id = req.params.id;
-//     connection.query('SELECT * FROM orden_trabajo WHERE id_orden_trabajo = ?',[id], (error, results)=>{
-        
-//         if(error){
-//             throw error;
-//         }else{
-//             res.json(results[0]);
-//         }
-//         });
-// });

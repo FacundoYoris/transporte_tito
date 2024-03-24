@@ -112,11 +112,10 @@
                               <label for="user" class="form-label mt-2" id="intervaloPeriodica">Repetir cada (cantidad de horas) </label>
                               <input type="text" class="form-control"  id="lapsoPeriodica" name="lapsoPeriodica" tabindex="1" value="0">
                           <label for="user" class="form-label mt-2">Tarea</label>
-                          <textarea class="form-control" id="tarea" name="tarea" tabindex="1" style="height: 80px; resize: none;"></textarea>
+                          <textarea class="form-control" id="tarea" name="tarea" tabindex="1" style="height: 80px; resize: none;" required></textarea>
                           <label for="user" class="form-label mt-2">Fecha inicio</label>
-                          <input type="datetime-local" class="form-control" id="fecha" name="fecha" tabindex="1">
+                          <input type="datetime-local" class="form-control" id="fecha" name="fecha" tabindex="1" required>
                           <label for="user" class="form-label mt-2">Activo</label>
-                          <!-- <input type="text" class="form-control" id="activo" name="activo" tabindex="1"> -->
                           <select id="activo" name="activo" class="form-select" tabindex="1">
                             <option value="">Seleccionar activo</option>
                             <% activos.forEach(activo => { %>
@@ -134,7 +133,7 @@
                               <option value="Baja">Baja</option>
                           </select>
                           <label for="user" class="form-label mt-2">Descripción del problema</label>
-                          <textarea class="form-control" id="descripción" name="descripcion" tabindex="1" style="height: 80px; resize: none;"></textarea>
+                          <textarea class="form-control" id="descripción" name="descripcion" tabindex="1" style="height: 80px; resize: none;" required></textarea>
                           </div>   
                           <div class="mb-3">
                           

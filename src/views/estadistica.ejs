@@ -27,7 +27,7 @@
                 <div class="col-md-12 text-center">  
                     <div class="card h-100"></div>
                         <div id="titulo-container" style="padding-top: 5px; padding-right: 0px;">
-                            <div id="titulo">ESTADÍSTICAS</div>
+                            <div id="titulo" style="color: black;">ESTADÍSTICAS</div>
                         </div>
                 </div>
             </div>
@@ -74,7 +74,7 @@
                             <div id="" style="width: 100%; height: 300px; background-color: white;border: solid 1px; border-radius: 5px;overflow-y: auto; overflow-x: auto">
                                 <div class="row">
                                     <div class="col-md-12 " style="margin-top: 10px;">
-                                        <p style="color: black; font-family:Arial, Helvetica, sans-serif ; font-size: 13px; font-weight: bold;" >STOCK AGOTADO</p>
+                                        <p style="color: black; font-family:Arial, Helvetica, sans-serif ; font-size: 15px; font-weight: bold;" >STOCK AGOTADO</p>
                                     </div>
                                 </div>
                                 <div class="row" >
@@ -112,7 +112,7 @@
                             <div id="" style="width: 100%; height: 300px; background-color: white;border: solid 1px; border-radius: 5px;overflow-y: auto;overflow-x: auto; ">
                                 <div class="row">
                                     <div class="col-md-12 " style="margin-top: 10px;">
-                                        <p style="color: black; font-family:Arial, Helvetica, sans-serif ; font-size: 13px; font-weight: bold;" >RESPONSABLE - TAREA ASOCIADA</p>
+                                        <p style="color: black; font-family:Arial, Helvetica, sans-serif ; font-size: 15px; font-weight: bold;" >RESPONSABLE - TAREA ASOCIADA</p>
                                     </div>
                                 </div>
                                 <div class="row" >
@@ -142,6 +142,94 @@
                     </div>
                 </div>
             </div>
+
+            <div class="row">
+                <div class="col-md-12 text-center mt-3 mb-0">  
+                    <div class="card h-100"></div>
+                        <div id="titulo-container" style="padding-top: 5px; padding-right: 0px;">
+                            <div id="titulo" style="color:rgb(164, 9, 9)">TAREAS ATRASADAS</div>
+                        </div>
+                </div>
+            </div>
+
+            <div class="row" style="margin-top: 0px;">  
+                <div class="col-md-6">  
+                    <div class="card h-100 text-center">
+                        <div class="card-body"  > 
+                            <div id="" style="width: 100%; height: 300px; background-color: white;border: solid 1px; border-radius: 5px;overflow-y: auto; overflow-x: auto">
+                                <div class="row">
+                                    <div class="col-md-12 " style="margin-top: 10px;">
+                                        <p style="color:rgb(164, 9, 9); font-family:Arial, Helvetica, sans-serif ; font-size: 15px; font-weight: bold;" >TAREAS CORRECTIVAS ATRASADAS</p>
+                                    </div>
+                                </div>
+                                <div class="row" >
+                                    <div class="col-md-12 text-center" style="margin-left: 2%;" >  
+                                    <table class="table table-bordered table-striped text-center " id="tabla3" style="max-height: 80%;" >
+                                        <thead>
+                                            <tr class="bg-primary text-white">
+                                                <th scope="col" class="p-1">ID</th>
+                                                <th scope="col" class="p-1">TAREA</th>
+                                                <th scope="col" class="p-1">PRIORIDAD</th>
+                                                <th scope="col" class="p-1">INICIO PROGRAMADO</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                           
+                                            <% correctivasPendientesAtrasadas.forEach((i)=>{ %>             
+                                            <tr>  
+                                                <td class="p-1"><%= i.id_orden_trabajo %></td>  
+                                                <td class="p-1"><%= i.actividad %></td>
+                                                <td class="p-1"><%= i.prioridad %></td>
+                                                <td class="p-1"><%= i.fecha_inicio %></td>
+                                            </tr>                              
+                                            <% }) %>
+                                        </tbody>
+                                    </table>
+                                    </div>    
+                                </div>
+                            </div>                        
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">  
+                    <div class="card h-100 text-center">
+                        <div class="card-body"  > 
+                            <div id="" style="width: 100%; height: 300px; background-color: white;border: solid 1px; border-radius: 5px;overflow-y: auto;overflow-x: auto; ">
+                                <div class="row">
+                                    <div class="col-md-12 " style="margin-top: 10px;">
+                                        <p style="color:rgb(164, 9, 9); font-family:Arial, Helvetica, sans-serif ; font-size: 15px; font-weight: bold;" >TAREAS PROGRAMADAS ATRASADAS</p>
+                                    </div>
+                                </div>
+                                <div class="row" >
+                                    <div class="col-md-12 text-center" style="margin-left: 2%;" >  
+                                    <table class="table table-bordered table-striped text-center " id="tabla4" style="max-height: 80%;" >
+                                        <thead>
+                                            <tr class="bg-primary text-white">
+                                                <th scope="col" class="p-1">ID</th>
+                                                <th scope="col" class="p-1">TAREA</th>
+                                                <th scope="col" class="p-1">PRIORIDAD</th>
+                                                <th scope="col" class="p-1">INICIO PROGRAMADO</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>                     
+                                            <% programadasPendientesAtrasadas.forEach((i)=>{ %>             
+                                                <tr>  
+                                                    <td class="p-1"><%= i.id_orden_trabajo %></td>  
+                                                    <td class="p-1"><%= i.actividad %></td>
+                                                    <td class="p-1"><%= i.prioridad %></td>
+                                                    <td class="p-1"><%= i.fecha_inicio %></td>
+                                                </tr>                              
+                                                <% }) %>
+                                          </tbody>
+                                    </table>
+                                    </div>    
+                                </div>
+                            </div>                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </main>
     <!-- Bootstrap JS y librería Chart.js -->
@@ -340,7 +428,7 @@
     categoryAxis.renderer.minGridDistance = 30;
 
     var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-    valueAxis.title.text = "ORDENES DE TRABAJO";
+    valueAxis.title.text = "GRÁFICO DE BARRAS CORRECTIVAS";
     valueAxis.title.fontWeight = "bold";
     valueAxis.title.fontFamily ="arial";
     valueAxis.renderer.labels.template.adapter.add("text", function(text) {

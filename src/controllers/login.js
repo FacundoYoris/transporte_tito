@@ -10,10 +10,10 @@ const login = (req, res) => {
         alert("Error al conectarse con la base de datos");
         res.send(err);
       } else if (rows.length === 0) {
-        res.render("inicio_sesion", {"x": true});
+        res.render("inicio_sesion", {"x": true});//X en true muestra el cartel de error de inicio de sesión
       } else {
         req.session.logueado=true;
-        const privilegio = rows[0].privilegio;
+        const privilegio = rows[0].privilegio;//Saca el privilegio que tiene dicho usuario, este puede ser cero o uno
         if (privilegio === 1) {
           req.session.loggedImAdmin = true;
         } else {

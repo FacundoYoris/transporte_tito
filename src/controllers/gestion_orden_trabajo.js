@@ -161,6 +161,83 @@ const eliminarOrden = (req, res)=>{
        });
 };
 
+const modificarDatosPersonales = (req, res)=>{
+   const usuario = req.body.usuario;
+   const password = req.body.passwordActual;
+   const userModification = req.body.userModification;
+   const usuarioNuevo = req.body.usuarioNuevo;
+   const passwordModification = req.body.passwordModification;
+   const newPassword = req.body.newPassword;
+   const repetirNewPassword = req.body.repetirNewPassword;
+   const nombre = req.body.nombre;
+   const apellido = req.body.apellido;
+   const telefono = req.body.telefono;
+   if(usuario == req.session.userName){
+      connection.query('SELECT contraseña FROM usuarios WHERE usuario = ?',[usuario], (error, results)=>{
+         if(error){
+             throw error;
+         }else{    
+             if(results[0].contraseña == password){
+               if(userModification == "no" && passwordModification == "no"){
+                  connection.query('UPDATE usuarios SET ? WHERE usuario = ?', 
+                  [{ nombre: nombre, apellido: apellido, telefono:telefono},usuario],
+                     (error,results)=>{
+                     if(error){
+                        console.log(error);
+                     }else{
+                        res.redirect('/estadistica');
+                     }
+                     })
+               }else if(userModification == "yes" && passwordModification == "no"){
+                  connection.query('UPDATE usuarios SET ? WHERE usuario = ?', 
+                  [{ nombre:nombre, apellido: apellido, telefono:telefono,usuario: usuarioNuevo},usuario],
+                     (error,results)=>{
+                     if(error){
+                        console.log(error);
+                     }else{
+                        res.redirect('/cerrarSesion');
+                     }
+                     })
+               }else if(userModification == "no" && passwordModification == "yes"){
+                  if(newPassword == repetirNewPassword){
+                     connection.query('UPDATE usuarios SET ? WHERE usuario = ?', 
+                     [{ nombre: nombre, apellido: apellido, telefono:telefono, contraseña:newPassword},usuario],
+                        (error,results)=>{
+                        if(error){
+                           console.log(error);
+                        }else{
+                           res.redirect('/cerrarSesion');
+                        }
+                        })
+                  }else{
+                     console.log("LAS CONTRASEÑAS NO COINCIDEN");
+                     res.redirect('/newPassword');
+                     
+                  }
+               }else if(userModification == "yes" && passwordModification == "yes"){
+                  if(newPassword == repetirNewPassword){
+                     connection.query('UPDATE usuarios SET ? WHERE usuario = ?', 
+                     [{ nombre: nombre, apellido: apellido, telefono:telefono, contraseña:newPassword, usuario:usuarioNuevo},usuario],
+                        (error,results)=>{
+                        if(error){
+                           console.log(error);
+                        }else{
+                           res.redirect('/cerrarSesion');
+                        }
+                        })
+                  }else{
+                     console.log("LAS CONTRASEÑAS NO COINCIDEN");
+                  }
+               }
+             }else{
+              console.log("CONTRASEÑA INCORRECTA");
+             }
+         }
+         });
+   }else{
+      console.log("USUARIO INCORRECTO");
+   }
+};
 
 export default {
    save, 
@@ -168,6 +245,7 @@ export default {
    cambiarEstadoPendienteEnProceso,
    cambiarEstadoEnProcesoTerminada,
    eliminarOrden,
+   modificarDatosPersonales,
 };
 
 
