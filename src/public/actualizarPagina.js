@@ -1,7 +1,7 @@
-window.addEventListener('resize', () => {
-    // Actualiza la página
-    window.location.reload();
-  });
+// window.addEventListener('resize', () => {
+//     // Actualiza la página
+//     window.location.reload();
+//   });
 
 //ESTA FUNCIÓN ME ACTUALIZA EL FORMATO PARA VER LAS DISTINTAS FECHAS EN EL MODAL VER ORDEN
   $(document).ready(function() {

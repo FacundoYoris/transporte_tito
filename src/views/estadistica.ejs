@@ -542,10 +542,6 @@
         const cargarDatos = (odt) =>{
             series0.data.setAll([
           {
-            category: "Correctivas finalizadas",
-            value: odt.totalCorrectivasFinalizadas
-          },
-          {
             category: "Restantes",
             value: odt.totalCorrectivas - odt.totalCorrectivasFinalizadas,
             settings: { forceHidden: true }
@@ -555,7 +551,7 @@
         // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/#Setting_data
             series1.data.setAll([{
             category: "Finalizadas",
-            value: odt.totalCorrectivasFinalizadas
+            value: odt.totalCorrectivasFinalizadas,
             }, {
             category: "Pendientes + en proceso",
             value: odt.totalCorrectivas - odt.totalCorrectivasFinalizadas,
@@ -569,8 +565,8 @@
         // start and end angle must be set both for chart and series
         var series1 = chart.series.push(
           am5percent.PieSeries.new(root, {
-            radius: am5.percent(95),
-            innerRadius: am5.percent(85),
+            radius: am5.percent(100),
+            innerRadius: am5.percent(82),
             valueField: "value",
             categoryField: "category",
             alignLabels: false
@@ -617,21 +613,3 @@
 
 
 
-<!-- <table class="table table-bordered table-striped text-center mt-4" id="tabla">
-    <thead>
-      <tr class="bg-primary text-white">
-        <th scope="col" class="p-1">RESPONSABLE</th>
-        <th scope="col" class="p-1">TAREA ASOCIADA</th>
-        <th scope="col" class="p-1">INICIO PROGRAMADO</th>
-      </tr>
-    </thead>
-    <tbody>                     
-      <% pendientes.forEach((orden)=>{ %>             
-        <tr>  
-            <td class="p-1"><%= orden.responsable %></td>
-            <td class="p-1"><%= orden.id_orden_trabajo %></td> 
-            <td class="p-1"><%= orden.fecha_inicio %></td>
-        </tr>                                
-     <% }) %>
-    </tbody>
-  </table> -->

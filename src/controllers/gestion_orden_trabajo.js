@@ -226,16 +226,19 @@ const modificarDatosPersonales = (req, res)=>{
                         }
                         })
                   }else{
-                     console.log("LAS CONTRASEÑAS NO COINCIDEN");
+                    //MOSTRAR MENSAJE DE ERROR ACÁ
+                      res.redirect('newPassword');
                   }
                }
              }else{
-              console.log("CONTRASEÑA INCORRECTA");
+               //MOSTRAR MENSAJE DE ERROR ACÁ
+              res.redirect('newPassword');
              }
          }
          });
    }else{
-      console.log("USUARIO INCORRECTO");
+      //MOSTRAR MENSAJE DE ERROR ACÁ
+      res.redirect('newPassword');
    }
 };
 
