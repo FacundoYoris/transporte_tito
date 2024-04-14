@@ -121,11 +121,16 @@
                             <% activos.forEach(activo => { %>
                                 <option value="<%= activo.nombre %>"><%= activo.nombre %></option>
                             <% }); %>
-                        </select>
+                          </select>
                           <label for="user" class="form-label mt-2">Elemento involucrado</label>
                           <input type="text" class="form-control" id="elemento" name="elemento" tabindex="1">
                           <label for="user" class="form-label mt-2">Responsable</label>
-                          <input type="text" class="form-control" id="Responsable" name="Responsable" tabindex="1">
+                          <select id="Responsable" name="Responsable" class="form-select" tabindex="1">
+                            <option value="">Seleccionar responsable</option>
+                            <% usuarios.forEach(usuario => { %>
+                                <option value="<%= usuario.usuario %>"><%= usuario.usuario %></option>
+                            <% }); %>
+                          </select>
                           <label for="user" class="form-label mt-2">Prioridad</label>
                           <select id="Prioridad" name="Prioridad" class="form-select" aria-label="Default select example" tabindex="2">
                               <option value="Alta" selected>Alta</option>

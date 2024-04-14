@@ -51,9 +51,20 @@
                           </select>
                           <label for="user" class="form-label mt-2">Elemento</label>
                           <input type="text" class="form-control" id="elemento" name="elemento" tabindex="1" value="<%= datos.elemento %>">
+                          <!-- <label for="user" class="form-label mt-2">Responsable</label>
+                          <input type="text" class="form-control" id="Responsable" name="Responsable" tabindex="1" value="<%= datos.responsable %>">  -->
                           <label for="user" class="form-label mt-2">Responsable</label>
-                          <input type="text" class="form-control" id="Responsable" name="Responsable" tabindex="1" value="<%= datos.responsable %>"> 
-    
+
+                          <select id="Responsable" name="Responsable" class="form-select" tabindex="1">
+                            <option value="">Seleccionar responsable</option>
+                            <% usuarios.forEach(usuario => { %>
+                              <option  <%= datos.responsable == usuario.usuario ? "selected" : '' %>
+                                value="<%= usuario.usuario %>" >
+                                <%= usuario.usuario %>      
+                              </option>
+                            <% }); %>
+                          </select>
+
                           <label for="user" class="form-label mt-2">Prioridad</label>
                           <select id="Prioridad" name="Prioridad" class="form-select" aria-label="Default select example" tabindex="2">
                             <option <%= datos.prioridad == 'Alta' ? "selected" : '' %> value="Alta">Alta</option>
