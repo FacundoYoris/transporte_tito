@@ -398,6 +398,108 @@ router.get('/fechasYtareasPrioridadAlta', (req, res) => {
     });
 });
 
+router.get('/fechasYtareasPrioridadMedia', (req, res) => {
+    const userActual = req.session.userName;
+
+    // Consulta SQL para obtener las ordenes de trabajo que coinciden con el usuario actual, prioridad "Alta" y estado "Pendiente"
+    const consultaOrdenes = `
+        SELECT fecha_inicio, id_orden_trabajo
+        FROM orden_trabajo
+        WHERE responsable = ? AND prioridad = 'Media' AND estado = 'Pendiente'
+        ORDER BY fecha_inicio;
+    `;
+
+    // Ejecutar la consulta para obtener las ordenes de trabajo
+    connection.query(consultaOrdenes, [userActual], (error, resultados) => {
+        if (error) {
+            throw error;
+        }
+
+        // Objeto para almacenar las ordenes de trabajo agrupadas por fecha_inicio
+        const ordenesAgrupadas = {};
+
+        // Iterar sobre los resultados para agruparlos por fecha_inicio
+        resultados.forEach(orden => {
+            const { fecha_inicio, id_orden_trabajo } = orden;
+            if (!ordenesAgrupadas[fecha_inicio]) {
+                ordenesAgrupadas[fecha_inicio] = [];
+            }
+            ordenesAgrupadas[fecha_inicio].push(id_orden_trabajo);
+        });
+
+        // Ordenar las fechas de forma ascendente
+        const fechasOrdenadas = Object.keys(ordenesAgrupadas).sort();
+
+        // Crear el arreglo final con el formato deseado
+        const resultadoFinal = fechasOrdenadas.map(fecha => ({
+            fecha_inicio: fecha,
+            tareas: ordenesAgrupadas[fecha]
+        }));
+        console.log(resultadoFinal);
+        // Renderizar la vista con los resultados finales
+        res.json(resultadoFinal);
+    });
+});
+
+router.get('/fechasYtareasPrioridadBaja', (req, res) => {
+    const userActual = req.session.userName;
+
+    // Consulta SQL para obtener las ordenes de trabajo que coinciden con el usuario actual, prioridad "Alta" y estado "Pendiente"
+    const consultaOrdenes = `
+        SELECT fecha_inicio, id_orden_trabajo
+        FROM orden_trabajo
+        WHERE responsable = ? AND prioridad = 'Baja' AND estado = 'Pendiente'
+        ORDER BY fecha_inicio;
+    `;
+
+    // Ejecutar la consulta para obtener las ordenes de trabajo
+    connection.query(consultaOrdenes, [userActual], (error, resultados) => {
+        if (error) {
+            throw error;
+        }
+
+        // Objeto para almacenar las ordenes de trabajo agrupadas por fecha_inicio
+        const ordenesAgrupadas = {};
+
+        // Iterar sobre los resultados para agruparlos por fecha_inicio
+        resultados.forEach(orden => {
+            const { fecha_inicio, id_orden_trabajo } = orden;
+            if (!ordenesAgrupadas[fecha_inicio]) {
+                ordenesAgrupadas[fecha_inicio] = [];
+            }
+            ordenesAgrupadas[fecha_inicio].push(id_orden_trabajo);
+        });
+
+        // Ordenar las fechas de forma ascendente
+        const fechasOrdenadas = Object.keys(ordenesAgrupadas).sort();
+
+        // Crear el arreglo final con el formato deseado
+        const resultadoFinal = fechasOrdenadas.map(fecha => ({
+            fecha_inicio: fecha,
+            tareas: ordenesAgrupadas[fecha]
+        }));
+        console.log(resultadoFinal);
+        // Renderizar la vista con los resultados finales
+        res.json(resultadoFinal);
+    });
+});
+
+
+router.get('/orden-de-trabajo/:id', (req, res) => {
+    const idOrdenTrabajo = req.params.id;
+    // Realizar la consulta a la base de datos para obtener los detalles de la orden de trabajo con el ID proporcionado
+    connection.query('SELECT * FROM orden_trabajo WHERE id_orden_trabajo = ?', [idOrdenTrabajo], (error, results) => {
+        if (error) {
+            console.error('Error al obtener los detalles de la orden de trabajo:', error);
+            res.status(500).json({ error: 'Error interno del servidor' });
+        } else {
+            // Devolver los detalles de la orden de trabajo en formato JSON
+            res.json(results[0]); // Suponiendo que solo se espera un resultado
+        }
+    });
+});
+
+
 
 import save from '../controllers/gestion_orden_trabajo.js';
 router.post('/save', save.save);//Guardar una nueva orden de trabajo

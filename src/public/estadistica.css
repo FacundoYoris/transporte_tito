@@ -386,7 +386,10 @@ article p{
     
 
 }
-
+.bg-vino {
+    background-color: #800020; /* Código hexadecimal para el color vino */
+    /* También puedes definir otros estilos según sea necesario */
+}
 .oculto{
     display: none;
 }
