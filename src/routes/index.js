@@ -264,16 +264,30 @@ router.get('/orden-de-trabajo/finalizada', (req, res) => {
     })
 })
 
-router.get('/orden-de-trabajo/en-proceso', (req, res) => { 
-    connection.query('SELECT * FROM orden_trabajo WHERE estado = ?', ['En proceso'] , (error, results)=>{
-        if(error){
-            throw error;
-        }else{
-            res.render('en_proceso.ejs', {results: results,"login": req.session.loggedImAdmin});
-        }
+router.get('/orden-de-trabajo/en-proceso', (req, res) => {
+    let query;
+    let params;
 
-    })
-})
+    if (req.session.loggedImAdmin) {
+        query = 'SELECT * FROM orden_trabajo WHERE estado = ?';
+        params = ['En proceso'];
+    } else {
+        query = 'SELECT * FROM orden_trabajo WHERE estado = ? AND responsable = ?';
+        params = ['En proceso', req.session.userName];
+    }
+
+    connection.query(query, params, (error, results) => {
+        if (error) {
+            throw error;
+        } else {
+            res.render('en_proceso.ejs', {
+                results: results,
+                login: req.session.loggedImAdmin
+            });
+        }
+    });
+});
+
 
 router.get('/orden-de-trabajo/generar-orden', (req, res) => { 
     // Consulta para obtener los activos distintos
@@ -360,7 +374,7 @@ router.get('/fechasYtareasPrioridadAlta', (req, res) => {
 
     // Consulta SQL para obtener las ordenes de trabajo que coinciden con el usuario actual, prioridad "Alta" y estado "Pendiente"
     const consultaOrdenes = `
-        SELECT fecha_inicio, id_orden_trabajo
+        SELECT fecha_inicio, id_orden_trabajo,actividad
         FROM orden_trabajo
         WHERE responsable = ? AND prioridad = 'Alta' AND estado = 'Pendiente'
         ORDER BY fecha_inicio;
@@ -391,8 +405,9 @@ router.get('/fechasYtareasPrioridadAlta', (req, res) => {
         const resultadoFinal = fechasOrdenadas.map(fecha => ({
             fecha_inicio: fecha,
             tareas: ordenesAgrupadas[fecha]
+
         }));
-        console.log(resultadoFinal);
+       
         // Renderizar la vista con los resultados finales
         res.json(resultadoFinal);
     });

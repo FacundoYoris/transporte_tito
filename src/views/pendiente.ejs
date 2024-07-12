@@ -119,26 +119,30 @@
       <div class="contenedorOpciones">
 
         <div class="contendorSecundarioOpciones">
-          <div class="opcion" onclick="toggleMenu('alta')"> PRIORIDAD ALTA </div>
+          <div class="opcion" style="font-weight: bold;" onclick="toggleMenu('alta')"> PRIORIDAD ALTA </div>
           <div class="menuOpciones" id="menu-alta">
             <ul id="fechas-prioridadAlta">
               <!-- Esto se rellena con javascript dinamicamente -->
+              <% results.forEach((orden)=>{ %>  
+              <%- include('partes/modalAceptarOrden.ejs',{"id":orden.id_orden_trabajo}) %>
+              <% }) %>
             </ul>
           </div>
         </div>
       
         <div class="contendorSecundarioOpciones">          
-          <div class="opcion" onclick="toggleMenu('media')">PRIORIDAD MEDIA</div>
+          <div class="opcion" style="font-weight: bold;" onclick="toggleMenu('media')">PRIORIDAD MEDIA</div>
           <div class="menuOpciones" id="menu-media">
             <ul id="fechas-prioridadMedia">
                <!-- Esto se rellena con javascript dinamicamente -->
+               
                
             </ul>
           </div>
         </div>
       
         <div class="contendorSecundarioOpciones">
-          <div class="opcion" onclick="toggleMenu('baja')">PRIORIDAD BAJA</div>
+          <div class="opcion" style="font-weight: bold;" onclick="toggleMenu('baja')">PRIORIDAD BAJA</div>
           <div class="menuOpciones" id="menu-baja">
             <ul id="fechas-prioridadBaja">
                <!-- Esto se rellena con javascript dinamicamente -->

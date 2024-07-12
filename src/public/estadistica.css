@@ -37,6 +37,7 @@ header{
  }
  table{
     box-shadow: 5px 10px 5px rgba(0, 0, 0, 0.72);
+    /* table-layout: fixed; */
 }
 
 
@@ -239,6 +240,7 @@ main{
     background: #f0f0f0;
     padding: 20px 20px;
     margin-top: 70px;
+    min-height: 1000px;
 }
 
 article{
@@ -273,7 +275,15 @@ article p{
   .card-body {
     height: 100%;
   }
-
+  .id_columna{
+    max-width: 40px;
+  }
+  .id_acciones{
+    max-width: 74px;
+  }
+  .buscador_columna{
+    max-width: 80%;
+  }
   
 /*ELEMENTOS RESPONSIVOS*/
 
@@ -321,10 +331,11 @@ article p{
     }
 }
 @media screen and (max-width: 720px){
-
+    /* si lo pongo anda bien para usuarios sin privilegio pero anda mal para usuarios con privilegios  */
+    /* 
     .search input{
         display: none;
-    }
+    */
     
     .header__superior{
         padding: 10px;
@@ -382,7 +393,6 @@ article p{
         opacity: 1;
     }
 
-    
     
 
 }

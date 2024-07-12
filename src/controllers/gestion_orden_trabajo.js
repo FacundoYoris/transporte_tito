@@ -185,7 +185,7 @@ const modificarDatosPersonales = (req, res)=>{
                      if(error){
                         console.log(error);
                      }else{
-                        res.redirect('/estadistica');
+                        res.redirect('/newPassword');
                      }
                      })
                }else if(userModification == "yes" && passwordModification == "no"){
@@ -211,7 +211,7 @@ const modificarDatosPersonales = (req, res)=>{
                         })
                   }else{
                      console.log("LAS CONTRASEÑAS NO COINCIDEN");
-                     res.redirect('/newPassword');
+                     res.redirect('newPassword');
                      
                   }
                }else if(userModification == "yes" && passwordModification == "yes"){
@@ -226,18 +226,18 @@ const modificarDatosPersonales = (req, res)=>{
                         }
                         })
                   }else{
-                    //MOSTRAR MENSAJE DE ERROR ACÁ
+                     console.log("LAS CONTRASEÑAS NO COINCIDEN");
                       res.redirect('newPassword');
                   }
                }
              }else{
-               //MOSTRAR MENSAJE DE ERROR ACÁ
+               console.log("USUARIO O CONTRASEÑA INCORRECTA");
               res.redirect('newPassword');
              }
          }
          });
    }else{
-      //MOSTRAR MENSAJE DE ERROR ACÁ
+      console.log("USUARIO O CONTRASEÑA INCORRECTA");
       res.redirect('newPassword');
    }
 };

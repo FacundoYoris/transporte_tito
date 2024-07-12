@@ -10,7 +10,7 @@ const login = (req, res) => {
   database.query('SELECT * FROM usuarios WHERE usuario = ? AND contraseña = ?', [username, password], (err, rows) => {
     // Si hay un error al ejecutar la consulta o si no se encuentra ningún usuario, enviar una respuesta al cliente
     if (err) {
-      alert("Error al conectarse con la base de datos");
+      console.log("Error al conectarse con la base de datos");
       res.send(err);
     } else if (rows.length === 0) {
       // Si no se encuentra ningún usuario, renderizar una vista con un mensaje de error

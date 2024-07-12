@@ -12,13 +12,20 @@
                     <% if (login){ %>
                     <li><a href="/estadistica">Estadísticas</a></li>
                     <% } %>
-                    <li><a href="/orden-de-trabajo">Ordenes de trabajo</a>
+                    <li>
+                        <% if (login){%>
+                            <a href="/orden-de-trabajo">Ordenes de trabajo</a>
+                        <%} else {%>
+                            <a href="#">Ordenes de trabajo</a>
+                        <%}%>
                         <ul>
                             <li><a href="/orden-de-trabajo/pendiente">Pendientes</a></li>
-                            <% if (login){ %>
+                            
                             <li><a href="/orden-de-trabajo/en-proceso">En proceso</a></li>
-                            <% } %>
+                           
+                            <% if (login){%>
                             <li><a href="/orden-de-trabajo/finalizada">Finalizadas</a></li>
+                            <%}%>
                         </ul>
                     </li>
                     <% if (login){ %>
