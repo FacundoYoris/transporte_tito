@@ -32,6 +32,9 @@ app.use(
 		}
 	})
 )
+
+
+
 const checkSessionMiddleware = (req, res, next) => {
     // Verifica si esta logueado existe en la sesión (o donde lo almacenes)
     if (req.session.logueado) {

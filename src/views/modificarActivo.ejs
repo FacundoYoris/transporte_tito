@@ -11,6 +11,12 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
     
     <%- include('partes/header.ejs') %>
+    <!-- ESTO ES SOLO PARA MODIFICAR EL TAMAÑO DE LA COL ID. IMPLEMENTAR PARA TODAS LAS TABLAS Y CORREGIR EL BUSCADOR DE LA MISMA -->
+     <!--FALTA SACAR LAS PLANTAS DE LOS DATOS (BASE DE DATOS, MODIFICAR ACTIVOS Y DE LAS FUNCIONES PARA CARGARLOS). 
+         TAMBIÉN HAY QUE MOSTRAR LA POTENCIA NOMINAL JUNTO CON LAS HORAS DE USO. VER QUE LOS BUSCADORES DEJAN DE ANDAR CUANDO CAMBIAMOS LA TABLA
+          (GESTION.ACTIVOS.JS ESTA LA LÓGICA)
+      -->
+      
     <title>ACTIVOS</title>
 </head>
 <body>
@@ -29,24 +35,28 @@
       <table class="table table-bordered table-striped text-center mt-4" id="tabla">
         <thead>
           <tr class="bg-primary text-white">
-            <th scope="col" class="p-1">ID </th>
-            <th scope="col" class="p-1">PLANTA </th>
-            <th scope="col" class="p-1">SECTOR </th>
+            <!-- <th scope="col" class="p-1">PLANTA </th> -->
+            <th scope="col" class="p-1 col-id">ID </th>
             <th scope="col" class="p-1">ACTIVO </th>
+            <th scope="col" class="p-1">SECTOR </th>
+            <th scope="col" class="p-1">POTENCIA </th>
+            <th scope="col" class="p-1">HORAS UTILIZADAS</th>
             <th scope="col" class="p-1">ESTADO </th>
-            <th scope="col" class="p-1">ACCIONES</th>
+            <th scope="col" class="p-1 col-acciones">ACCIONES</th>
           </tr>
         </thead>
         <tbody>
           <!--Los results que yo paso en el index.js, acá los uso con la variable orden declarada dentro del forEach-->
           <% results.forEach((activo)=>{ %>             
             <tr>
-                <td class="p-1"><%= activo.idactivos %></td>  
-                <td class="p-1"><%= activo.planta %></td>  
-                <td class="p-1"><%= activo.sector %></td>
+              <!-- <td class="p-1"><%= activo.planta %></td>   -->
+                <td class="p-1 col-id"><%= activo.idactivos %></td>  
                 <td class="p-1"><%= activo.nombre %></td>
+                <td class="p-1"><%= activo.sector %></td>
+                <td class="p-1"><%= activo.potencia_nominal %></td>
+                <td class="p-1"><%= activo.horas_uso %></td>
                 <td class="p-1"><%= activo.estado %></td>  
-                <td class="p-1">
+                <td class="p-1 col-acciones">
                   <!-- Boton editar activo -->  
                   <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#editarActivo<%= activo.idactivos %>">
                     <i class='bx bx-edit-alt bx-sm'></i>
@@ -84,12 +94,16 @@
                         <div class="card-body">
                             <form action="/saveActivo" method="POST">
                                 <div class="mb-3">
-                                <label for="user" class="form-label mt-2">Planta</label>
-                                <input type="text" class="form-control" id="planta" name="planta" tabindex="1" required>
-                                <label for="user" class="form-label mt-2">Sector</label>
-                                <input type="text" class="form-control" id="sector" name="sector" tabindex="1" required>
+                                <!-- <label for="user" class="form-label mt-2">Planta</label>
+                                <input type="text" class="form-control" id="planta" name="planta" tabindex="1" required> -->
                                 <label for="user" class="form-label mt-2">Activo</label>
                                 <input type="text" class="form-control" id="activo" name="activo" tabindex="1" required>
+                                <label for="user" class="form-label mt-2">Sector</label>
+                                <input type="text" class="form-control" id="sector" name="sector" tabindex="1" required>
+                                <label for="user" class="form-label mt-2">Potencia nominal [KW]</label>
+                                <input type="text" class="form-control" id="potencia" name="potencia" tabindex="1" required>
+                                <label for="user" class="form-label mt-2">Horas de uso</label>
+                                <input type="text" class="form-control" id="horas" name="horas" tabindex="1" required>
                                 <label for="user" class="form-label mt-2">Estado</label>
                                 <select id="estado" name="estado" class="form-select" aria-label="Default select example" tabindex="2">
                                   <option value="Disponible" selected>Disponible</option>

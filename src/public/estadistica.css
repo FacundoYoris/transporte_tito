@@ -171,9 +171,10 @@ nav > ul > li > a:hover{
     word-wrap: break-word; /* Dividir palabras largas si es necesario para ajustarse al ancho máximo */
    
 }
-td:nth-child(2) {
+/* JUSTIFICA EL CONTENIDO DEL NÚMERO DE COLUMNA QUE SE LE PASA */
+/* td:nth-child(2) {
     text-align: justify;
-  }
+  } */
 
 
 /*SUBMENU*/
@@ -324,6 +325,23 @@ article p{
 .table {
     min-width: 100%; /* Asegurar que la tabla ocupe el ancho completo del contenedor */
 }
+
+/* COLUMNAS ID Y ACCIONES (ANCHO) + BUSCADOR (ID) */
+.col-id {
+    max-width: 30px;
+    /* width: 10px; */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    position: relative;
+  }
+.ID {
+  width: 90%;
+}
+  .col-acciones {
+    max-width: 100px;
+    
+  }
 
 @media screen and (min-width: 301px) and (max-width: 400px) {
     .achicarFontSize {

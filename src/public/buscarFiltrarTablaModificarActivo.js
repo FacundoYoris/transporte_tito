@@ -7,7 +7,7 @@ $(document).ready(function(){
     $clonedHeaderRow.find('th').each(function (i) {
         if (i != 7) {
             var title = $(this).text(); //es el nombre de la columna
-            $(this).html('<input type="text" placeholder="'+title+'..." />');
+            $(this).html('<input type="text" placeholder="'+title+'..." class="'+title+'" />');
             
             $(this).on('click', 'input', function (e) {
                 e.stopPropagation(); // Evitar que el evento de clic se propague a la columna para ordenar
@@ -43,7 +43,7 @@ $(document).ready(function(){
                 },
                 lengthMenu: [ [5,10, 25, -1], [5,10, 25, "Mostrar todo"] ],
                 columnDefs: [
-                    { targets: [5], orderable: false }
+                    { targets: [6], orderable: false }
                 ],
                 scrollY: 500, // Agregamos scroll en Y
                 scrollX: true, // Agregamos scroll en X

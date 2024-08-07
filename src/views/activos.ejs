@@ -24,9 +24,11 @@
       <table class="table table-bordered table-striped text-center mt-4" id="tabla">
         <thead>
           <tr class="bg-primary text-white">
-            <th scope="col" class="p-1">PLANTA</th>
-            <th scope="col" class="p-1">SECTOR</th>
+            <!-- <th scope="col" class="p-1">PLANTA</th> -->
             <th scope="col" class="p-1">ACTIVO</th>
+            <th scope="col" class="p-1">SECTOR</th>
+            <th scope="col" class="p-1">POTENCIA</th>
+            <th scope="col" class="p-1">HORAS UTILIZADAS</th>
             <th scope="col" class="p-1">ESTADO</th>
             
           </tr>
@@ -35,9 +37,11 @@
           <!-- //Los results que yo paso en el index.js, acá los uso con la variable orden declarada dentro del forEach                                  -->
           <% results.forEach((activo)=>{ %>             
             <tr>  
-                <td class="p-1"><%= activo.planta %></td>  
-                <td class="p-1"><%= activo.sector %></td>
+                <!-- <td class="p-1"><%= activo.planta %></td>   -->
                 <td class="p-1"><%= activo.nombre %></td>
+                <td class="p-1"><%= activo.sector %></td>
+                <td class="p-1"><%= activo.potencia_nominal %></td>
+                <td class="p-1"><%= activo.horas_uso %></td>
                 <td class="p-1"><%= activo.estado %></td>  
                 
             </tr>                              

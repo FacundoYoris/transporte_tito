@@ -6,7 +6,7 @@ $(document).ready(function(){
     $clonedHeaderRow.find('th').each(function (i) {
         if(i!=5 && i!=6){
             var title = $(this).text(); //es el nombre de la columna
-            $(this).html('<input type="text" placeholder="'+title+'..." />');
+            $(this).html('<input type="text" class="'+title+'" placeholder="'+title+'..." />');
                 
             $(this).on('click', 'input', function (e) {
                 e.stopPropagation(); // Evitar que el evento de clic se propague a la columna para ordenar

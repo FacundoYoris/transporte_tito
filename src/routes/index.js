@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import connection from '../database/db.js'
+
 const router = Router()
 
 
@@ -513,7 +514,6 @@ router.get('/orden-de-trabajo/:id', (req, res) => {
         }
     });
 });
-
 
 
 import save from '../controllers/gestion_orden_trabajo.js';

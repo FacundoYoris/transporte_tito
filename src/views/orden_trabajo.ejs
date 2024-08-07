@@ -26,28 +26,28 @@
       <table class="table table-bordered table-striped text-center mt-4 display" id="tabla">
         <thead>
           <tr class="bg-primary text-white">
-            <th scope="col" class="p-1">ID</th>
+            <th scope="col" class="p-1 col-id">ID</th>
             <th scope="col" class="p-1">TAREA</th>
             <th scope="col" class="p-1">ESTADO</th>
             <th scope="col" class="p-1">PRIORIDAD</th>
             <th scope="col" class="p-1">RESPONSABLE</th>
             <th scope="col" class="p-1">INICIO PROGRAMADO</th>
             <th scope="col" class="p-1">ACTIVO</th>
-            <th scope="col" class="p-1">ACCIONES</th>
+            <th scope="col" class="p-1 col-acciones">ACCIONES</th>
           </tr>
         </thead>
         <tbody>
           <!-- //Los results que yo paso en el index.js, acá los uso con la variable orden declarada dentro del forEach                                  -->
           <% results.forEach((orden)=>{ %>             
             <tr>  
-                <td class="p-1"><%= orden.id_orden_trabajo %></td>  
+                <td class="p-1 col-id"><%= orden.id_orden_trabajo %></td>  
                 <td class="p-1"><%= orden.actividad %></td>
                 <td class="p-1"><%= orden.estado %></td>
                 <td class="p-1"><%= orden.prioridad %></td>
                 <td class="p-1"><%= orden.responsable %></td>
                 <td class="p-1"><%= orden.fecha_inicio %></td>
                 <td class="p-1"><%= orden.activo %></td> 
-                <td class="p-1">
+                <td class="p-1 col-acciones">
                   <!-- Boton ver orden -->  
                   <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#verOrden<%= orden.id_orden_trabajo %>">
                     <i class='bx bx-show bx-sm'></i>
@@ -66,7 +66,7 @@
     <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
     <!-- DATATABLES -->
     <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/fixedheader/3.1.6/js/dataTables.fixedHeader.min.js"></script> 
+    <!-- <script src="https://cdn.datatables.net/fixedheader/3.1.6/js/dataTables.fixedHeader.min.js"></script>  -->
     <!-- BOOTSTRAP -->
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>

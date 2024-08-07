@@ -32,7 +32,7 @@
       <table class="table table-bordered table-striped text-center mt-4" id="tabla">
         <thead>
           <tr class="bg-primary text-white">
-            <th scope="col" class="p-1">ID</th>
+            <th scope="col" class="p-1 col-id">ID</th>
             <th scope="col" class="p-1">ITEM</th>
             <th scope="col" class="p-1">CANTIDAD</th>
             <th scope="col" class="p-1">ESTADO</th>
@@ -42,7 +42,7 @@
           <!-- //Los results que yo paso en el index.js, acá los uso con la variable orden declarada dentro del forEach                                  -->
           <% results.forEach((orden)=>{ %>             
             <tr >  
-                <td class="p-1"><%= orden.idstock %></td>  
+                <td class="p-1 col-id"><%= orden.idstock %></td>  
                 <td class="p-1"><%= orden.item %></td>
                 <td class="p-1"><%= orden.cantidad %></td>
                 <% if (orden.cantidad > orden.CantidadAdvertencia) { %>
