@@ -277,13 +277,24 @@ router.get('/orden-de-trabajo/en-proceso', (req, res) => {
         params = ['En proceso', req.session.userName];
     }
 
-    connection.query(query, params, (error, results) => {
+    // Primera consulta: Consultar orden_trabajo
+    connection.query(query, params, (error, ordenesResults) => {
         if (error) {
             throw error;
         } else {
-            res.render('en_proceso.ejs', {
-                results: results,
-                login: req.session.loggedImAdmin
+            // Segunda consulta: Consultar la columna "item" de la tabla "stock"
+            const stockQuery = 'SELECT item FROM stock';
+            connection.query(stockQuery, (stockError, stockResults) => {
+                if (stockError) {
+                    throw stockError;
+                } else {
+                    // Renderizar la vista con ambos resultados
+                    res.render('en_proceso.ejs', {
+                        results: ordenesResults, // Resultados de la tabla orden_trabajo
+                        items: stockResults,     // Resultados de la tabla stock
+                        login: req.session.loggedImAdmin
+                    });
+                }
             });
         }
     });

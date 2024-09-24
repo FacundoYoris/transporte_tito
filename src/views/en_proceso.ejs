@@ -62,7 +62,7 @@
                     </td>
                 </tr> 
                 <%- include('partes/modalVerOrden.ejs',{"id":orden.id_orden_trabajo,"datos":orden}) %>
-                <%- include('partes/modalTerminarOrden.ejs',{"id":orden.id_orden_trabajo, "tipo": orden.tipo, "fechaI": orden.fecha_inicio, "cantidadHoras": orden.lapsoProgramada,"inicioReal":orden.fecha_inicio_real}) %>                                   
+                <%- include('partes/modalTerminarOrden.ejs',{"id":orden.id_orden_trabajo, "tipo": orden.tipo, "fechaI": orden.fecha_inicio, "cantidadHoras": orden.lapsoProgramada,"inicioReal":orden.fecha_inicio_real, "items": items}) %>                                   
              <% }) %>
             </tbody>
           </table>
