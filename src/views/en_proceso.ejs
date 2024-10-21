@@ -82,5 +82,41 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script src="/actualizarPagina.js"></script>
     <script src="/buscarFiltrarTabla.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.add-material').forEach(button => {
+        button.addEventListener('click', function() {
+      const orderId = this.getAttribute('data-order-id'); // Obtener el ID de la orden
+      const container = document.getElementById(`material-container-${orderId}`); // Contenedor de materiales
+      let materialIndex = container.querySelectorAll('.material-row').length; // Cantidad de filas existentes
+
+      // Crear una nueva fila con los campos de material y cantidad
+      const newRow = document.createElement('div');
+      newRow.classList.add('row', 'mb-3', 'material-row');
+
+      // Generar HTML para la fila
+      newRow.innerHTML = `
+        <div class="col-md-6">
+          <label for="material${materialIndex}" class="form-label">Seleccionar material</label>
+          <select class="form-select" name="material${materialIndex}" id="material${materialIndex}" required>
+            <option value="" disabled selected>Elige un material</option>
+            <% items.forEach(function(item) { %>
+              <option value="<%= item.id %>"><%= item.item %></option>
+            <% }); %>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label for="cantidad${materialIndex}" class="form-label">Cantidad</label>
+          <input type="number" class="form-control" name="cantidad${materialIndex}" id="cantidad${materialIndex}" min="1" required>
+        </div>
+      `;
+
+      // Añadir la nueva fila al contenedor
+      container.appendChild(newRow);
+    });
+  });
+});
+
+    </script>
 </body>
 </html>

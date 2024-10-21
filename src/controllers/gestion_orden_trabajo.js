@@ -83,70 +83,105 @@ const cambiarEstadoPendienteEnProceso = (req, res)=>{
    })
 };
 
-const cambiarEstadoEnProcesoTerminada = (req, res)=>{
-   //Sacando los datos del formulario.
-   const id = req.body.id;
-   const tipo = req.body.tipo; 
-   const descripcionSolucion= req.body.descripcionSolucion;
-   const fechaInicio = req.body.fechaI; //Tipo varchar
-   const lapsoHorasMilisegundos = req.body.horas  * 3600000;//Se pasa la cantidad de horas a milisegundos para luego sumarlo a la fecha
-   const fechaInicioReal = req.body.inicioReal;//Tipo varchar formato aaaa/mm/ddThh:mm
+const cambiarEstadoEnProcesoTerminada = (req, res) => {
+   console.log(req.body); // Depuración para ver todos los datos enviados
  
-   //Formateando la fecha de fin del tipo Date al formato con el que la guardo en la base de datos (dd/mm/aaaa)
-   const fechaFin = new Date(); //Este formato tira tres horas adelantado por la zona horaria(acá en visual. En la consola tira bien).
-   const fechaFinMilisegundos = fechaFin.getTime();
-   var fechaMomentFin = moment(fechaFin,'YYYY-MM-DD HH:mm:ss.SSS').format('YYYY-MM-DDTHH:mm');
-
-   // Extraer partes de la cadena porque es de tipo varchar en la base de datos
-      var year = fechaInicioReal.substring(0, 4);
-      var month = fechaInicioReal.substring(5, 7) - 1; // Restar 1 ya que los meses van de 0 a 11
-      var day = fechaInicioReal.substring(8, 10);
-      var hour = fechaInicioReal.substring(11, 13);
-      var minute = fechaInicioReal.substring(14, 16);
-// Crear un objeto Date
-      var fechaInicioRealTipoDate = new Date(year, month, day, hour, minute);//La paso a formato date
-      const milisegundosFechaInicioReal = fechaInicioRealTipoDate.getTime();
-   
-   const duracionOT = (fechaFinMilisegundos - milisegundosFechaInicioReal)/3600000; //Duración en horas que tardó la orden de trabajo
-
-   if(tipo == "Correctiva"){
-      connection.query('UPDATE orden_trabajo SET ? WHERE id_orden_trabajo = ?', [{estado: "Finalizada", descripcion_solucion: descripcionSolucion, fecha_fin: fechaMomentFin,horas_totales:duracionOT},id],(error,results)=>{
-         if(error){
-            console.log(error);
-         }else{
-            res.redirect('/orden-de-trabajo/en-proceso');
+   const id = req.body.id;
+   const tipo = req.body.tipo;
+   const descripcionSolucion = req.body.descripcionSolucion;
+   const fechaInicio = req.body.fechaI;
+   const lapsoHorasMilisegundos = req.body.horas * 3600000;
+   const fechaInicioReal = req.body.inicioReal;
+ 
+   // Recoger materiales y cantidades
+   const materiales = [];
+   const cantidades = [];
+ 
+   // Recorre las claves del cuerpo del formulario para detectar "material" y "cantidad"
+   Object.keys(req.body).forEach(key => {
+     if (key.startsWith('material')) {
+       const index = key.replace('material', ''); // Obtener el índice
+       materiales.push(req.body[key]);
+       cantidades.push(req.body[`cantidad${index}`]);
+     }
+   });
+ 
+   // Ahora `materiales` y `cantidades` contienen los valores correctos
+   console.log('Materiales:', materiales);
+   console.log('Cantidades:', cantidades);
+ 
+   // Actualización de stock para cada material
+   materiales.forEach((materialId, index) => {
+     const cantidadUtilizada = cantidades[index];
+ 
+     connection.query(
+       'UPDATE stock SET cantidad = cantidad - ? WHERE item = ?',
+       [cantidadUtilizada, materialId],
+       (error, results) => {
+         if (error) {
+           console.log(`Error al actualizar stock para el material ${materialId}:`, error);
+         } else {
+           console.log(`Stock actualizado para el material ${materialId}`);
          }
-      })
-   }else{
-      const nuevaFechaInicio = new Date(fechaFinMilisegundos +  lapsoHorasMilisegundos); //Fecha de inicio nueva = fecha en la que termina mas la cantidad de horas(en milisegundos) en la que se repite la O.T programada
-      let fechaMomentInicio = moment(nuevaFechaInicio, "ddd MMM DD YYYY HH:mm:ss [GMT]Z (Z)").format("YYYY-MM-DDTHH:mm");
-   
-      //Insertar en la tabla de ordenes Programadas finalizadas la nueva orden 
-      connection.query('INSERT INTO ot_programada_finalizada SET ?', {
-         id_orden_programada: id,
-         fecha_inicio: fechaMomentInicio,
-         fecha_inicio_real:fechaInicioReal,
-         fecha_fin: fechaMomentFin,
-         observacion: descripcionSolucion,
-         horas_totales:duracionOT,
-       }, (error, results) => {
+       }
+     );
+   });
+ 
+   // Continuar con la actualización de la orden de trabajo...
+   const fechaFin = new Date();
+   const fechaFinMilisegundos = fechaFin.getTime();
+   const fechaMomentFin = moment(fechaFin, 'YYYY-MM-DD HH:mm:ss.SSS').format('YYYY-MM-DDTHH:mm');
+ 
+   const year = fechaInicioReal.substring(0, 4);
+   const month = fechaInicioReal.substring(5, 7) - 1;
+   const day = fechaInicioReal.substring(8, 10);
+   const hour = fechaInicioReal.substring(11, 13);
+   const minute = fechaInicioReal.substring(14, 16);
+   const fechaInicioRealTipoDate = new Date(year, month, day, hour, minute);
+   const milisegundosFechaInicioReal = fechaInicioRealTipoDate.getTime();
+   const duracionOT = (fechaFinMilisegundos - milisegundosFechaInicioReal) / 3600000;
+ 
+   if (tipo === "Correctiva") {
+     connection.query(
+       'UPDATE orden_trabajo SET ? WHERE id_orden_trabajo = ?', 
+       [{ estado: "Finalizada", descripcion_solucion: descripcionSolucion, fecha_fin: fechaMomentFin, horas_totales: duracionOT }, id],
+       (error, results) => {
          if (error) {
            console.log(error);
          } else {
-           //Actualizar la orden de trabajo para que se resetee con la nueva fecha de inicio y pase a estado pendiente.
-           //ACÄ CAMBIO NUEVAFECHAINICIO FORMATEADA POR NUEVA FECHA INICIO
-            connection.query('UPDATE orden_trabajo SET ? WHERE id_orden_trabajo = ?', [{estado: "Pendiente", fecha_inicio: fechaMomentInicio},id],(error,results)=>{
-            if(error){
-               console.log(error);
-            }else{
-               res.redirect('/orden-de-trabajo/en-proceso');
-            }
-      })
+           res.redirect('/orden-de-trabajo/en-proceso');
          }
-       });
-
+       }
+     );
+   } else {
+     const nuevaFechaInicio = new Date(fechaFinMilisegundos + lapsoHorasMilisegundos);
+     const fechaMomentInicio = moment(nuevaFechaInicio, "ddd MMM DD YYYY HH:mm:ss [GMT]Z (Z)").format("YYYY-MM-DDTHH:mm");
+ 
+     connection.query(
+       'INSERT INTO ot_programada_finalizada SET ?', 
+       { id_orden_programada: id, fecha_inicio: fechaMomentInicio, fecha_inicio_real: fechaInicioReal, fecha_fin: fechaMomentFin, observacion: descripcionSolucion, horas_totales: duracionOT }, 
+       (error, results) => {
+         if (error) {
+           console.log(error);
+         } else {
+           connection.query(
+             'UPDATE orden_trabajo SET ? WHERE id_orden_trabajo = ?', 
+             [{ estado: "Pendiente", fecha_inicio: fechaMomentInicio }, id],
+             (error, results) => {
+               if (error) {
+                 console.log(error);
+               } else {
+                 res.redirect('/orden-de-trabajo/en-proceso');
+               }
+             }
+           );
+         }
+       }
+     );
    }
-};
+ };
+ 
+
 
 const eliminarOrden = (req, res)=>{
    const id = req.body.id;
