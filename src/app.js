@@ -17,7 +17,7 @@ app.set('view engine', 'ejs')
 
 app.use(express.static(join(__dirname,'public')))
 
-app.use(express.urlencoded({extended:false}));
+app.use(express.urlencoded({extended:false}));//cambiado para ver si anda bien el formulario. Antes estaba en false
 app.use(express.json());
 
 

@@ -1,80 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">    
-    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
-    <!-- BOOTSTRAP -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
-    <%- include('partes/header.ejs') %>
-    <title>Ordenes de trabajo</title>
-</head>
-<body>
-    <div id="menu">
-      <%- include('partes/navegacion.ejs') %>
-    </div>
-    <main>
-      <div id="titulo-container">
-      <div id="titulo">TAREAS EN PROCESO</div>
-      </div>
-         
-          <div  eblclass="container">       
-            <table class="table table-bordered table-striped text-center mt-4" id="<%= login ? 'tabla' : 'tablaSinPrivilegio' %>">
 
-            <thead>
-              <tr class="bg-primary text-white">
-                <th scope="col" class="p-1 col-id">ID</th>
-                <th scope="col" class="p-1">TAREA</th>
-                <% if (login){ %>
-                <th scope="col" class="p-1">ESTADO</th>
-                <th scope="col" class="p-1">PRIORIDAD</th>
-                <th scope="col" class="p-1">RESPONSABLE</th>
-                <th scope="col" class="p-1">FECHA INICIO</th>
-                <th scope="col" class="p-1">ACTIVO</th>
-                <% } %>
-                <th scope="col" class="p-1 col-acciones" >ACCIONES</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- //Los results que yo paso en el index.js, acá los uso con la variable orden declarada dentro del forEach                                  -->
-              <% results.forEach((orden)=>{ %>             
-                <tr>  
-                    <td class="p-1 col-id"><%= orden.id_orden_trabajo %></td>  
-                    <td class="p-1"><%= orden.actividad %></td>
-                    <% if (login){ %>
-                    <td class="p-1"><%= orden.estado %></td>
-                    <td class="p-1"><%= orden.prioridad %></td>  
-                    <td class="p-1"><%= orden.responsable %></td>
-                    <td class="p-1"><%= orden.fecha_inicio_real %></td>
-                    <td class="p-1"><%= orden.activo %></td>  
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous" />
+    <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
+    <!-- BOOTSTRAP -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" />
+    <%- include('partes/header.ejs') %>
+        <title>Ordenes de trabajo</title>
+</head>
+
+<body>
+    <div id="menu"><%- include('partes/navegacion.ejs') %></div>
+    <main>
+        <div id="titulo-container">
+            <div id="titulo">TAREAS EN PROCESO</div>
+        </div>
+
+        <div eblclass="container">
+            <table class="table table-bordered table-striped text-center mt-4"
+                id="<%= login ? 'tabla' : 'tablaSinPrivilegio' %>">
+                <thead>
+                    <tr class="bg-primary text-white">
+                        <th scope="col" class="p-1 col-id">ID</th>
+                        <th scope="col" class="p-1">TAREA</th>
+                        <% if (login){ %>
+                            <th scope="col" class="p-1">ESTADO</th>
+                            <th scope="col" class="p-1">PRIORIDAD</th>
+                            <th scope="col" class="p-1">RESPONSABLE</th>
+                            <th scope="col" class="p-1">FECHA INICIO</th>
+                            <th scope="col" class="p-1">ACTIVO</th>
+                        <% } %>
+                            <th scope="col" class="p-1 col-acciones">ACCIONES</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- //Los results que yo paso en el index.js, acá los uso con la variable orden declarada dentro del forEach                                  -->
+                    <% results.forEach((orden)=>{ %>
+                        <tr>
+                            <td class="p-1 col-id">
+                                <%= orden.id_orden_trabajo %>
+                            </td>
+                            <td class="p-1">
+                                <%= orden.actividad %>
+                            </td>
+                            <% if (login){ %>
+                                <td class="p-1">
+                                    <%= orden.estado %>
+                                </td>
+                                <td class="p-1">
+                                    <%= orden.prioridad %>
+                                </td>
+                                <td class="p-1">
+                                    <%= orden.responsable %>
+                                </td>
+                                <td class="p-1">
+                                    <%= orden.fecha_inicio_real %>
+                                </td>
+                                <td class="p-1">
+                                    <%= orden.activo %>
+                                </td>
+                                <% } %>
+                                    <td class="p-1 col-acciones">
+                                        <!-- Boton ver orden -->
+                                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
+                                            data-bs-target="#verOrden<%= orden.id_orden_trabajo %>">
+                                            <i class="bx bx-show bx-sm"></i>
+                                        </button>
+                                        <!-- Boton terminar orden -->
+                                        <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
+                                            data-bs-target="#terminarOrden<%= orden.id_orden_trabajo %>">
+                                            <i class="bx bx-check-double bx-sm" style="color: rgb(0, 0, 0)"></i>
+                                        </button>
+                                    </td>
+                        </tr>
+                        <%- include('partes/modalVerOrden.ejs',{"id":orden.id_orden_trabajo,"datos":orden}) %> <%-
+                                include('partes/modalTerminarOrden.ejs',{"id":orden.id_orden_trabajo, "tipo" :
+                                orden.tipo, "fechaI" : orden.fecha_inicio, "cantidadHoras" :
+                                orden.lapsoProgramada,"inicioReal":orden.fecha_inicio_real, "items" : items}) %>
+                                <% }) %>
+                </tbody>
+            </table>
+            <% if (login){ %> <%- include('partes/botonesSeleccionarFechaEnProceso.ejs') %>
                     <% } %>
-                    <td class="p-1 col-acciones">
-                      <!-- Boton ver orden -->  
-                      <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#verOrden<%= orden.id_orden_trabajo %>">
-                        <i class='bx bx-show bx-sm'></i>
-                      </button>
-                      <!-- Boton terminar orden -->  
-                      <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#terminarOrden<%= orden.id_orden_trabajo %>">
-                        <i class='bx bx-check-double bx-sm' style="color: rgb(0, 0, 0);"></i>
-                      </button>
-                    </td>
-                </tr> 
-                <%- include('partes/modalVerOrden.ejs',{"id":orden.id_orden_trabajo,"datos":orden}) %>
-                <%- include('partes/modalTerminarOrden.ejs',{"id":orden.id_orden_trabajo, "tipo": orden.tipo, "fechaI": orden.fecha_inicio, "cantidadHoras": orden.lapsoProgramada,"inicioReal":orden.fecha_inicio_real, "items": items}) %>                                   
-             <% }) %>
-            </tbody>
-          </table>
-          <% if (login){ %>
-          <%- include('partes/botonesSeleccionarFechaEnProceso.ejs') %>
-          <% } %>
-          </div>
-          
+        </div>
     </main>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+        crossorigin="anonymous"></script>
     <!-- JQUERY -->
-    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
     <!-- DATATABLES -->
     <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
     <!-- BOOTSTRAP -->
@@ -82,41 +102,111 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script src="/actualizarPagina.js"></script>
     <script src="/buscarFiltrarTabla.js"></script>
+    <!-- <script src="/cargarMaterialesDinamicamente.js"></script> -->
     <script>
-      document.addEventListener('DOMContentLoaded', function() {
-      document.querySelectorAll('.add-material').forEach(button => {
-        button.addEventListener('click', function() {
-      const orderId = this.getAttribute('data-order-id'); // Obtener el ID de la orden
-      const container = document.getElementById(`material-container-${orderId}`); // Contenedor de materiales
-      let materialIndex = container.querySelectorAll('.material-row').length; // Cantidad de filas existentes
+        // Función para eliminar una fila de material
+        function eliminar(button) {
+            const row = button.closest(".material-row"); // Encuentra la fila más cercana
+            if (row) {
+                row.remove(); // Elimina la fila
+            }
+        }
+    
+        
+            const addButton = document.querySelectorAll(".add-material");
+    
+            // Añadir evento para agregar filas dinámicas
+            addButton.forEach((button) => {
+                button.addEventListener("click", function () {
+                    const orderId = this.getAttribute("data-order-id");
+                    const container = document.getElementById(`material-container-${orderId}`);
+    
+                    // Verificar que el contenedor existe
+                    if (!container) {
+                        console.error(`El contenedor con ID material-container-${orderId} no existe.`);
+                        return;
+                    }
+    
+                    const materialIndex = container.querySelectorAll(".material-row").length; // Obtener el índice de material
+    
+                    // Crear una nueva fila (div) para los materiales
+                    const newRow = document.createElement("div");
+                    newRow.classList.add("row", "mb-3", "material-row");
+    
+                    // Generar la estructura HTML de la nueva fila
+                    newRow.innerHTML = `
+                        <input id="1231" name="123" value="asd" hidden>
+    
+                        <div class="col-6">
+                            <label for="material${materialIndex}" class="form-label">Seleccionar material</label>
+                            <select class="form-select material-select" name="materiales${materialIndex}" id="material${materialIndex}" required>
+                                <option value="" disabled selected>Elige un material</option>
+                                <% items.forEach(function(item) { %>
+                                    <option value="<%= item.id %>"><%= item.item %></option>
+                                <% }); %>
+                            </select>
+                        </div>
+    
+                        <div class="col-4">
+                            <label for="cantidad${materialIndex}" class="form-label">Cantidad</label>
+                            <input type="number" class="form-control cantidad-input" name="materiales${materialIndex}" id="cantidad${materialIndex}" min="1" required>
+                        </div>
+    
+                        <div class="col-2">
+                            <button type="button" onclick="eliminar(this)" class="btn btn-danger remove-material" id="remove-material-${materialIndex}">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    `;
+    
+                    // Añadir la nueva fila al contenedor
+                    container.appendChild(newRow);
+                });
+            });
+    
+            // Configuración del MutationObserver para detectar cambios en el contenedor de materiales
+            const materialContainers = document.querySelectorAll('[id^="material-container-"]');
+            
+            materialContainers.forEach((container) => {
+                const observer = new MutationObserver((mutations) => {
+                    mutations.forEach((mutation) => {
+                        if (mutation.type === 'childList') {
+                            console.log("Cambio detectado en el DOM:", mutation);
+                            // Puedes agregar código adicional aquí si necesitas actualizar algo cuando se detectan cambios
+                        }
+                    });
+                });
+    
+                // Iniciar el observador en el contenedor de materiales
+                observer.observe(container, { childList: true, subtree: true });
+            });
 
-      // Crear una nueva fila con los campos de material y cantidad
-      const newRow = document.createElement('div');
-      newRow.classList.add('row', 'mb-3', 'material-row');
 
-      // Generar HTML para la fila
-      newRow.innerHTML = `
-        <div class="col-md-6">
-          <label for="material${materialIndex}" class="form-label">Seleccionar material</label>
-          <select class="form-select" name="material${materialIndex}" id="material${materialIndex}" required>
-            <option value="" disabled selected>Elige un material</option>
-            <% items.forEach(function(item) { %>
-              <option value="<%= item.id %>"><%= item.item %></option>
-            <% }); %>
-          </select>
-        </div>
-        <div class="col-md-6">
-          <label for="cantidad${materialIndex}" class="form-label">Cantidad</label>
-          <input type="number" class="form-control" name="cantidad${materialIndex}" id="cantidad${materialIndex}" min="1" required>
-        </div>
-      `;
+            const enviarFormulario = (id) => {
+    const formulario = document.getElementById(`orderForm`);
+    console.log(formulario);
+    let dataForm = new FormData(formulario);
 
-      // Añadir la nueva fila al contenedor
-      container.appendChild(newRow);
+    let datas = {};
+    dataForm.forEach((value, key) => {
+        if (datas[key] || datas[key] == '') {
+            if (Array.isArray(datas[key])) {
+                datas[key].push(value);
+            } else {
+                datas[key] = [datas[key], value];
+            }
+        } else {
+            datas[key] = value;
+        }
     });
-  });
-});
+
+    console.log(datas);
+}
 
     </script>
+    
+      
+    
 </body>
+
 </html>

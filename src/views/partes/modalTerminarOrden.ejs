@@ -1,47 +1,50 @@
 <div class="modal fade" id="terminarOrden<%= id %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-header">
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-              ¿Estás seguro que deseas dar como finalizada la orden de trabajo?
-          </div>
-          <div class="modal-footer">
-              <div class="container mt-4">
-                  <div class="card border-secondary">
-                      <div class="card-header bg-primary text-white">Finalizar orden de trabajo</div>
-                      <div class="card-body">
-                        <form action="/cambiar-estado-enProceso-Terminada" method="POST">
-                            <input id="id" name="id" value="<%= id %>" hidden>
-                            <input id="tipo" name="tipo" value="<%= tipo %>" hidden>
-                            <input id="fechaI" name="fechaI" value="<%= fechaI %>" hidden>
-                            <input id="horas" name="horas" value="<%= cantidadHoras %>" hidden>
-                            <input id="inicioReal" name="inicioReal" value="<%= inicioReal %>" hidden>
-                          
-                            <div class="mb-3">
-                              <label for="descripcionSolucion" class="form-label mt-2">Observaciones</label>
-                              <textarea class="form-control" id="descripcionSolucion" name="descripcionSolucion" tabindex="1" style="height: 80px; resize: none;"></textarea>
-                            </div>
-                          
-                            <div class="mb-3">
-                              <label for="materiales" class="form-label mt-2">Materiales utilizados</label>
-                              <!-- Botón + -->
-                              <button type="button" class="btn btn-success add-material" data-order-id="<%= id %>" style="margin-left: 10px;">+</button>
-                            </div>
-                          
-                            <!-- Contenedor donde se agregarán dinámicamente las filas -->
-                            <div id="material-container-<%= id %>"></div>
-                          
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-primary" tabindex="5">Finalizar orden</button>
-                          </form>
-                      
-                      </div>
-                  </div>        
-              </div>
-          </div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+      <div class="modal-body">
+        ¿Estás seguro que deseas dar como finalizada la orden de trabajo?
+      </div>
+      <div class="modal-footer">
+        <div class="container mt-4">
+          <div class="card border-secondary">
+            <div class="card-header bg-primary text-white">Finalizar orden de trabajo</div>
+            <div class="card-body">
+              <form id="orderForm" action="/cambiar-estado-enProceso-Terminada" method="POST">
+                <input id="id" name="id" value="<%= id %>" hidden>
+                <input id="tipo" name="tipo" value="<%= tipo %>" hidden>
+                <input id="fechaI" name="fechaI" value="<%= fechaI %>" hidden>
+                <input id="horas" name="horas" value="<%= cantidadHoras %>" hidden>
+                <input id="inicioReal" name="inicioReal" value="<%= inicioReal %>" hidden>
+
+                <div class="mb-3">
+                  <label for="descripcionSolucion" class="form-label mt-2">Observaciones</label>
+                  <textarea class="form-control" id="descripcionSolucion" name="descripcionSolucion" tabindex="1"
+                            style="height: 80px; resize: none;"></textarea>
+                </div>
+
+                <div class="mb-3">
+                  <label for="materiales" class="form-label mt-2">Materiales utilizados</label>
+                  <button type="button" id="agregar" class="btn btn-success add-material" data-order-id="<%= id %>"
+                          style="margin-left: 10px;">+
+                  </button>
+                </div>
+
+                <!-- Agregar data-order-id al contenedor de materiales -->
+                <div id="material-container-<%= id %>" data-order-id="<%= id %>">
+                  
+                  <!-- Sección donde se agregarán los materiales dinámicamente -->
+                </div>
+
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <input type="submit" class="btn btn-primary" tabindex="5">
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
-
