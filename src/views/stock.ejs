@@ -47,11 +47,9 @@
                 <td class="p-1"><%= orden.cantidad %></td>
                 <% if (orden.cantidad > orden.CantidadAdvertencia) { %>
                   <td class="p-1"><i class='bx bxs-bell' style="color:green"></i></td>
-                <% } %>
-                <% if (orden.cantidad > orden.CantidadCritica && orden.cantidad <= orden.CantidadAdvertencia) { %>
+                <% } else if (orden.cantidad > orden.CantidadCritica && orden.cantidad <= orden.CantidadAdvertencia) { %>
                   <td class="p-1"><i class='bx bxs-bell' style="color:rgba(242, 242, 64, 0.996)"></i></td>
-                <% } %>
-                <% if (orden.cantidad <= orden.CantidadCritica) { %>
+                <% } else { %>
                   <td class="p-1"><i class='bx bxs-bell' style="color:rgb(255, 0, 0)"></i></td>
                 <% } %>
             </tr>                        

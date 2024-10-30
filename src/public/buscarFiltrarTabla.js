@@ -49,14 +49,11 @@ $(document).ready(function(){
         drawCallback: function() {
             // Formatear las fechas en la tabla cada vez que se redibuja
             $('#tabla tbody tr').each(function() {
-                var fecha = $(this).find('td:eq(5)').text();
-                // Verificar si la fecha está en el formato original
-                if (moment(fecha, 'YYYY-MM-DDTHH:mm', true).isValid()) {
-                    // Si es así, formatearla al nuevo formato
-                    var fechaFormateada = moment(fecha, 'YYYY-MM-DDTHH:mm').format('DD - MM - YYYY HH:mm');
-                    $(this).find('td:eq(5)').text(fechaFormateada);
-                }
-                // Si la fecha ya está en el nuevo formato, no hacer nada
+                var fecha = $(this).find('td:eq(5)').text().trim(); // Quita los espacios
+                // Formatea la fecha directamente
+                var fechaFormateada = moment(fecha, 'YYYY-MM-DDTHH:mm').format('DD - MM - YYYY HH:mm');
+                // Aplica el texto formateado a la celda de fecha
+                $(this).find('td:eq(5)').text(fechaFormateada);
             });
         },
         scrollY: 500, // Agregamos scroll en Y
@@ -64,6 +61,7 @@ $(document).ready(function(){
     });
     $clonedHeaderRow.find('th:last-child').text('');
 });
+
 $(document).ready(function(){
     // Creamos una fila en el head de la tabla y la clonamos para cada columna
     var $headerRow = $('#tablaSinPrivilegio thead tr');
@@ -130,3 +128,5 @@ $(document).ready(function(){
     });
     $clonedHeaderRow.find('th:last-child').text('');
 });
+
+

@@ -57,13 +57,12 @@
                 <td class="p-1"><%= item.CantidadCritica %></td>
                 <% if (item.cantidad > item.CantidadAdvertencia) { %>
                   <td class="p-1"><i class='bx bxs-bell' style="color:green"></i></td>
-                <% } %>
-                <% if (item.cantidad > item.CantidadCritica && item.cantidad <= item.CantidadAdvertencia) { %>
+                <% } else if (item.cantidad > item.CantidadCritica && item.cantidad <= item.CantidadAdvertencia) { %>
                   <td class="p-1"><i class='bx bxs-bell' style="color:rgba(242, 242, 64, 0.996)"></i></td>
-                <% } %>
-                <% if (item.cantidad <= item.CantidadCritica) { %>
+                <% } else { %>
                   <td class="p-1"><i class='bx bxs-bell' style="color:rgb(255, 0, 0)"></i></td>
                 <% } %>
+
                 <td class="p-1">
                   <!-- Boton editar stock -->  
                    <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#editarStock<%= item.idstock %>">

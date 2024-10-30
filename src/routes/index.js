@@ -282,8 +282,8 @@ router.get('/orden-de-trabajo/en-proceso', (req, res) => {
         if (error) {
             throw error;
         } else {
-            // Segunda consulta: Consultar la columna "item" de la tabla "stock"
-            const stockQuery = 'SELECT item FROM stock';
+            // Segunda consulta: Consultar la columna "item" y "idstock" de la tabla "stock"
+            const stockQuery = 'SELECT idstock, item FROM stock';
             connection.query(stockQuery, (stockError, stockResults) => {
                 if (stockError) {
                     throw stockError;
@@ -291,7 +291,7 @@ router.get('/orden-de-trabajo/en-proceso', (req, res) => {
                     // Renderizar la vista con ambos resultados
                     res.render('en_proceso.ejs', {
                         results: ordenesResults, // Resultados de la tabla orden_trabajo
-                        items: stockResults,     // Resultados de la tabla stock
+                        items: stockResults,     // Resultados de la tabla stock (idstock e item)
                         login: req.session.loggedImAdmin
                     });
                 }
@@ -299,6 +299,7 @@ router.get('/orden-de-trabajo/en-proceso', (req, res) => {
         }
     });
 });
+
 
 
 router.get('/orden-de-trabajo/generar-orden', (req, res) => { 

@@ -84,9 +84,8 @@ const cambiarEstadoPendienteEnProceso = (req, res)=>{
 };
 
 const cambiarEstadoEnProcesoTerminada = (req, res) => {
-   console.log("Datos recibidos:", req.body);
-  return;
-
+   console.log("Datos recibidos:");
+   console.log(req.body);
 
    const id = req.body.id;
    const tipo = req.body.tipo;
@@ -94,92 +93,97 @@ const cambiarEstadoEnProcesoTerminada = (req, res) => {
    const fechaInicio = req.body.fechaI;
    const lapsoHorasMilisegundos = req.body.horas * 3600000;
    const fechaInicioReal = req.body.inicioReal;
- 
-   // Verificar si se enviaron materiales
+
+   // Construir array de materiales procesando las propiedades del objeto `req.body`
    let materiales = [];
-   if (req.body.materiales_json) {
-     try {
-       materiales = JSON.parse(req.body.materiales_json);
-       console.log('Materiales recibidos:', materiales); // Para depurar
-     } catch (error) {
-       console.error('Error al parsear materiales JSON:', error);
-       return res.status(400).send('Error: Materiales no válidos.');
-     }
-   
-     // Procesar los materiales
-     materiales.forEach(({ material, cantidad }) => {
-       console.log(`Material ID: ${material}, Cantidad: ${cantidad}`);
-       // Actualización del stock para cada material
-       connection.query(
-         'UPDATE stock SET cantidad = cantidad - ? WHERE item = ?',
-         [cantidad, material],
-         (error, results) => {
-           if (error) {
-             console.log(`Error al actualizar stock para el material ${material}:`, error);
-           } else {
-             console.log(`Stock actualizado para el material ${material}`);
+   Object.keys(req.body).forEach(key => {
+       const match = key.match(/materiales\[(\d+)\]\[(id|cantidad)\]/);
+       if (match) {
+           const index = match[1];
+           const field = match[2];
+
+           // Inicializar el objeto de material si no existe
+           if (!materiales[index]) {
+               materiales[index] = { id: null, cantidad: 0 };
            }
-         }
+
+           // Asignar valor al campo id o cantidad
+           if (field === 'id') materiales[index].id = req.body[key];
+           if (field === 'cantidad') materiales[index].cantidad = parseInt(req.body[key], 10);
+       }
+   });
+
+   // Filtrar los materiales con cantidad mayor a cero
+   const materialesActualizables = materiales.filter(material => material.cantidad > 0);
+
+   // Actualizar el stock solo para materiales con cantidad mayor a cero
+   materialesActualizables.forEach(({ id, cantidad }) => {
+       console.log(`Actualizando stock - Material ID: ${id}, Cantidad: ${cantidad}`);
+       connection.query(
+           'UPDATE stock SET cantidad = cantidad - ? WHERE idstock = ?',
+           [cantidad, id],
+           (error, results) => {
+               if (error) {
+                   console.log(`Error al actualizar stock para el material ${id}:`, error);
+               } else {
+                   console.log(`Stock actualizado para el material ${id}`);
+               }
+           }
        );
-     });
-   } else {
-     console.log('No se usaron materiales.');
-   }
- 
+   });
+
    // Continuar con la actualización de la orden de trabajo
    const fechaFin = new Date();
    const fechaMomentFin = moment(fechaFin).format('YYYY-MM-DDTHH:mm');
- 
+
    const year = fechaInicioReal.substring(0, 4);
    const month = fechaInicioReal.substring(5, 7) - 1;
    const day = fechaInicioReal.substring(8, 10);
    const hour = fechaInicioReal.substring(11, 13);
    const minute = fechaInicioReal.substring(14, 16);
    const fechaInicioRealTipoDate = new Date(year, month, day, hour, minute);
-   const milisegundosFechaInicioReal = fechaInicioRealTipoDate.getTime();
-   const duracionOT = (fechaFin.getTime() - milisegundosFechaInicioReal) / 3600000;
- 
+   const duracionOT = (fechaFin.getTime() - fechaInicioRealTipoDate.getTime()) / 3600000;
+
    if (tipo === "Correctiva") {
-     connection.query(
-       'UPDATE orden_trabajo SET ? WHERE id_orden_trabajo = ?',
-       [{ estado: "Finalizada", descripcion_solucion: descripcionSolucion, fecha_fin: fechaMomentFin, horas_totales: duracionOT }, id],
-       (error, results) => {
-         if (error) {
-           console.error(error);
-           return res.status(500).send("Error al actualizar la orden de trabajo.");
-         }
-         res.redirect('/orden-de-trabajo/en-proceso');
-       }
-     );
-   } else {
-     const nuevaFechaInicio = new Date(fechaFin.getTime() + lapsoHorasMilisegundos);
-     const fechaMomentInicio = moment(nuevaFechaInicio).format("YYYY-MM-DDTHH:mm");
- 
-     connection.query(
-       'INSERT INTO ot_programada_finalizada SET ?',
-       { id_orden_programada: id, fecha_inicio: fechaMomentInicio, fecha_inicio_real: fechaInicioReal, fecha_fin: fechaMomentFin, observacion: descripcionSolucion, horas_totales: duracionOT },
-       (error, results) => {
-         if (error) {
-           console.error(error);
-           return res.status(500).send("Error al insertar en la tabla ot_programada_finalizada.");
-         }
- 
-         connection.query(
-           'DELETE FROM orden_trabajo WHERE id_orden_trabajo = ?',
-           [id],
+       connection.query(
+           'UPDATE orden_trabajo SET ? WHERE id_orden_trabajo = ?',
+           [{ estado: "Finalizada", descripcion_solucion: descripcionSolucion, fecha_fin: fechaMomentFin, horas_totales: duracionOT }, id],
            (error, results) => {
-             if (error) {
-               console.error(error);
-               return res.status(500).send("Error al eliminar la orden de trabajo.");
-             }
-             res.redirect('/orden-de-trabajo/en-proceso');
+               if (error) {
+                   console.error(error);
+                   return res.status(500).send("Error al actualizar la orden de trabajo.");
+               }
+               res.redirect('/orden-de-trabajo/en-proceso');
            }
-         );
-       }
-     );
+       );
+   } else {
+       const nuevaFechaInicio = new Date(fechaFin.getTime() + lapsoHorasMilisegundos);
+       const fechaMomentInicio = moment(nuevaFechaInicio).format("YYYY-MM-DDTHH:mm");
+
+       connection.query(
+           'INSERT INTO ot_programada_finalizada SET ?',
+           { id_orden_programada: id, fecha_inicio: fechaMomentInicio, fecha_inicio_real: fechaInicioReal, fecha_fin: fechaMomentFin, observacion: descripcionSolucion, horas_totales: duracionOT },
+           (error, results) => {
+               if (error) {
+                   console.error(error);
+                   return res.status(500).send("Error al insertar en la tabla ot_programada_finalizada.");
+               }
+
+               connection.query(
+                   'DELETE FROM orden_trabajo WHERE id_orden_trabajo = ?',
+                   [id],
+                   (error, results) => {
+                       if (error) {
+                           console.error(error);
+                           return res.status(500).send("Error al eliminar la orden de trabajo.");
+                       }
+                       res.redirect('/orden-de-trabajo/en-proceso');
+                   }
+               );
+           }
+       );
    }
- };
- 
+};
 const eliminarOrden = (req, res)=>{
    const id = req.body.id;
    connection.query('DELETE FROM orden_trabajo WHERE id_orden_trabajo = ?', [id], (error, results)=>{

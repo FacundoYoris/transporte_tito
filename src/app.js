@@ -9,6 +9,7 @@ import {fileURLToPath} from 'url'
 import indexRoutes from './routes/index.js'
 import mysql2 from 'mysql2';
 
+
 const app = express()
 const __dirname = dirname(fileURLToPath(import.meta.url)) //Forma de obtener la ruta absoluta. Por mas que movamos views de carpeta en carpeta siempre va a estar de la forma correcta.
 

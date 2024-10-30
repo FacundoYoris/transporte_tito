@@ -21,25 +21,43 @@
 
                 <div class="mb-3">
                   <label for="descripcionSolucion" class="form-label mt-2">Observaciones</label>
-                  <textarea class="form-control" id="descripcionSolucion" name="descripcionSolucion" tabindex="1"
-                            style="height: 80px; resize: none;"></textarea>
+                  <textarea class="form-control" id="descripcionSolucion" name="descripcionSolucion" tabindex="1" style="height: 80px; resize: none;"></textarea>
                 </div>
 
                 <div class="mb-3">
                   <label for="materiales" class="form-label mt-2">Materiales utilizados</label>
-                  <button type="button" id="agregar" class="btn btn-success add-material" data-order-id="<%= id %>"
-                          style="margin-left: 10px;">+
+                  <button type="button" id="agregar" class="btn btn-success add-material" data-order-id="<%= id %>" style="margin-left: 10px;">
+                    <i class='bx bx-plus-circle'></i>
                   </button>
                 </div>
 
-                <!-- Agregar data-order-id al contenedor de materiales -->
+                <!-- Contenedor de filas de materiales -->
                 <div id="material-container-<%= id %>" data-order-id="<%= id %>">
-                  
-                  <!-- Sección donde se agregarán los materiales dinámicamente -->
+                  <% for (let i = 0; i < 25; i++) { %>
+                    <div class="row mb-3 material-row" style="display: none;">
+                      <div class="col-6">
+                        <label class="form-label">Seleccionar material</label>
+                        <select class="form-select material-select" name="materiales[<%= i %>][id]">
+                          <% items.forEach(function(item, index) { %>
+                            <option value="<%= item.idstock %>" <%= index === 0 ? 'selected' : '' %>><%= item.item %></option>
+                          <% }); %>
+                        </select>
+                      </div>
+                      <div class="col-4">
+                        <label class="form-label">Cantidad</label>
+                        <input type="number" class="form-control cantidad-input" name="materiales[<%= i %>][cantidad]" min="0" value="0">
+                      </div>
+                      <div class="col-2">
+                        <button type="button" onclick="eliminar(this)" class="btn btn-danger remove-material">
+                          <i class='bx bxs-trash-alt'></i>
+                        </button>
+                      </div>
+                    </div>
+                  <% } %>
                 </div>
 
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <input type="submit" class="btn btn-primary" tabindex="5">
+                <input type="submit" class="btn btn-primary" tabindex="5" value="Finalizar tarea">
               </form>
             </div>
           </div>
