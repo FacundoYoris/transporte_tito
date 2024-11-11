@@ -527,6 +527,9 @@ router.get('/orden-de-trabajo/:id', (req, res) => {
     });
 });
 
+router.get('/ordenes-solicitadas', (req,res) =>{
+    res.render('ordenes_solicitadas.ejs',{login: req.session.loggedImAdmin});
+});
 
 import save from '../controllers/gestion_orden_trabajo.js';
 router.post('/save', save.save);//Guardar una nueva orden de trabajo

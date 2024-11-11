@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+            integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous" />
+        <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
+        <!-- BOOTSTRAP -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css" />
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" />
+        <%- include('partes/header.ejs') %>
+            <title>SOLICITUDES</title>
+    </head>
+<body>
+        <div id="menu"><%- include('partes/navegacion.ejs') %></div>
+    <div class="container mt-4">
+        <h2 class="mb-4">Órdenes Solicitadas</h2>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Rol</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Ana Pérez</td>
+                        <td>ana.perez@example.com</td>
+                        <td>Administrador</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Juan López</td>
+                        <td>juan.lopez@example.com</td>
+                        <td>Usuario</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>María García</td>
+                        <td>maria.garcia@example.com</td>
+                        <td>Editor</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Enlace al JavaScript de Bootstrap (opcional para componentes interactivos) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
