@@ -1,0 +1,47 @@
+<!-- MODAL SOLICITAR TAREA -->
+<div class="modal fade" id="crearSolicitud" tabindex="-1" data-bs-keyboard="false" data-bs-backdrop="static" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-footer">
+            <div class="container mt-10">     
+                <div class="card border-secondary">  
+                    <div class="card-header bg-primary text-white">Nueva solicitud de trabajo</div>
+                    <div class="card-body">
+                        <form action="/saveSolicitud" method="POST">
+                            <div class="mb-3">
+                                <label for="user" class="form-label mt-2">Activo</label>
+                                <select id="activo" name="activo" class="form-select" tabindex="1">
+                                    <option value="">Seleccionar activo</option>
+                                    <% activos.forEach(activo => { %>
+                                        <option value="<%= activo.nombre %>"><%= activo.nombre %></option>
+                                    <% }); %>
+                                  </select>
+                                <label for="user" class="form-label mt-2">Prioridad</label>
+                                <select id="Prioridad" name="Prioridad" class="form-select" aria-label="Default select example" tabindex="2">
+                                      <option value="Alta" >Alta</option>
+                                      <option value="Media" selected>Media</option>
+                                      <option value="Baja">Baja</option>
+                                  </select>
+                                <label for="user" class="form-label mt-2">Descripción del problema</label>
+                                <textarea class="form-control" id="descripción" name="descripcion" tabindex="1" style="height: 80px; resize: none;" required></textarea>
+                        
+                            
+                            
+                            </div>   
+                            <div class="mb-3">
+                            
+                            </div>        
+                            <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button> -->
+                            <a href="/solicitar-tarea" class="btn btn-secondary">Cancelar</a> 
+                            <button type="submit" class="btn btn-primary" tabindex="5">Enviar solicitud</button>
+                        </form>
+                    </div>
+                </div>        
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

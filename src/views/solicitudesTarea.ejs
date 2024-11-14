@@ -9,7 +9,7 @@
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">
      <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
      <%- include('partes/header.ejs') %>
-    <title>Solicitudes en espera</title>
+    <title>Solicitudes de tareas</title>
 </head>
 <body>
     <div id="menu">
@@ -20,17 +20,20 @@
       <div id="titulo-container">
       <div id="titulo">SOLICITUDES DE TAREAS</div>
       </div>
-          <div  eblclass="container">  
-               
-          <table class="table table-bordered table-striped text-center mt-4" id="tabla2">
+          <div  eblclass="container" class="table-responsive">  
+            <!-- Boton crear orden -->
+            <button type="button" class="btn btn-outline-primary mt-4" data-bs-toggle="modal" data-bs-target="#crearSolicitud">
+                <i class='bx bx-task fs-1'></i>
+              </button>     
+          <table class="table table-bordered table-striped text-center mt-4" id="tabla">
             <thead>
               <tr class="bg-primary text-white">
                 <th scope="col" class="p-1 col-id">ID SOLICITUD</th>
                 <th scope="col" class="p-1">DESCRIPCIÓN</th>
                 <th scope="col" class="p-1">PRIORIDAD</th>
                 <th scope="col" class="p-1">ACTIVO</th>
-                <th scope="col" class="p-1">USUARIO</th>
-                <th scope="col" class="p-1 col-acciones">ACCIONES</th>
+                <th scope="col" class="p-1">ESTADO</th>
+                <!-- <th scope="col" class="p-1 col-acciones">ACCIONES</th> -->
               </tr>
             </thead>
             <tbody>
@@ -41,25 +44,18 @@
                     <td class="p-1"><%= solicitud.problema %></td>
                     <td class="p-1"><%= solicitud.prioridad %></td>
                     <td class="p-1"><%= solicitud.activo %></td>
-                    <td class="p-1"><%= solicitud.usuario_generador %></td>  
-                    <td class="p-1 col-acciones">
-                            <!-- Boton aceptar solicitud -->
-                            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
-                            data-bs-target="#aceptarSolicitud<%= solicitud.idsolicitud_ot %>">
-                            <i class="bx bx-check-double bx-sm" style="color: rgb(0, 0, 0)"></i>
-                        </button>
-                            <!-- Boton eliminar orden ESTO DEBERÍA SER UNA CRUZ QUE PASE A LA TAREA COMO RECHAZADA-->
-                             <!-- Boton eliminar orden ESTO DEBERÍA SER UNA CRUZ QUE PASE A LA TAREA COMO RECHAZADA-->  
-                              <!-- Boton eliminar orden ESTO DEBERÍA SER UNA CRUZ QUE PASE A LA TAREA COMO RECHAZADA-->
-                               <!-- Boton eliminar orden ESTO DEBERÍA SER UNA CRUZ QUE PASE A LA TAREA COMO RECHAZADA-->
-                                <!-- Boton eliminar orden ESTO DEBERÍA SER UNA CRUZ QUE PASE A LA TAREA COMO RECHAZADA-->
-
-                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#eliminarSolicitud<%= solicitud.idsolicitud_ot %>">
-                              <i class='bx bx-trash bx-sm bx-flip-horizontal' style='color:#0f1010' ></i>
-                            </button>
-                          </td>
+                    <td class="p-1"><%= solicitud.estado %></td>  
+                    <!-- <td class="p-1 col-acciones">
+                      
+                      <button type="button" class="btn btn-outline-info"  data-bs-toggle="modal" data-bs-target="#editarSolicitud<%= solicitud.idsolicitud_ot  %>">
+                        <i class='bx bx-edit-alt bx-sm'></i>
+                      </button>
+                      
+                      <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#eliminarSolicitud<%= solicitud.idsolicitud_ot %>">
+                        <i class='bx bx-trash bx-sm bx-flip-horizontal' style='color:#0f1010' ></i>
+                      </button>  
                                    
-                    
+                    </td> -->
                 </tr>
                                               
              <% }) %>
@@ -68,15 +64,8 @@
           <%- include('partes/botonesSeleccionarFechaFinalizada.ejs') %>
           </div>
             
-    </main> 
-    <%- include('partes/modalSolicitarTarea.ejs') %> 
-    <!-- Acá debería agregar el modal para crear la orden de trabajo -->
-    <!-- Acá debería agregar el modal para crear la orden de trabajo --><!-- Acá debería agregar el modal para crear la orden de trabajo -->
-    <!-- Acá debería agregar el modal para crear la orden de trabajo -->
-    <!-- Acá debería agregar el modal para crear la orden de trabajo -->
-    <!-- Acá debería agregar el modal para crear la orden de trabajo -->
-    <!-- Acá debería agregar el modal para crear la orden de trabajo -->
-
+    </main>
+    <%- include('partes/modalSolicitarTarea.ejs') %>  
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>    
     <!-- JQUERY -->
     <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>

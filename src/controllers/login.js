@@ -1,5 +1,5 @@
-import database from '../database/db.js'
-import express from 'express'
+import database from '../database/db.js';
+import express from 'express';
 
 const login = (req, res) => {
   // Extraer el nombre de usuario y la contraseña de la solicitud HTTP
@@ -20,32 +20,39 @@ const login = (req, res) => {
       req.session.userName = username;
 
       // Si se encuentra un usuario, establecer la sesión como logueada
-      req.session.logueado=true;
+      req.session.logueado = true;
 
       // Extraer el nivel de privilegio del primer usuario encontrado en los resultados de la consulta
       const privilegio = rows[0].privilegio;
-      // Establecer la sesión como logueada como administrador si el nivel de privilegio es 1, de lo contrario, establecer como falso
+
+      // Asignar permisos basados en el nivel de privilegio
       if (privilegio === 1) {
         req.session.loggedImAdmin = true;
-        res.redirect('/estadistica');
-      } else {
+        req.session.loggedImOperario = false;
+        req.session.loggedImExterno = false;
+        res.redirect('/estadistica'); // Redirigir al dashboard de administrador
+      } else if (privilegio === 0) {
         req.session.loggedImAdmin = false;
-        res.redirect('/orden-de-trabajo/pendiente');
+        req.session.loggedImOperario = true;
+        req.session.loggedImExterno = false;
+        res.redirect('/orden-de-trabajo/pendiente'); // Redirigir a la página de operarios
+      } else if (privilegio === 2) {
+        req.session.loggedImAdmin = false;
+        req.session.loggedImOperario = false;
+        req.session.loggedImExterno = true;
+        res.redirect('/ordenes-solicitadas'); // Redirigir a la página para usuarios externos
       }
     }
   });
 };
 
+const logout = (req, res) => {
+  req.session.destroy(() => {
+    res.redirect('/');
+  });
+};
 
-  const logout = (req,res) => {
-    req.session.destroy(()=>{
-      res.redirect('/');
-    });
-  }
-
-  export default
-  {
-    login,
-    logout,
-
-  } 
+export default {
+  login,
+  logout,
+};

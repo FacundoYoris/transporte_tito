@@ -1,3 +1,6 @@
+// La variable "login" = req.session.loggedImAdmin hace referencia a si el usuario tiene privilegio de administrador
+// La variable "operario" = req.session.loggedImOperario hace referencia a si el usuario tiene privilegio de operario
+// La variable "usuarioExterno" = req.session.loggedImExterno hace referencia a si el usuario tiene privilegio de usuario externo
 import { Router } from 'express'
 import connection from '../database/db.js'
 
@@ -38,7 +41,8 @@ router.get('/estadistica', (req, res) => {
                         results: results,
                         correctivasPendientesAtrasadas: correctivasPendientesAtrasadas,
                         programadasPendientesAtrasadas: programadasPendientesAtrasadas,
-                        login: req.session.loggedImAdmin
+                        login: req.session.loggedImAdmin,
+                        operario: req.session.loggedImOperario
                     });
                 }
             });
@@ -52,7 +56,7 @@ router.get('/almacen/stock', (req, res) => {
         if(error){
             throw error;
         }else{
-            res.render('stock.ejs', {results: results,"login": req.session.loggedImAdmin});
+            res.render('stock.ejs', {results: results,"login": req.session.loggedImAdmin,"operario": req.session.loggedImOperario});
         }
 
     })
@@ -63,7 +67,7 @@ router.get('/almacen/activos', (req, res) => {
         if(error){
             throw error;
         }else{
-            res.render('activos.ejs', {results: results,"login": req.session.loggedImAdmin});
+            res.render('activos.ejs', {results: results,"login": req.session.loggedImAdmin,"operario": req.session.loggedImOperario});
         }
 
     })
@@ -74,7 +78,7 @@ router.get('/modificar-activos', (req, res) => {
         if(error){
             throw error;
         }else{
-            res.render('modificarActivo.ejs', {results: results,"login": req.session.loggedImAdmin});
+            res.render('modificarActivo.ejs', {results: results,"login": req.session.loggedImAdmin,"operario": req.session.loggedImOperario});
         }
 
     })
@@ -85,7 +89,7 @@ router.get('/modificar-stock', (req, res) => {
         if(error){
             throw error;
         }else{
-            res.render('modificarStock.ejs', {results: results,"login": req.session.loggedImAdmin});
+            res.render('modificarStock.ejs', {results: results,"login": req.session.loggedImAdmin,"operario": req.session.loggedImOperario});
         }
 
     })
@@ -97,7 +101,7 @@ router.get('/orden-de-trabajo', (req, res) => {
         if(error){
             throw error;
         }else{
-            res.render('orden_trabajo.ejs', {results: results,"login": req.session.loggedImAdmin});
+            res.render('orden_trabajo.ejs', {results: results,"login": req.session.loggedImAdmin,"operario": req.session.loggedImOperario});
         }
 
     })
@@ -248,7 +252,7 @@ router.get('/orden-de-trabajo/pendiente', (req, res) => {
         if(error){
             throw error;
         }else{
-            res.render('pendiente.ejs', {results: results,"login": req.session.loggedImAdmin});
+            res.render('pendiente.ejs', {results: results,"login": req.session.loggedImAdmin,"operario": req.session.loggedImOperario});
         }
 
     })
@@ -259,7 +263,7 @@ router.get('/orden-de-trabajo/finalizada', (req, res) => {
         if(error){
             throw error;
         }else{
-            res.render('finalizada.ejs', {results: results,"login": req.session.loggedImAdmin});
+            res.render('finalizada.ejs', {results: results,"login": req.session.loggedImAdmin,"operario": req.session.loggedImOperario});
         }
 
     })
@@ -292,7 +296,8 @@ router.get('/orden-de-trabajo/en-proceso', (req, res) => {
                     res.render('en_proceso.ejs', {
                         results: ordenesResults, // Resultados de la tabla orden_trabajo
                         items: stockResults,     // Resultados de la tabla stock (idstock e item)
-                        login: req.session.loggedImAdmin
+                        login: req.session.loggedImAdmin,
+                        operario: req.session.loggedImOperario
                     });
                 }
             });
@@ -324,7 +329,7 @@ router.get('/orden-de-trabajo/generar-orden', (req, res) => {
                                 } else {
                                     
                                     // Renderizar la plantilla 'gestion_orden_trabajo.ejs' y pasar los resultados de ambas consultas y los datos de inicio de sesión
-                                    res.render('gestion_orden_trabajo.ejs', { results: results, activos: activos,usuarios:usuarios, login: req.session.loggedImAdmin });
+                                    res.render('gestion_orden_trabajo.ejs', { results: results, activos: activos,usuarios:usuarios, login: req.session.loggedImAdmin, operario: req.session.loggedImOperario});
                                 }
                             }); 
                         }
@@ -359,24 +364,24 @@ router.get('/terceros', (req, res) =>{
         if(error){
             throw error;
         }else{
-            res.render('terceros.ejs', {results: results,"login": req.session.loggedImAdmin});
+            res.render('terceros.ejs', {results: results,"login": req.session.loggedImAdmin,"operario": req.session.loggedImOperario});
         }
     });
 });
 
-router.get('/almacen', (req, res) => res.render('almacen.ejs', {"login": req.session.loggedImAdmin}))
-router.get('/gestion-mantenimiento', (req, res) => res.render('gestion_mantenimiento.ejs', {"login": req.session.loggedImAdmin}))
-router.get('/administrar-usuario', (req, res) => res.render('administrar_usuario.ejs', {"login": req.session.loggedImAdmin}))
-router.get('/orden-de-trabajo/rangeDates', (req,res) => res.render('nuevaTablaFiltrada.ejs', {"login": req.session.loggedImAdmin}))
+router.get('/almacen', (req, res) => res.render('almacen.ejs', {"login": req.session.loggedImAdmin,"operario": req.session.loggedImOperario}))
+router.get('/gestion-mantenimiento', (req, res) => res.render('gestion_mantenimiento.ejs', {"login": req.session.loggedImAdmin,"operario": req.session.loggedImOperario}))
+router.get('/administrar-usuario', (req, res) => res.render('administrar_usuario.ejs', {"login": req.session.loggedImAdmin,"operario": req.session.loggedImOperario}))
+router.get('/orden-de-trabajo/rangeDates', (req,res) => res.render('nuevaTablaFiltrada.ejs', {"login": req.session.loggedImAdmin,"operario": req.session.loggedImOperario}))
 
-router.get('/modificarDatosPersonales', (req,res) => res.render('modificarDatosPersonales.ejs',{"login": req.session.loggedImAdmin}))
+router.get('/modificarDatosPersonales', (req,res) => res.render('modificarDatosPersonales.ejs',{"login": req.session.loggedImAdmin,"operario": req.session.loggedImOperario}))
 router.get('/newPassword', (req,res) =>{
     const userActual = req.session.userName
     connection.query('SELECT * FROM usuarios WHERE usuario = ?',[userActual], (error, results)=>{
         if(error){
             throw error;
         }else{    
-            res.render('newPassword.ejs', {"login": req.session.loggedImAdmin,"dato":results});
+            res.render('newPassword.ejs', {"login": req.session.loggedImAdmin,"dato":results,"operario": req.session.loggedImOperario});
         }
         });
     
@@ -527,9 +532,50 @@ router.get('/orden-de-trabajo/:id', (req, res) => {
     });
 });
 
-router.get('/ordenes-solicitadas', (req,res) =>{
-    res.render('ordenes_solicitadas.ejs',{login: req.session.loggedImAdmin});
+
+router.get('/solicitar-tarea', (req,res) =>{
+    connection.query('SELECT * FROM solicitud_ot', (error, results)=>{
+        if(error){
+            throw error;
+        }else{
+            connection.query('SELECT nombre FROM activos', (error, nombresActivos)=>{
+                if(error){
+                    throw error;
+                }else{
+                    res.render('solicitudesTarea.ejs', {"login": req.session.loggedImAdmin,results:results,"activos":nombresActivos,"operario": req.session.loggedImOperario});
+                }
+        
+            })   
+            
+        }
+        });
+    
 });
+router.get('/ordenes-solicitadas', (req,res) =>{
+    connection.query('SELECT * FROM solicitud_ot', (error, results)=>{//Para mostrar la tabla
+        if(error){
+            throw error;
+        }else{
+            connection.query('SELECT nombre FROM activos', (error, nombresActivos)=>{//Para seleccionar el el selected
+                if(error){
+                    throw error;
+                }else{
+                    res.render('ordenes_solicitadas.ejs', {"login": req.session.loggedImAdmin,results:results,"activos":nombresActivos,"operario": req.session.loggedImOperario});
+                }
+        
+            })   
+            
+        }
+        });
+    
+});
+
+
+
+
+import saveSolicitud from '../controllers/gestion_solicitudes_tareas.js';
+router.post('/saveSolicitud', saveSolicitud.saveSolicitud);//Guardar una nueva solicitud de tarea
+
 
 import save from '../controllers/gestion_orden_trabajo.js';
 router.post('/save', save.save);//Guardar una nueva orden de trabajo
