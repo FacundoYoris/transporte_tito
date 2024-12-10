@@ -5,9 +5,8 @@ const saveActivo = (req, res)=>{
    //  const planta = req.body.planta; 
     const sector = req.body.sector;
     const estado = req.body.estado;
-    const potencia = req.body.potencia;
-    const horas_uso = req.body.horas;
-    connection.query('INSERT INTO activos SET ?', {nombre: activo, sector: sector, estado:estado, potencia_nominal: potencia, horas_uso: horas_uso},(error,results)=>{
+
+    connection.query('INSERT INTO activos SET ?', {nombre: activo, sector: sector, estado:estado},(error,results)=>{
        if(error){
           console.log(error);
        }else{
@@ -22,9 +21,8 @@ const saveActivo = (req, res)=>{
    const sector = req.body.sector;
    const nombre = req.body.activo;
    const estado = req.body.estado;
-   const potencia = req.body.potencia;
-   const horas_uso = req.body.horas;
-   connection.query('UPDATE activos SET ? WHERE idactivos = ?', [{ sector: sector, nombre:nombre, estado:estado, potencia_nominal: potencia, horas_uso: horas_uso},id],(error,results)=>{
+
+   connection.query('UPDATE activos SET ? WHERE idactivos = ?', [{ sector: sector, nombre:nombre, estado:estado},id],(error,results)=>{
       if(error){
          console.log(error);
       }else{

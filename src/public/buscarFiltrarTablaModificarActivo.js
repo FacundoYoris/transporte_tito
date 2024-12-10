@@ -5,7 +5,7 @@ $(document).ready(function(){
     var $clonedHeaderRow = $headerRow.clone(true).appendTo('#tabla thead');
     
     $clonedHeaderRow.find('th').each(function (i) {
-        if (i != 7) {
+        if (i != 5) {
             var title = $(this).text(); //es el nombre de la columna
             $(this).html('<input type="text" placeholder="'+title+'..." class="'+title+'" />');
             
@@ -43,7 +43,7 @@ $(document).ready(function(){
                 },
                 lengthMenu: [ [5,10, 25, -1], [5,10, 25, "Mostrar todo"] ],
                 columnDefs: [
-                    { targets: [6], orderable: false }
+                    { targets: [4], orderable: false }
                 ],
                 scrollY: 500, // Agregamos scroll en Y
                 scrollX: true, // Agregamos scroll en X

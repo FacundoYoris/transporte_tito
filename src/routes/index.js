@@ -1,3 +1,5 @@
+
+
 // La variable "login" = req.session.loggedImAdmin hace referencia a si el usuario tiene privilegio de administrador
 // La variable "operario" = req.session.loggedImOperario hace referencia a si el usuario tiene privilegio de operario
 // La variable "usuarioExterno" = req.session.loggedImExterno hace referencia a si el usuario tiene privilegio de usuario externo
@@ -468,11 +470,14 @@ router.get('/fechasYtareasPrioridadMedia', (req, res) => {
             fecha_inicio: fecha,
             tareas: ordenesAgrupadas[fecha]
         }));
-        console.log(resultadoFinal);
         // Renderizar la vista con los resultados finales
         res.json(resultadoFinal);
     });
 });
+
+
+
+
 
 router.get('/fechasYtareasPrioridadBaja', (req, res) => {
     const userActual = req.session.userName;
@@ -511,7 +516,6 @@ router.get('/fechasYtareasPrioridadBaja', (req, res) => {
             fecha_inicio: fecha,
             tareas: ordenesAgrupadas[fecha]
         }));
-        console.log(resultadoFinal);
         // Renderizar la vista con los resultados finales
         res.json(resultadoFinal);
     });
@@ -531,6 +535,8 @@ router.get('/orden-de-trabajo/:id', (req, res) => {
         }
     });
 });
+
+
 
 
 router.get('/solicitar-tarea', (req,res) =>{
@@ -609,4 +615,3 @@ router.post('/actualizarTablaFechas-Gestion', actualizarPorFechas.rangoFechasGes
 
 
 export default router
-

@@ -9,6 +9,7 @@ function toggleMenu(opcion) {//FUNCIÓN PARA MOSTRAR/OCULTAR LAS FECHAS Y/O TARE
 
 
 function generarListaFechasAlta() {
+    
     let url = '/fechasYtareasPrioridadAlta';
     fetch(url)
         .then(response => response.json())
@@ -40,6 +41,7 @@ function generarListaFechasAlta() {
     }
 
     function mostrarFechasAgrupadas(fechasAgrupadas) {
+        
         const fechasPrioridadAlta = document.getElementById("fechas-prioridadAlta");
         fechasPrioridadAlta.innerHTML = "";
         for (const fecha in fechasAgrupadas) {
@@ -73,7 +75,6 @@ function generarListaFechasAlta() {
         }
     }
 }
-
 
 function generarListaFechasMedia() {
     let url = '/fechasYtareasPrioridadMedia';
@@ -130,6 +131,45 @@ function generarListaFechasMedia() {
         }
     }
 }
+
+
+
+function mostrarFechasAgrupadas(fechasAgrupadas) {
+    const fechasPrioridadMedia = document.getElementById("fechas-prioridadMedia");
+    fechasPrioridadMedia.innerHTML = "";
+    
+    fechasAgrupadas.forEach(fechaItem => {
+        const { fecha_inicio, tareas } = fechaItem;
+        const fechaLi = document.createElement("li");
+        const fechaDiv = document.createElement("div");
+        fechaDiv.classList.add("opcionSecundaria");
+        fechaDiv.textContent = `${fecha_inicio} (${tareas.length})`;
+        fechaDiv.setAttribute("onclick", `toggleMenu('media-secundaria-${fecha_inicio}')`);
+        const tareasUl = document.createElement("ul");
+
+        tareas.forEach((tarea) => {
+            const tareaLi = document.createElement("li");
+            tareaLi.classList.add("submenu");
+            const tareaBtn = document.createElement("button");
+            tareaBtn.textContent = tarea.actividad;  // Muestra la actividad como texto
+
+            // Usar el id para abrir el modal de detalles
+            tareaBtn.addEventListener("click", () => abrirModal(tarea.id, tarea.actividad));
+            tareaLi.appendChild(tareaBtn);
+            tareasUl.appendChild(tareaLi);
+        });
+
+        const tareasDiv = document.createElement("div");
+        tareasDiv.classList.add("menuOpciones");
+        tareasDiv.setAttribute("id", `menu-media-secundaria-${fecha_inicio}`);
+        tareasDiv.appendChild(tareasUl);
+        fechaLi.appendChild(fechaDiv);
+        fechaLi.appendChild(tareasDiv);
+        fechasPrioridadMedia.appendChild(fechaLi);
+    });
+}
+
+
 
 
 function generarListaFechasBaja() {
@@ -192,9 +232,9 @@ function generarListaFechasBaja() {
 function abrirModal(idTarea, tareaId) {
     const modalId = `verOrden${idTarea}`;
     let modal = document.getElementById(modalId);
-    
+
+    // Si el modal no existe, crear uno dinámicamente
     if (!modal) {
-        // Si el modal no existe, crearlo dinámicamente
         modal = document.createElement('div');
         modal.id = modalId;
         modal.classList.add('modal', 'fade');
@@ -203,11 +243,15 @@ function abrirModal(idTarea, tareaId) {
     
     // Realizar la solicitud fetch para obtener los detalles de la orden de trabajo
     fetch(`/orden-de-trabajo/${tareaId}`)
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Error en la respuesta del servidor");
+            }
+            return response.json();
+        })
         .then(data => {
-            // Obtener la fecha y hora de inicio en formato ISO 8601
+            // Formatear la fecha de inicio
             const fechaInicioISO = moment(data.fecha_inicio);
-            // Formatear la fecha y hora según el formato deseado
             const fechaInicioFormateada = fechaInicioISO.format('DD/MM/YYYY HH:mm');
             
             // Construir el contenido del modal con los detalles de la orden de trabajo
@@ -215,13 +259,14 @@ function abrirModal(idTarea, tareaId) {
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Orden de Trabajo - ${tareaId}</h5>
+                            <h5 class="modal-title">Orden de Trabajo - ${data.id_orden_trabajo}</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <p><strong>Descripción:</strong> ${data.actividad}</p>
                             <p><strong>Fecha de inicio:</strong> ${fechaInicioFormateada}</p>
-                            <p><strong>Problema: </strong>${data.descripción_problematica} </p>
+                            <p><strong>Problema:</strong> ${data["descripción_problematica"] || "No especificado"}</p>
+                            <p><strong>Elemento:</strong> ${data.elemento || "No especificado"}</p>
                             <!-- Agregar más detalles aquí según los campos de la orden de trabajo -->
                         </div>
                         <div class="modal-footer">
@@ -234,14 +279,13 @@ function abrirModal(idTarea, tareaId) {
             
             // Añadir evento al botón "Aceptar Orden" para abrir el modal de confirmación
             document.getElementById(`btnAceptarOrden${idTarea}`).addEventListener('click', function() {
-                // Cerrar el primer modal antes de abrir el segundo
                 const modalInstance = bootstrap.Modal.getInstance(modal);
                 modalInstance.hide();
-                
-                // Usar un setTimeout para asegurar que el primer modal esté completamente cerrado antes de abrir el segundo
+
+                // Usar un setTimeout para abrir el segundo modal después de cerrar el primero
                 setTimeout(() => {
                     abrirModalConfirmacion(idTarea, tareaId);
-                }, 500);
+                }, 300);
             });
 
             // Mostrar el modal
@@ -251,12 +295,14 @@ function abrirModal(idTarea, tareaId) {
         .catch(error => console.error('Error al obtener los datos de la orden de trabajo:', error));
 }
 
+
+
 function abrirModalConfirmacion(idTarea, tareaId) {
     const modalIdConfirmacion = `aceptarOrden${idTarea}`;
     let modalConfirmacion = document.getElementById(modalIdConfirmacion);
 
+    // Crear el modal de confirmación si no existe
     if (!modalConfirmacion) {
-        // Si el modal no existe, crearlo dinámicamente
         modalConfirmacion = document.createElement('div');
         modalConfirmacion.id = modalIdConfirmacion;
         modalConfirmacion.classList.add('modal', 'fade');
@@ -267,7 +313,7 @@ function abrirModalConfirmacion(idTarea, tareaId) {
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Aceptar orden de trabajo</h5>
+                        <h5 class="modal-title">Aceptar orden de trabajo</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -289,6 +335,7 @@ function abrirModalConfirmacion(idTarea, tareaId) {
     const modalInstanceConfirmacion = new bootstrap.Modal(modalConfirmacion);
     modalInstanceConfirmacion.show();
 }
+
 
 
 
