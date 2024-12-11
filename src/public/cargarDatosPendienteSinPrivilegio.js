@@ -9,7 +9,6 @@ function toggleMenu(opcion) {//FUNCIÓN PARA MOSTRAR/OCULTAR LAS FECHAS Y/O TARE
 
 
 function generarListaFechasAlta() {
-    
     let url = '/fechasYtareasPrioridadAlta';
     fetch(url)
         .then(response => response.json())
@@ -18,30 +17,21 @@ function generarListaFechasAlta() {
         .catch(error => console.log(error));
 
     function agruparPorDia(datos) {
-        
-        // Creamos un objeto para almacenar las tareas agrupadas por día
         const tareasPorDia = {};
-
-        // Recorremos los datos y agrupamos las tareas por día
         datos.forEach(item => {
-            // Obtenemos la fecha sin la hora y los minutos
             const fechaInicio = new Date(item.fecha_inicio);
             const fechaDia = `${fechaInicio.getDate()}/${fechaInicio.getMonth() + 1}/${fechaInicio.getFullYear()}`;
-
-            // Si el día aún no está en el objeto, lo inicializamos como un arreglo vacío
             if (!tareasPorDia[fechaDia]) {
                 tareasPorDia[fechaDia] = { tareas: [] };
             }
-
-            // Agregamos las tareas al día correspondiente
-            tareasPorDia[fechaDia].tareas.push(...item.tareas);
+            // Ordenar tareas por actividad
+            const tareasOrdenadas = item.tareas.sort((a, b) => a.actividad.localeCompare(b.actividad));
+            tareasPorDia[fechaDia].tareas.push(...tareasOrdenadas);
         });
-
         return tareasPorDia;
     }
 
     function mostrarFechasAgrupadas(fechasAgrupadas) {
-        
         const fechasPrioridadAlta = document.getElementById("fechas-prioridadAlta");
         fechasPrioridadAlta.innerHTML = "";
         for (const fecha in fechasAgrupadas) {
@@ -53,14 +43,14 @@ function generarListaFechasAlta() {
                 fechaDiv.textContent = `${fecha} (${tareas.length})`;
                 fechaDiv.setAttribute("onclick", `toggleMenu('alta-secundaria-${fecha}')`);
                 const tareasUl = document.createElement("ul");
-                tareas.forEach((tarea, index) => {
+                tareas.forEach((tarea) => {
                     const tareaLi = document.createElement("li");
                     tareaLi.classList.add("submenu");
-                    tareaLi.setAttribute("data-submenu", `submenu-alta-${fecha}-${index + 1}`);
+                    tareaLi.setAttribute("data-submenu", `submenu-alta-${fecha}-${tarea.id_orden_trabajo}`);
                     const tareaBtn = document.createElement("button");
-                    tareaBtn.textContent = tarea;
-                    // Pasar el ID de la tarea como parámetro adicional a abrirModal
-                    tareaBtn.addEventListener("click", () => abrirModal(`verOrden-${fecha}-${index}`, tarea));
+                    tareaBtn.textContent = tarea.actividad; // Mostrar actividad
+                    tareaBtn.classList.add("tarea-boton"); // Clase para alinear a la izquierda
+                    tareaBtn.addEventListener("click", () => abrirModal(tarea.id_orden_trabajo, tarea.id_orden_trabajo));
                     tareaLi.appendChild(tareaBtn);
                     tareasUl.appendChild(tareaLi);
                 });
@@ -75,6 +65,7 @@ function generarListaFechasAlta() {
         }
     }
 }
+
 
 function generarListaFechasMedia() {
     let url = '/fechasYtareasPrioridadMedia';
@@ -92,7 +83,9 @@ function generarListaFechasMedia() {
             if (!tareasPorDia[fechaDia]) {
                 tareasPorDia[fechaDia] = { tareas: [] };
             }
-            tareasPorDia[fechaDia].tareas.push(...item.tareas);
+            // Mantener ID y actividad, pero ordenar por actividad
+            const tareasOrdenadas = item.tareas.sort((a, b) => a.actividad.localeCompare(b.actividad));
+            tareasPorDia[fechaDia].tareas.push(...tareasOrdenadas);
         });
         return tareasPorDia;
     }
@@ -109,17 +102,18 @@ function generarListaFechasMedia() {
                 fechaDiv.textContent = `${fecha} (${tareas.length})`;
                 fechaDiv.setAttribute("onclick", `toggleMenu('media-secundaria-${fecha}')`);
                 const tareasUl = document.createElement("ul");
-                tareas.forEach((tarea, index) => {
+                tareas.forEach((tarea) => {
                     const tareaLi = document.createElement("li");
                     tareaLi.classList.add("submenu");
-                    tareaLi.setAttribute("data-submenu", `submenu-media-${fecha}-${index + 1}`);
+                    tareaLi.setAttribute("data-submenu", `submenu-media-${fecha}-${tarea.id_orden_trabajo}`);
                     const tareaBtn = document.createElement("button");
-                    tareaBtn.textContent = tarea;
+                    tareaBtn.textContent = tarea.actividad; // Mostrar la actividad
+                    tareaBtn.classList.add("tarea-boton"); // Agregar la clase para alinear a la izquierda
                     // Pasar el ID de la tarea como parámetro adicional a abrirModal
-                    tareaBtn.addEventListener("click", () => abrirModal(`verOrden-${fecha}-${index}`, tarea));
+                    tareaBtn.addEventListener("click", () => abrirModal(tarea.id_orden_trabajo, tarea.id_orden_trabajo));
                     tareaLi.appendChild(tareaBtn);
                     tareasUl.appendChild(tareaLi);
-                });
+                });                
                 const tareasDiv = document.createElement("div");
                 tareasDiv.classList.add("menuOpciones");
                 tareasDiv.setAttribute("id", `menu-media-secundaria-${fecha}`);
@@ -131,6 +125,8 @@ function generarListaFechasMedia() {
         }
     }
 }
+
+
 
 
 
@@ -188,7 +184,9 @@ function generarListaFechasBaja() {
             if (!tareasPorDia[fechaDia]) {
                 tareasPorDia[fechaDia] = { tareas: [] };
             }
-            tareasPorDia[fechaDia].tareas.push(...item.tareas);
+            // Ordenar tareas por actividad
+            const tareasOrdenadas = item.tareas.sort((a, b) => a.actividad.localeCompare(b.actividad));
+            tareasPorDia[fechaDia].tareas.push(...tareasOrdenadas);
         });
         return tareasPorDia;
     }
@@ -205,14 +203,14 @@ function generarListaFechasBaja() {
                 fechaDiv.textContent = `${fecha} (${tareas.length})`;
                 fechaDiv.setAttribute("onclick", `toggleMenu('baja-secundaria-${fecha}')`);
                 const tareasUl = document.createElement("ul");
-                tareas.forEach((tarea, index) => {
+                tareas.forEach((tarea) => {
                     const tareaLi = document.createElement("li");
                     tareaLi.classList.add("submenu");
-                    tareaLi.setAttribute("data-submenu", `submenu-baja-${fecha}-${index + 1}`);
+                    tareaLi.setAttribute("data-submenu", `submenu-baja-${fecha}-${tarea.id_orden_trabajo}`);
                     const tareaBtn = document.createElement("button");
-                    tareaBtn.textContent = tarea;
-                    // Pasar el ID de la tarea como parámetro adicional a abrirModal
-                    tareaBtn.addEventListener("click", () => abrirModal(`verOrden-${fecha}-${index}`, tarea));
+                    tareaBtn.textContent = tarea.actividad; // Mostrar la actividad
+                    tareaBtn.classList.add("tarea-boton"); // Clase para alinear a la izquierda
+                    tareaBtn.addEventListener("click", () => abrirModal(tarea.id_orden_trabajo, tarea.id_orden_trabajo));
                     tareaLi.appendChild(tareaBtn);
                     tareasUl.appendChild(tareaLi);
                 });
@@ -227,6 +225,7 @@ function generarListaFechasBaja() {
         }
     }
 }
+
 
 
 function abrirModal(idTarea, tareaId) {

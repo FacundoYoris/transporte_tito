@@ -4,11 +4,17 @@
         <div class="menu">
             <input type="checkbox" id="check__menu">
             <label for="check__menu" id="label__check" style="margin-left: 10px;">
-                <i class="fas fa-bars icon__menu"></i>
+                
+                <i class='bx bx-menu icon__menu'></i>
             </label>
             <nav>
-                <ul>
-                    <li><a href="#" id="selected"></a></li>
+                <ul id="<%= operario ? 'operario' : 'otro-privilegio' %>">
+                    
+                    <li style="height: 70px;"">
+                        <a href="#titulo" id="selected" style="background-color: white;">
+                            <img src="/imagenes/logo.jpg" alt="Logo">
+                        </a>
+                    </li>
                     <% if (login){ %>
                         <li><a href="/estadistica">Panel de control</a></li>
                         <li>

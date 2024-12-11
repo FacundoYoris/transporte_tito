@@ -392,56 +392,51 @@ router.get('/newPassword', (req,res) =>{
 router.get('/fechasYtareasPrioridadAlta', (req, res) => {
     const userActual = req.session.userName;
 
-    // Consulta SQL para obtener las ordenes de trabajo que coinciden con el usuario actual, prioridad "Alta" y estado "Pendiente"
+    // Consulta SQL para obtener las órdenes de trabajo con prioridad "Alta" y estado "Pendiente"
     const consultaOrdenes = `
-        SELECT fecha_inicio, id_orden_trabajo,actividad
+        SELECT fecha_inicio, id_orden_trabajo, actividad
         FROM orden_trabajo
         WHERE responsable = ? AND prioridad = 'Alta' AND estado = 'Pendiente'
-        ORDER BY fecha_inicio;
+        ORDER BY fecha_inicio, actividad;
     `;
 
-    // Ejecutar la consulta para obtener las ordenes de trabajo
+    // Ejecutar la consulta
     connection.query(consultaOrdenes, [userActual], (error, resultados) => {
         if (error) {
             throw error;
         }
 
-        // Objeto para almacenar las ordenes de trabajo agrupadas por fecha_inicio
+        // Agrupar las órdenes de trabajo por fecha_inicio
         const ordenesAgrupadas = {};
-
-        // Iterar sobre los resultados para agruparlos por fecha_inicio
         resultados.forEach(orden => {
-            const { fecha_inicio, id_orden_trabajo } = orden;
+            const { fecha_inicio, id_orden_trabajo, actividad } = orden;
             if (!ordenesAgrupadas[fecha_inicio]) {
                 ordenesAgrupadas[fecha_inicio] = [];
             }
-            ordenesAgrupadas[fecha_inicio].push(id_orden_trabajo);
+            ordenesAgrupadas[fecha_inicio].push({ id_orden_trabajo, actividad });
         });
 
-        // Ordenar las fechas de forma ascendente
+        // Ordenar las fechas y crear el formato final
         const fechasOrdenadas = Object.keys(ordenesAgrupadas).sort();
-
-        // Crear el arreglo final con el formato deseado
         const resultadoFinal = fechasOrdenadas.map(fecha => ({
             fecha_inicio: fecha,
             tareas: ordenesAgrupadas[fecha]
-
         }));
-       
-        // Renderizar la vista con los resultados finales
+
         res.json(resultadoFinal);
     });
 });
+
 
 router.get('/fechasYtareasPrioridadMedia', (req, res) => {
     const userActual = req.session.userName;
 
-    // Consulta SQL para obtener las ordenes de trabajo que coinciden con el usuario actual, prioridad "Alta" y estado "Pendiente"
+    // Consulta SQL para obtener las ordenes de trabajo que coinciden con el usuario actual, prioridad "Media" y estado "Pendiente"
     const consultaOrdenes = `
-        SELECT fecha_inicio, id_orden_trabajo
+        SELECT fecha_inicio, id_orden_trabajo, actividad
         FROM orden_trabajo
         WHERE responsable = ? AND prioridad = 'Media' AND estado = 'Pendiente'
-        ORDER BY fecha_inicio;
+        ORDER BY fecha_inicio, actividad;
     `;
 
     // Ejecutar la consulta para obtener las ordenes de trabajo
@@ -455,11 +450,11 @@ router.get('/fechasYtareasPrioridadMedia', (req, res) => {
 
         // Iterar sobre los resultados para agruparlos por fecha_inicio
         resultados.forEach(orden => {
-            const { fecha_inicio, id_orden_trabajo } = orden;
+            const { fecha_inicio, id_orden_trabajo, actividad } = orden;
             if (!ordenesAgrupadas[fecha_inicio]) {
                 ordenesAgrupadas[fecha_inicio] = [];
             }
-            ordenesAgrupadas[fecha_inicio].push(id_orden_trabajo);
+            ordenesAgrupadas[fecha_inicio].push({ id_orden_trabajo, actividad });
         });
 
         // Ordenar las fechas de forma ascendente
@@ -468,58 +463,57 @@ router.get('/fechasYtareasPrioridadMedia', (req, res) => {
         // Crear el arreglo final con el formato deseado
         const resultadoFinal = fechasOrdenadas.map(fecha => ({
             fecha_inicio: fecha,
-            tareas: ordenesAgrupadas[fecha]
+            tareas: ordenesAgrupadas[fecha].map(tarea => ({
+                id_orden_trabajo: tarea.id_orden_trabajo,
+                actividad: tarea.actividad
+            }))
         }));
+
+        
         // Renderizar la vista con los resultados finales
         res.json(resultadoFinal);
     });
 });
-
-
-
 
 
 router.get('/fechasYtareasPrioridadBaja', (req, res) => {
     const userActual = req.session.userName;
 
-    // Consulta SQL para obtener las ordenes de trabajo que coinciden con el usuario actual, prioridad "Alta" y estado "Pendiente"
+    // Consulta SQL para obtener las órdenes de trabajo con prioridad "Baja" y estado "Pendiente"
     const consultaOrdenes = `
-        SELECT fecha_inicio, id_orden_trabajo
+        SELECT fecha_inicio, id_orden_trabajo, actividad
         FROM orden_trabajo
         WHERE responsable = ? AND prioridad = 'Baja' AND estado = 'Pendiente'
-        ORDER BY fecha_inicio;
+        ORDER BY fecha_inicio, actividad;
     `;
 
-    // Ejecutar la consulta para obtener las ordenes de trabajo
+    // Ejecutar la consulta
     connection.query(consultaOrdenes, [userActual], (error, resultados) => {
         if (error) {
             throw error;
         }
 
-        // Objeto para almacenar las ordenes de trabajo agrupadas por fecha_inicio
+        // Agrupar las órdenes de trabajo por fecha_inicio
         const ordenesAgrupadas = {};
-
-        // Iterar sobre los resultados para agruparlos por fecha_inicio
         resultados.forEach(orden => {
-            const { fecha_inicio, id_orden_trabajo } = orden;
+            const { fecha_inicio, id_orden_trabajo, actividad } = orden;
             if (!ordenesAgrupadas[fecha_inicio]) {
                 ordenesAgrupadas[fecha_inicio] = [];
             }
-            ordenesAgrupadas[fecha_inicio].push(id_orden_trabajo);
+            ordenesAgrupadas[fecha_inicio].push({ id_orden_trabajo, actividad });
         });
 
-        // Ordenar las fechas de forma ascendente
+        // Ordenar las fechas y crear el formato final
         const fechasOrdenadas = Object.keys(ordenesAgrupadas).sort();
-
-        // Crear el arreglo final con el formato deseado
         const resultadoFinal = fechasOrdenadas.map(fecha => ({
             fecha_inicio: fecha,
             tareas: ordenesAgrupadas[fecha]
         }));
-        // Renderizar la vista con los resultados finales
+
         res.json(resultadoFinal);
     });
 });
+
 
 
 router.get('/orden-de-trabajo/:id', (req, res) => {
@@ -535,8 +529,6 @@ router.get('/orden-de-trabajo/:id', (req, res) => {
         }
     });
 });
-
-
 
 
 router.get('/solicitar-tarea', (req,res) =>{
@@ -557,6 +549,7 @@ router.get('/solicitar-tarea', (req,res) =>{
         });
     
 });
+
 router.get('/ordenes-solicitadas', (req,res) =>{
     connection.query('SELECT * FROM solicitud_ot', (error, results)=>{//Para mostrar la tabla
         if(error){
@@ -577,11 +570,8 @@ router.get('/ordenes-solicitadas', (req,res) =>{
 });
 
 
-
-
 import saveSolicitud from '../controllers/gestion_solicitudes_tareas.js';
 router.post('/saveSolicitud', saveSolicitud.saveSolicitud);//Guardar una nueva solicitud de tarea
-
 
 import save from '../controllers/gestion_orden_trabajo.js';
 router.post('/save', save.save);//Guardar una nueva orden de trabajo
