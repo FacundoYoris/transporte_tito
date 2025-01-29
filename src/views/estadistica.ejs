@@ -1,3 +1,11 @@
+<!-- NO SE USA ESTO -->
+ <!-- NO SE USA ESTO -->
+  <!-- NO SE USA ESTO -->
+   <!-- NO SE USA ESTO -->
+    <!-- NO SE USA ESTO -->
+     <!-- NO SE USA ESTO -->
+      <!-- NO SE USA ESTO -->
+       
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,612 +14,62 @@
     <title>PANEL DE CONTROL</title>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
-    <!-- FullCalendar CSS -->
+    <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.1/main.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
-    <!-- Incluir el header -->
     <%- include('partes/header.ejs') %>
-    
 </head>
 
 <body>
     <div id="menu">
-        <!-- Incluir la navegación -->
         <%- include('partes/navegacion.ejs', {login}) %>
     </div>
     
     <main id="mainEstadistica">
-        
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12 text-center">  
                     <div class="card h-100"></div>
                         <div id="titulo-container" style="padding-top: 5px; padding-right: 0px;">
                             <div id="titulo" style="color: black;">PANEL DE CONTROL</div>
-                           
                         </div>
-                </div>
-            </div>
-
-            <div class="row">  
-                <div class="col-md-12 text-center">  
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <div style="max-width: 1350px;max-height: 400px; margin: auto" id='calendario'></div>
-                            <div id="tooltip" class="evento-tooltip"></div>
-                        </div>
-                </div>
-                </div>
-            </div>
-            
-            <div class="row" style="margin-top: 5px;">  
-                <div class="col-md-4">  
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <div id="porcentajeCumplimiento" style="width: 100%; height: 300px; background-color: white;border: solid 1px; border-radius: 5px;"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">  
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <div id="barras3D" style="width: 100%; height: 300px; background-color: white;border: solid 1px; border-radius: 5px;"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">  
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <div id="chartdiv" style="width: 100%; height: 300px; background-color: white;border: solid 1px; border-radius: 5px;"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row" style="margin-top: 5px;">  
-                <div class="col-md-6">  
-                    <div class="card h-100 text-center">
-                        <div class="card-body"  > 
-                            <div id="" style="width: 100%; height: 300px; background-color: white;border: solid 1px; border-radius: 5px;overflow-y: auto; overflow-x: auto">
-                                <div class="row">
-                                    <div class="col-md-12 " style="margin-top: 10px;">
-                                        <p style="color: black; font-family:Arial, Helvetica, sans-serif ; font-size: 15px; font-weight: bold;" >MATERIALES CRÍTICOS: Adquisición urgente</p>
-                                    </div>
-                                </div>
-                                <div class="row" >
-                                    <div class="col-md-12 text-center" style="margin-left: 2%;" >  
-                                    <table class="table table-bordered table-striped text-center " id="tabla" style="max-height: 80%;" >
-                                        <thead>
-                                            <tr class="bg-primary text-white">
-                                                <th scope="col" class="p-1">ID</th>
-                                                <th scope="col" class="p-1">ITEM</th>
-                                                <th scope="col" class="p-1">CANTIDAD</th>
-                                                <th scope="col" class="p-1">CANTIDAD MÍNIMA</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                           
-                                            <% results.forEach((stock)=>{ %>             
-                                            <tr>  
-                                                <td class="p-1"><%= stock.idstock %></td>  
-                                                <td class="p-1"><%= stock.item %></td>
-                                                <td class="p-1"><%= stock.cantidad %></td>
-                                                <td class="p-1"><%= stock.CantidadAdvertencia %></td>
-                                            </tr>                              
-                                            <% }) %>
-                                        </tbody>
-                                    </table>
-                                    </div>    
-                                </div>
-                            </div>                        
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">  
-                    <div class="card h-100 text-center">
-                        <div class="card-body"  > 
-                            <div id="" style="width: 100%; height: 300px; background-color: white;border: solid 1px; border-radius: 5px;overflow-y: auto;overflow-x: auto; ">
-                                <div class="row">
-                                    <div class="col-md-12 " style="margin-top: 10px;">
-                                        <p style="color: black; font-family:Arial, Helvetica, sans-serif ; font-size: 15px; font-weight: bold;" >RESPONSABLE - TAREA ASOCIADA</p>
-                                    </div>
-                                </div>
-                                <div class="row" >
-                                    <div class="col-md-12 text-center" style="margin-left: 2%;" >  
-                                    <table class="table table-bordered table-striped text-center " id="tabla1" style="max-height: 80%;" >
-                                        <thead>
-                                            <tr class="bg-primary text-white">
-                                              <th scope="col" class="p-1">RESPONSABLE</th>
-                                              <th scope="col" class="p-1">TAREA ASOCIADA</th>
-                                              <th scope="col" class="p-1">INICIO PROGRAMADO</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>                     
-                                            <% pendientes.forEach((orden)=>{ %>             
-                                              <tr>  
-                                                  <td class="p-1"><%= orden.responsable %></td>
-                                                  <td class="p-1 text-center"><%= orden.actividad %></td> 
-                                                  <td class="p-1"><%= orden.fecha_inicio %></td>
-                                              </tr>                                
-                                           <% }) %>
-                                          </tbody>
-                                    </table>
-                                    </div>    
-                                </div>
-                            </div>                        
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-12 text-center mt-3 mb-0">  
-                    <div class="card h-100"></div>
-                        <div id="titulo-container" style="padding-top: 5px; padding-right: 0px;">
-                            <div id="titulo" style="color:#800020">TAREAS ATRASADAS</div>
-                        </div>
-                </div>
-            </div>
-
-            <div class="row" style="margin-top: 0px;">  
-                <div class="col-md-6">  
-                    <div class="card h-100 text-center">
-                        <div class="card-body"  > 
-                            <div id="" style="width: 100%; height: 300px; background-color: white;border: solid 1px; border-radius: 5px;overflow-y: auto; overflow-x: auto">
-                                <div class="row">
-                                    <div class="col-md-12 " style="margin-top: 10px;">
-                                        <p style="color:rgb(164, 9, 9); font-family:Arial, Helvetica, sans-serif ; font-size: 15px; font-weight: bold;" >TAREAS CORRECTIVAS ATRASADAS</p>
-                                    </div>
-                                </div>
-                                <div class="row" >
-                                    <div class="col-md-12 text-center" style="margin-left: 2%;" >  
-                                    <table class="table table-bordered table-striped text-center " id="tabla3" style="max-height: 80%; " >
-                                        <thead class="secondary">
-                                            <tr class="bg-vino text-white">
-                                                <th scope="col" class="p-1">ID</th>
-                                                <th scope="col" class="p-1">TAREA</th>
-                                                <th scope="col" class="p-1">PRIORIDAD</th>
-                                                <th scope="col" class="p-1">INICIO PROGRAMADO</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                           
-                                            <% correctivasPendientesAtrasadas.forEach((i)=>{ %>             
-                                            <tr>  
-                                                <td class="p-1"><%= i.id_orden_trabajo %></td>  
-                                                <td class="p-1"><%= i.actividad %></td>
-                                                <td class="p-1"><%= i.prioridad %></td>
-                                                <td class="p-1"><%= i.fecha_inicio %></td>
-                                            </tr>                              
-                                            <% }) %>
-                                        </tbody>
-                                    </table>
-                                    </div>    
-                                </div>
-                            </div>                        
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">  
-                    <div class="card h-100 text-center">
-                        <div class="card-body"  > 
-                            <div id="" style="width: 100%; height: 300px; background-color: white;border: solid 1px; border-radius: 5px;overflow-y: auto;overflow-x: auto; ">
-                                <div class="row">
-                                    <div class="col-md-12 " style="margin-top: 10px;">
-                                        <p style="color:rgb(164, 9, 9); font-family:Arial, Helvetica, sans-serif ; font-size: 15px; font-weight: bold;" >TAREAS PROGRAMADAS ATRASADAS</p>
-                                    </div>
-                                </div>
-                                <div class="row" >
-                                    <div class="col-md-12 text-center" style="margin-left: 2%;" >  
-                                    <table class="table table-bordered table-striped text-center " id="tabla4" style="max-height: 80%;" >
-                                        <thead>
-                                            <tr class="bg-vino text-white">
-                                                <th scope="col" class="p-1">ID</th>
-                                                <th scope="col" class="p-1">TAREA</th>
-                                                <th scope="col" class="p-1">PRIORIDAD</th>
-                                                <th scope="col" class="p-1">INICIO PROGRAMADO</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>                     
-                                            <% programadasPendientesAtrasadas.forEach((i)=>{ %>             
-                                                <tr>  
-                                                    <td class="p-1"><%= i.id_orden_trabajo %></td>  
-                                                    <td class="p-1"><%= i.actividad %></td>
-                                                    <td class="p-1"><%= i.prioridad %></td>
-                                                    <td class="p-1"><%= i.fecha_inicio %></td>
-                                                </tr>                              
-                                                <% }) %>
-                                          </tbody>
-                                    </table>
-                                    </div>    
-                                </div>
-                            </div>                        
-                        </div>
-                    </div>
                 </div>
             </div>
 
         </div>
     </main>
-    <!-- Bootstrap JS y librería Chart.js -->
+
+    <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-     <!-- JQUERY -->
-     <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
-     <!-- DATATABLES -->
-     <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
-     <script src="https://cdn.datatables.net/fixedheader/3.1.6/js/dataTables.fixedHeader.min.js"></script> 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.1/umd/popper.min.js"></script>
-    <!-- FullCalendar JS para el calendario-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
-    <!-- Librerias para grafico de torta version copada -->
-    <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
-    <script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
-    <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
-
-    <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
-    <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
-    <script src="https://cdn.amcharts.com/lib/4/themes/dark.js"></script>
-    <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- <script src="/actualizarPagina.js"></script> -->
-    <script src="/buscarFiltrarTablaEstadistica.js"></script>
-    
-    <!-- Scripts para crear los gráficos y el calendario -->
-    <!-- Calendario -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var calendarEl = document.getElementById('calendario');
-            var tooltipEl = document.getElementById('tooltip');
+        document.addEventListener("DOMContentLoaded", () => {
+            let draggedRow;
 
-            fetch('/datos-calendario')
-                .then(response => response.json())
-                .then(eventos => {
-                    var calendar = new FullCalendar.Calendar(calendarEl, {
-                        // Configuración del calendario
-                        initialView: 'dayGridMonth',
-                        events: eventos,
-                        locale: 'es', // Establece el idioma en español
-                        eventMouseEnter: function(info) {
-                            var tooltipContent = '<strong>' + info.event.title + '</strong>';
-                            tooltipEl.innerHTML = tooltipContent;
-                            tooltipEl.style.top = (info.jsEvent.clientY + 10) + 'px'; // Posiciona el tooltip debajo del cursor
-                            tooltipEl.style.left = (info.jsEvent.clientX + 10) + 'px'; // Posiciona el tooltip a la derecha del cursor
-                            tooltipEl.style.display = 'block';
-                        },
-                        eventMouseLeave: function(info) {
-                            tooltipEl.style.display = 'none';
-                        }
-                    });
-                    
-                    calendar.render();
-                })
-                .catch(error => console.error('Error al obtener los datos del calendario:', error));
+            // Asignar eventos de arrastre a las filas de ambas tablas
+            document.querySelectorAll("tbody tr").forEach((row) => {
+                row.addEventListener("dragstart", (event) => {
+                    draggedRow = row;
+                });
+
+                row.addEventListener("dragend", () => {
+                    draggedRow = null;
+                });
+            });
+
+            // Asignar eventos a las tablas para permitir soltar
+            document.querySelectorAll("tbody").forEach((tbody) => {
+                tbody.addEventListener("dragover", (event) => {
+                    event.preventDefault(); // Permitir soltar
+                });
+
+                tbody.addEventListener("drop", (event) => {
+                    event.preventDefault();
+                    if (draggedRow) {
+                        tbody.appendChild(draggedRow); // Mover la fila a la nueva tabla
+                    }
+                });
+            });
         });
     </script>
-    <!-- Gráfico de tortas amcharts -->
-    <script>
-      am4core.ready(function() {
-    // Themes begin
-    am4core.useTheme(am4themes_animated);
-    // Themes end
-    
-    var chart = am4core.create("chartdiv", am4charts.PieChart3D);
-    chart.width = am4core.percent(100); // Establece el ancho del gráfico al 100% del contenedor
-    chart.height = am4core.percent(100); // Establece la altura del gráfico al 100% del contenedor
-    chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
-    
-    var series = chart.series.push(new am4charts.PieSeries3D());
-    series.dataFields.value = "litres";
-    series.dataFields.category = "country";
-    
-    chart.legend = new am4charts.Legend();
-
-    let url3 = '/orden-de-trabajo-graficoTorta';
-    fetch(url3)
-        .then(response => response.json())
-        .then(datos => grafica(datos))
-        .catch(error => console.log(error));
-    
-    const grafica = (datos) => {
-        chart.data = [
-            {
-                country: "Correctivas",
-                litres: datos.correctiva,
-                
-            },
-            {
-                country: "Programadas",
-                litres: datos.programada,
-                
-            }
-        ];
-
-        // Posiciona las etiquetas de las leyendas
-        series.labels.template.wrap = true;
-        series.labels.template.maxWidth = 130; // Ajusta el ancho máximo para evitar que se desborden
-        series.labels.template.truncate = true; // Trunca las etiquetas si son demasiado largas
-        series.labels.template.adapter.add("radius", function(radius, target) {
-            if (target.dataItem && target.dataItem.dataContext) {
-            if (target.dataItem.dataContext.country === "Correctivas") {
-                return am4core.percent(0); // Cambia el radio para "Correctivas"
-            } else if (target.dataItem.dataContext.country === "Programadas") {
-                return am4core.percent(0); // Cambia el radio para "Programadas"
-            }
-            }   
-            return radius;
-        });
-        series.labels.template.rotation = -90;
-        // series.labels.template.adapter.add("rotation", function(rotation, target) {
-        //     if (target.dataItem && target.dataItem.dataContext) {
-        //         if (target.dataItem.dataContext.country === "Correctivas") {
-        //             return 90; // Rotar "Correctivas" en sentido opuesto
-        //         }
-        //     }
-        //     return rotation; // Mantener rotación predeterminada para otras etiquetas
-        // });
-        series.labels.template.adapter.add("text", function(text, target) {
-            if (target.dataItem && target.dataItem.dataContext) {
-                if (target.dataItem.dataContext.country === "Correctivas") {
-                    return "[font-weight:bold]Correctivas[/]: " + target.dataItem.value;
-                } else if (target.dataItem.dataContext.country === "Programadas") {
-                    return "[font-weight:bold]Programadas[/]: " + target.dataItem.value;
-                }
-            }
-            return text;
-        });
-
-        // Agregar adaptadores para ajustar dx y dy para cada etiqueta individualmente
-        series.labels.template.adapter.add("dx", function(dx, target) {
-            if (target.dataItem && target.dataItem.dataContext) {
-                if (target.dataItem.dataContext.country === "Correctivas") {
-                    // Ajuste horizontal para "Correctivas"
-                    return 7;
-                } else if (target.dataItem.dataContext.country === "Programadas") {
-                    // Ajuste horizontal para "Programadas"
-                    return -7;
-                }
-            }
-            return dx;
-        });
-
-        series.labels.template.adapter.add("dy", function(dy, target) {
-            if (target.dataItem && target.dataItem.dataContext) {
-                if (target.dataItem.dataContext.country === "Correctivas") {
-                    // Ajuste vertical para "Correctivas"
-                    return 30;
-                } else if (target.dataItem.dataContext.country === "Programadas") {
-                    // Ajuste vertical para "Programadas"
-                    return -80;
-                }
-            }
-            return dy;
-        });
-    }
-}); // end am4core.ready()
-
-    </script>
-     <!-- Gráfico de barras 3d--> 
-    <script>
-       am4core.ready(function() {
-    // Crear instancia del gráfico
-    var chart = am4core.create("barras3D", am4charts.XYChart3D);
-
-    // Fetch data from URL
-    let url5 = '/orden-de-trabajo-graficoBarras'
-    fetch(url5)
-        .then(response => response.json())
-        .then(datos => mostrar(datos))
-        .catch(error => console.log(error));
-
-    // Función para mostrar los datos
-    const mostrar = (articulos) => {
-        // Añadir datos
-        chart.data = [{
-            "Orden de trabajo": "Pendiente",
-            "cantidad": articulos.pendientes
-        }, {
-            "Orden de trabajo": "En proceso",
-            "cantidad": articulos.enProceso
-        }, {
-            "Orden de trabajo": "Finalizada",
-            "cantidad": articulos.finalizadas
-        }];
-    }
-
-    // Crear ejes
-    var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
-    categoryAxis.dataFields.category = "Orden de trabajo";
-    categoryAxis.renderer.grid.template.location = 0;
-    categoryAxis.renderer.minGridDistance = 30;
-
-    var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-    valueAxis.title.text = "GRÁFICO DE BARRAS CORRECTIVAS";
-    valueAxis.title.fontWeight = "bold";
-    valueAxis.title.fontFamily ="arial";
-    valueAxis.renderer.labels.template.adapter.add("text", function(text) {
-        return text;
-    });
-
-    // Crear series
-    var series = chart.series.push(new am4charts.ColumnSeries3D());
-    series.dataFields.valueY = "cantidad";
-    series.dataFields.categoryX = "Orden de trabajo";
-    series.name = "";
-    series.clustered = false;
-    series.columns.template.tooltipText = "Cantidad O.D.T {category}: [bold]{valueY}[/]";
-    series.columns.template.fillOpacity = 0.9;
-
-    // Cambiar la orientación de las etiquetas del eje X cuando el ancho de la pantalla sea menor o igual a 1288px
-    var mediaquery = window.matchMedia("(max-width: 1288px)");
-    function handleOrientationChange(event) {
-        if (event.matches) {
-            categoryAxis.renderer.labels.template.rotation = -90;
-            categoryAxis.renderer.labels.template.horizontalCenter = "right";
-            categoryAxis.renderer.labels.template.verticalCenter = "middle";
-        } else {
-            categoryAxis.renderer.labels.template.rotation = 0;
-            categoryAxis.renderer.labels.template.horizontalCenter = "middle";
-            categoryAxis.renderer.labels.template.verticalCenter = "middle";
-        }
-    }
-    mediaquery.addListener(handleOrientationChange);
-    handleOrientationChange(mediaquery);
-});
-    </script>
-    <!-- Grafico porcentaje cumplimiento correctivas-->
-    <script>
-        am5.ready(function() {
-        
-        // Create root element
-        // https://www.amcharts.com/docs/v5/getting-started/#Root_element
-        var root = am5.Root.new("porcentajeCumplimiento");
-        
-        // Set themes
-        // https://www.amcharts.com/docs/v5/concepts/themes/
-        root.setThemes([
-          am5themes_Animated.new(root)
-        ]);
-        // Create title
-        var title = root.container.children.push(
-        am5.Label.new(root, {
-            text: "CORRECTIVAS FINALIZADAS",
-            fontSize: 12,
-            fontWeight: "bold",
-            fontFamily: "Arial",
-            
-        })
-        );
-        // Create chart
-        // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/
-        // start and end angle must be set both for chart and series
-         var chart = root.container.children.push(
-        am5percent.PieChart.new(root, {
-            layout: root.verticalLayout
-        })
-    );
-        
-        // Create series
-        // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/#Series
-        // start and end angle must be set both for chart and series
-        var series0 = chart.series.push(
-          am5percent.PieSeries.new(root, {
-            valueField: "value",
-            categoryField: "category",
-            alignLabels: false,
-            radius: am5.percent(100),
-            innerRadius: am5.percent(80)
-          })
-        );
-        
-        series0.states.create("hidden", {
-          startAngle: 180,
-          endAngle: 180
-        });
-        
-        series0.slices.template.setAll({
-          fillOpacity: 0.5,
-          strokeOpacity: 0,
-          templateField: "settings"
-        });
-        
-        series0.slices.template.states.create("hover", { scale: 1 });
-        series0.slices.template.states.create("active", { shiftRadius:0 });
-        
-        series0.labels.template.setAll({
-          templateField: "settings"
-        });
-        
-        series0.ticks.template.setAll({
-          templateField: "settings"
-        });
-        
-        series0.labels.template.setAll({
-          textType: "circular",
-          radius: 30
-        });
-        let url6 = '/orden-de-trabajo-graficoPorcentaje'
-        fetch(url6)
-          .then( response => response.json() )
-          .then( datos => cargarDatos(datos) ) //En datos obtengo la cantidad de pendientes, en proceso y finalizadas.
-          .catch( error => console.log(error) )
-        // Set data
-        // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/#Setting_data
-        const cargarDatos = (odt) =>{
-            series0.data.setAll([
-          {
-            category: "Restantes",
-            value: odt.totalCorrectivas - odt.totalCorrectivasFinalizadas,
-            settings: { forceHidden: true }
-          }
-        ]);
-        // Set data
-        // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/#Setting_data
-            series1.data.setAll([{
-            category: "Finalizadas",
-            value: odt.totalCorrectivasFinalizadas,
-            }, {
-            category: "Pendientes + en proceso",
-            value: odt.totalCorrectivas - odt.totalCorrectivasFinalizadas,
-            sliceSettings: { fill: am5.color(0xdedede) }
-            }]);
-        }       
-        
-        
-        // Create series
-        // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/#Series
-        // start and end angle must be set both for chart and series
-        var series1 = chart.series.push(
-          am5percent.PieSeries.new(root, {
-            radius: am5.percent(100),
-            innerRadius: am5.percent(82),
-            valueField: "value",
-            categoryField: "category",
-            alignLabels: false
-          })
-        );
-        
-        series1.states.create("hidden", {
-          startAngle: 180,
-          endAngle: 180
-        });
-        
-        series1.slices.template.setAll({
-          templateField: "sliceSettings",
-          strokeOpacity: 0
-        });
-        
-        series1.labels.template.setAll({
-          textType: "circular"
-        });
-        
-        series1.labels.template.adapters.add("radius", function (radius, target) {
-          var dataItem = target.dataItem;
-          var slice = dataItem.get("slice");
-          return -(slice.get("radius") - slice.get("innerRadius")) / 2 - 10;
-        });
-        
-        series1.slices.template.states.create("hover", { scale: 1 });
-        series1.slices.template.states.create("active", { shiftRadius:0 });
-        
-        series1.ticks.template.setAll({
-          forceHidden: true
-        });
-        
-        
-        
-        }); // end am5.ready()
-    </script>
-
 </body>
 </html>
-
-
-
-
-
-

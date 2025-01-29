@@ -8,31 +8,26 @@
                 <i class='bx bx-menu icon__menu'></i>
             </label>
             <nav>
-                <ul id="<%= operario ? 'operario' : 'otro-privilegio' %>">
+                <ul>
                     
                     <li style="height: 70px;"">
                         <a href="#titulo" id="selected" style="background-color: white;">
-                            <img src="/imagenes/logo.jpg" alt="Logo">
+                            <img src="/imagenes/logo2.jpg" alt="Logo">
                         </a>
                     </li>
-                    <% if (login){ %>
-                        <li><a href="/estadistica">Panel de control</a></li>
+                    
+                        <li><a href="/depositos">Depósitos</a></li>
                         <li>
-                            <a href="/orden-de-trabajo">Ordenes de trabajo</a>
+                            <a href="/envios">Envíos</a>
                             <ul>
-                                <li><a href="/orden-de-trabajo/pendiente">Pendientes</a></li>
-                                <li><a href="/orden-de-trabajo/en-proceso">En proceso</a></li>
-                                <li><a href="/orden-de-trabajo/finalizada">Finalizadas</a></li>
+                                <li><a href="#">Pendientes</a></li>
+                                <li><a href="#">En proceso</a></li>
+                                <li><a href="#">Finalizadas</a></li>
                             </ul>
                         </li>
-                        <li><a href="/terceros">Terceros</a></li>
-                        <li><a href="#">Almacen</a>
-                            <ul>
-                                <li><a href="/almacen/activos">Activos</a></li>
-                                <li><a href="/almacen/stock">Stock</a></li>
-                            </ul>
-                        </li>
-                        <li class="gestion_mantenimiento"><a href="#">Gestión de mantenimiento</a>
+                        <li><a href="/clientes">Clientes</a></li>
+                        <li><a href="/proveedores">Proveedores</a></li>
+                        <li class="conductores"><a href="/conductores">Conductores</a>
                             <ul>
                                 <li><a href="/orden-de-trabajo/generar-orden">Nueva orden de trabajo</a>
                                 </li>
@@ -41,18 +36,8 @@
                                 <li><a href="/ordenes-solicitadas">Órdenes Solicitadas</a></li>
                             </ul>
                         </li>
-                        <% } else if(operario) { %>
-                            <li>
-                                <a href="#">Ordenes de trabajo</a>
-                                <ul>
-                                    <li><a href="/orden-de-trabajo/pendiente">Pendientes</a></li>
-                                    <li><a href="/orden-de-trabajo/en-proceso">En proceso</a></li>
-                                    <li><a href="/solicitar-tarea">Solicitudes de mantenimiento</a></li>
-                                </ul>
-                            </li>
-                            <%} else {%>
-                                <li><a href="#">Solicitudes de mantenimiento</a></li>
-                                <%}%>
+                        <li><a href="/camiones">Camiones</a></li>
+                               
                             <li><a href="#">Usuario</a>
                                 <ul>
                                     <li><a href="/newPassword">Modificar datos personales</a></li>
