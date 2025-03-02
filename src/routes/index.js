@@ -60,10 +60,6 @@ router.get('/depositos', (req, res) => {
     });
 });
 
-
-
-
-// Ruta API para obtener las cargas según el depósito seleccionado
 // Ruta API para obtener las cargas según el depósito seleccionado
 router.get('/api/cargas', (req, res) => {
     const depositoId = req.query.depositoId;
@@ -116,8 +112,8 @@ router.get('/newPassword', (req,res) =>{
 
 import save from '../controllers/carga.js';
 router.post('/save', save.save);//Guardar una nueva orden de trabajo
-router.post('/update', save.update);//Editar una orden de trabajo
-router.post('/carga/delete', save.eliminarOrden);//Eliminar una orden de trabajo
+router.post('/update', save.update);//Editar una carga en depósito 
+router.post('/carga/delete', save.eliminarCarga);//Eliminar una carga
 
 
 

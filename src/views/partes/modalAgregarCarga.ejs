@@ -8,26 +8,34 @@
             </div>
             <div class="modal-body">
                 <form action="/save" method="post" id="formAgregarCarga">
-                    <!-- Cliente -->
+                    <!-- Cliente ORIGEN -->
                     <div class="mb-2">
                         <div class="d-flex align-items-center">
-                            <select class="form-select me-2" id="cliente" name="cliente" required>
-                                <option value="">Seleccionar cliente</option>
+                            <select class="form-select me-2" id="clienteOrigen" name="clienteOrigen" required>
+                                <option value="">Cliente origen</option>
                                 <% clientes.forEach(cliente => { %>
                                     <option value="<%= cliente.nomclie %>"><%= cliente.nomclie %></option>
                                 <% }); %>
                             </select>
+                            <select class="form-select me-2" id="clienteDestino" name="clienteDestino" required>
+                                <option value="">Cliente destino</option>
+                                <% clientes.forEach(cliente => { %>
+                                    <option value="<%= cliente.nomclie %>"><%= cliente.nomclie %></option>
+                                <% }); %>
+                            </select> 
                             <button type="button" class="btn btn-outline-secondary" id="btnAgregarCliente">
                                 <i class='bx bx-plus' style='color:#097707'></i>
                             </button>
                         </div>
                     </div>
+                   
+                    
 
                     <!-- Campo para Unidad -->
                     <div class="mb-2">
                         <select class="form-select" id="unidad" name="unidad" required>
                             <option value="">Seleccionar unidad</option>
-                            <option value="cajas">Cajas</option>
+                            <option value="cajas">Bultos</option>
                             <option value="palets">Palets</option>
                         </select>
                     </div>
