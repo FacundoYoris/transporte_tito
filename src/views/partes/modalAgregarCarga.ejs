@@ -12,15 +12,15 @@
                     <div class="mb-2">
                         <div class="d-flex align-items-center">
                             <select class="form-select me-2" id="clienteOrigen" name="clienteOrigen" required>
-                                <option value="">Cliente origen</option>
+                                <option value="">Proveedor</option>
                                 <% clientes.forEach(cliente => { %>
-                                    <option value="<%= cliente.nomclie %>"><%= cliente.nomclie %></option>
+                                    <option value="<%= cliente.numclie %>"><%= cliente.nomclie %></option>
                                 <% }); %>
                             </select>
                             <select class="form-select me-2" id="clienteDestino" name="clienteDestino" required>
                                 <option value="">Cliente destino</option>
                                 <% clientes.forEach(cliente => { %>
-                                    <option value="<%= cliente.nomclie %>"><%= cliente.nomclie %></option>
+                                    <option value="<%= cliente.numclie %>"><%= cliente.nomclie %></option>
                                 <% }); %>
                             </select> 
                             <button type="button" class="btn btn-outline-secondary" id="btnAgregarCliente">
@@ -28,14 +28,12 @@
                             </button>
                         </div>
                     </div>
-                   
-                    
 
                     <!-- Campo para Unidad -->
                     <div class="mb-2">
                         <select class="form-select" id="unidad" name="unidad" required>
                             <option value="">Seleccionar unidad</option>
-                            <option value="cajas">Bultos</option>
+                            <option value="bultos">Bultos</option>
                             <option value="palets">Palets</option>
                         </select>
                     </div>
@@ -44,6 +42,7 @@
                     <input type="number" class="form-control mb-2" placeholder="Cantidad" name="cantidad" required>
                     <input type="number" class="form-control mb-2" placeholder="Valor declarado" name="valor" required>
                     <input type="text" class="form-control mb-2" placeholder="Destino" name="destino" required>
+                    <input type="datetime-local" class="form-control mb-2" placeholder="Fecha ingreso" name="fecha" required>
                     
                     <button type="submit" class="btn btn-primary w-100">Agregar</button>
                 </form>
@@ -51,10 +50,31 @@
                 <!-- Formulario para agregar nuevo cliente -->
                 <div id="formAgregarCliente" class="mt-3 d-none">
                     <h6>Agregar Nuevo Cliente</h6>
-                    <form action="/clientes/agregar" method="post">
+                    <form action="/saveClientes" method="post">
                         <input type="text" class="form-control mb-2" placeholder="Nombre del Cliente" name="nomclie" required>
+                        <input type="text" class="form-control mb-2" placeholder="Domicilio" name="domclie" required>
+                        <input type="text" class="form-control mb-2" placeholder="Localidad" name="locclie" required>
+                        <input type="number" class="form-control mb-2" placeholder="Número de teléfono" name="telclie" required>
+                        <select class="form-control mb-2" name="sitclie" required>
+                            <option value="" disabled selected>Seleccione la situación ante el IVA</option>
+                            <option value="RI">Responsable Inscripto</option>
+                            <option value="MT">Monotributista</option>
+                            <option value="EX">Exento</option>
+                            <option value="NR">No Responsable</option>
+                            <option value="CF">Consumidor Final</option>
+                            <option value="RD">Relación de Dependencia</option>
+                        </select>
+                        <input type="number" class="form-control mb-2" placeholder="CUIL - CUIT" name="cuiclie" required>
+                        <input type="email" class="form-control mb-2" placeholder="Correo electrónico" name="maiclie" required>
+                        <input type="text" class="form-control mb-2" placeholder="Observaciones" name="obsclie" required>
+                        
                         <button type="submit" class="btn btn-success w-100">Guardar Cliente</button>
                     </form>
+
+                    <!-- Botón para volver al formulario de carga -->
+                    <button type="button" class="btn btn-secondary w-100 mt-3" id="btnVolverCarga">
+                        Volver a Carga
+                    </button>
                 </div>
             </div>
         </div>
@@ -62,9 +82,50 @@
 </div>
 
 <script>
-    // Mostrar/ocultar el formulario para agregar un nuevo cliente
+    // Botón para cambiar de formulario
     document.getElementById('btnAgregarCliente').addEventListener('click', () => {
-        const formAgregarCliente = document.getElementById('formAgregarCliente');
-        formAgregarCliente.classList.toggle('d-none');
+        document.getElementById('formAgregarCarga').classList.add('d-none');
+        document.getElementById('formAgregarCliente').classList.remove('d-none');
+    });
+
+    // Botón para volver al formulario de carga
+    document.getElementById('btnVolverCarga').addEventListener('click', () => {
+        document.getElementById('formAgregarCliente').classList.add('d-none');
+        document.getElementById('formAgregarCarga').classList.remove('d-none');
+    });
+
+    // Enviar formulario de nuevo cliente sin recargar la página
+    document.getElementById('formNuevoCliente').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const formData = new FormData(this);
+
+        fetch('/saveClientes', {
+            method: 'POST',
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                alert('Cliente agregado correctamente');
+                
+                // Agregar nuevo cliente a los select
+                const option = document.createElement("option");
+                option.value = data.numclie;
+                option.textContent = data.nomclie;
+                document.getElementById('clienteOrigen').appendChild(option.cloneNode(true));
+                document.getElementById('clienteDestino').appendChild(option);
+
+                // Resetear formulario y volver a la carga
+                this.reset();
+                document.getElementById('formAgregarCliente').classList.add('d-none');
+                document.getElementById('formAgregarCarga').classList.remove('d-none');
+
+                // Volver al formulario de carga
+                document.getElementById('formAgregarCarga').scrollIntoView(); // Desplaza la vista al formulario de carga
+            } else {
+                alert('Error al agregar el cliente');
+            }
+        })
+        .catch(error => console.error('Error:', error));
     });
 </script>

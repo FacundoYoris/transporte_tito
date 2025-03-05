@@ -3,28 +3,27 @@ import connection from "../database/db.js";
 import express from 'express';
 
 const save = (req, res) => {
-const cliente = req.body.cliente;
-console.log(cliente);
-   return;
-   connection.query('INSERT INTO orden_trabajo SET ?', {
-     tipo: tipo,
-     actividad: tarea,
-     fecha_inicio: fecha,
-     activo: activo,
-     responsable: Responsable,
-     prioridad: Prioridad,
-     lapsoProgramada: lapso,
-     usuario_creador: req.session.userName,
-     descripción_problematica: descripcion,
-     elemento: elemento,
-   }, (error, results) => {
-     if (error) {
-       console.log(error);
-     } else {
-       res.redirect('#');
-     }
-   });
- };
+    const cargaData = {
+        unidad: req.body.unidad,
+        iddeposito: 1,
+        cantidad: req.body.cantidad,
+        destino: req.body.destino,
+        prioridad: "Sin prioridad",
+        idcliente: req.body.clienteDestino,
+        valordeclarado: req.body.valor,
+        idproveedor: req.body.clienteOrigen,
+        fecha: req.body.fecha,
+        // cargadoPor: "Sin asignar todavía",
+    };
+
+    connection.query('INSERT INTO carga SET ?', cargaData, (error, results) => {
+        if (error) {
+            console.error("Error al guardar carga:", error);
+            return res.status(500).json({ error: "Error al guardar la carga", details: error });
+        }
+        res.redirect('/depositos');
+    });
+};
 
  const update = (req, res) => {
    const { id, nombre, unidad, cantidad, valor, destino, prioridad } = req.body;

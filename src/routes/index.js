@@ -34,7 +34,7 @@ router.get('/depositos', (req, res) => {
         const userDeposito = result.length > 0 ? result[0] : { iddeposito: null, nombreDeposito: "Sin depósito asignado" };
 
         const queryDepositos = 'SELECT id, nombre FROM depositos';
-        const queryClientes = 'SELECT nomclie FROM clientes';
+        const queryClientes = 'SELECT numclie,nomclie FROM clientes';
 
         connection.query(queryDepositos, (error, depositos) => {
             if (error) {
@@ -64,29 +64,33 @@ router.get('/depositos', (req, res) => {
 router.get('/api/cargas', (req, res) => {
     const depositoId = req.query.depositoId;
 
-    // Consulta que une las tablas carga y clientes para obtener nomclie
+    // Consulta que une la tabla carga con clientes dos veces para obtener nomclie y nomprov
     const query = `
         SELECT 
             carga.id, 
             carga.unidad, 
+            carga.idproveedor,
+            proveedor.nomclie AS nomprov, -- Nombre del proveedor
             carga.iddeposito, 
             carga.cantidad, 
             carga.destino, 
             carga.prioridad, 
             carga.idcliente, 
-            carga.valordeclarado, 
-            clientes.nomclie 
+            cliente.nomclie AS nomclie, -- Nombre del cliente
+            carga.valordeclarado 
         FROM carga 
-        LEFT JOIN clientes ON carga.idcliente = clientes.numclie
+        LEFT JOIN clientes AS cliente ON carga.idcliente = cliente.numclie
+        LEFT JOIN clientes AS proveedor ON carga.idproveedor = proveedor.numclie
         WHERE carga.iddeposito = ?`;
 
     connection.query(query, [depositoId], (error, results) => {
         if (error) {
             return res.status(500).json({ error: 'Error en la consulta' });
         }
-        res.json(results); // Enviamos las cargas con nomclie como respuesta JSON
+        res.json(results); // Enviamos las cargas con nomclie y nomprov como respuesta JSON
     });
 });
+
 
 
 router.get('/envios', (req, res) => res.render('envios.ejs'));
@@ -111,12 +115,12 @@ router.get('/newPassword', (req,res) =>{
 
 
 import save from '../controllers/carga.js';
-router.post('/save', save.save);//Guardar una nueva orden de trabajo
+router.post('/save', save.save);//Guardar una nueva carga
 router.post('/update', save.update);//Editar una carga en depósito 
 router.post('/carga/delete', save.eliminarCarga);//Eliminar una carga
 
-
-
+import saveClientes from '../controllers/clientes.js';
+router.post('/saveClientes', saveClientes.saveClientes);//Guardar nuevo cliente
 
 
 export default router
