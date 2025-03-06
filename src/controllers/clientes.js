@@ -5,6 +5,8 @@ import express from 'express';
 
 // Función para guardar un cliente en la base de datos
 const saveClientes = (req, res) => {
+    console.log("Datos recibidos en el backend:", JSON.stringify(req.body, null, 2));
+
     const { 
         nomclie, domclie, locclie, telclie, 
         sitclie, cuiclie, maiclie, obsclie 
@@ -22,13 +24,12 @@ const saveClientes = (req, res) => {
             return res.status(500).json({ success: false, error: "Error al guardar el cliente" });
         }
 
-        res.json({
-            success: true,
-            numclie: results.insertId, 
-            nomclie
-        });
+        // Redirigir a la ruta de los depósitos con un parámetro para abrir el modal
+        res.redirect(`/depositos?openModal=true`);
     });
 };
+
+
 
 export default {
     saveClientes, 

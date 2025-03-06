@@ -318,7 +318,17 @@
 
         });
     </script>
-
+    <script>
+    // Verificar si el parámetro 'openModal' está presente en la URL
+const params = new URLSearchParams(window.location.search);
+if (params.has('openModal') && params.get('openModal') === 'true') {
+    // Esperar un momento para asegurar que el modal esté completamente cargado
+    window.addEventListener('load', function() {
+        const modal = new bootstrap.Modal(document.getElementById('modalAgregarCarga'));
+        modal.show(); // Abre el modal automáticamente
+    });
+}
+    </script>
 </body>
 
 </html>
