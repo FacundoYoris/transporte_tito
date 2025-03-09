@@ -5,7 +5,7 @@ import express from 'express';
 
 // Función para guardar un cliente en la base de datos
 const saveClientes = (req, res) => {
-    console.log("Datos recibidos en el backend:", JSON.stringify(req.body, null, 2));
+    
 
     const { 
         nomclie, domclie, locclie, telclie, 

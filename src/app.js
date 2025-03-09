@@ -48,7 +48,7 @@ const checkSessionMiddleware = (req, res, next) => {
 };
 
 // Usa el middleware en todas las rutas
-// app.use(checkSessionMiddleware);
+app.use(checkSessionMiddleware);
 
 app.use(indexRoutes)
 const puerto = process.env.PORT || 3000;

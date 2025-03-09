@@ -30,7 +30,7 @@
                     </div>
                 </div>
             </div>
-            <!-- Botón agregar carga con tooltip -->
+
             <!-- Botón para abrir el modal -->
             <button type="button" class="btn btn-outline-primary mt-4" data-bs-toggle="modal"
                 data-bs-target="#modalAgregarCarga" title="Agregar carga">
@@ -60,36 +60,39 @@
                             </div>
                         </div>
                         <div class="table-responsive">
-                            <table id="tablaDepositos" class="table table-striped table-bordered">
+                            <table id="tablaDepositos" class="table table-striped table-bordered" >
                                 <thead class="thead-dark">
                                     <tr>
-                                        <th>ID</th>
-                                        <th>Proveedor</th>
-                                        <th>CLIENTE</th>
-                                        <th>Unidad</th>
-                                        <th>Cantidad</th>
-                                        <th>Valor Declarado</th>
-                                        <th>Destino</th>
-                                        <th>Prioridad</th>
-                                        <th>Acciones</th>
+                                        <th style="width: 35px; white-space: nowrap; text-align: center;">ID</th>
+                                        <th style="text-align: center;">PROVEEDOR</th>
+                                        <th style="text-align: center;"">CLIENTE</th>
+                                        <th style="text-align: center;"">UNIDAD</th>
+                                        <th style="text-align: center;"">CANTIDAD</th>
+                                        <th style="text-align: center;"">VALOR DECLARADO</th>
+                                        <th style="text-align: center;"">DESTINO</th>
+                                        <th style="width: 100px; white-space: nowrap; text-align: center;">PRIORIDAD</th>
+                                        <th style="text-align: center;"">FECHA</th>
+                                        <th style="text-align: center;"">ACCIONES</th>
                                     </tr>
                                     <tr>
                                         <th><input type="text" class="form-control form-control-sm"
                                                 placeholder="Buscar ID"></th>
                                         <th><input type="text" class="form-control form-control-sm"
-                                                placeholder="Buscar Proveedor"></th>
+                                                placeholder="Buscar proveedor"></th>
                                         <th><input type="text" class="form-control form-control-sm"
-                                                placeholder="Buscar Cliente"></th>
+                                                placeholder="Buscar cliente"></th>
                                         <th><input type="text" class="form-control form-control-sm"
-                                                placeholder="Buscar Unidad"></th>
+                                                placeholder="Buscar unidad"></th>
                                         <th><input type="text" class="form-control form-control-sm"
-                                                placeholder="Buscar Cantidad"></th>
+                                                placeholder="Buscar cantidad"></th>
                                         <th><input type="text" class="form-control form-control-sm"
-                                                placeholder="Buscar Valor"></th>
+                                                placeholder="Buscar valor"></th>
                                         <th><input type="text" class="form-control form-control-sm"
-                                                placeholder="Buscar Destino"></th>
+                                                placeholder="Buscar destino"></th>
                                         <th><input type="text" class="form-control form-control-sm"
-                                                placeholder="Buscar Prioridad"></th>
+                                                placeholder="Buscar prioridad"></th>
+                                        <th><input type="text" class="form-control form-control-sm"
+                                                placeholder="Buscar fecha"></th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -112,24 +115,44 @@
                                                     </div>
                                                     <div class="modal-body">
                                                         <input type="hidden" id="edit-id" name="id">
-                                                        <div class="mb-3">
-                                                            <label class="form-label">Cliente</label>
-                                                            <input type="text" class="form-control" id="edit-nombre"
-                                                                name="nombre">
+                                                        <div class="mb-2">
+                                                            <div class="d-flex w-100">
+                                                                <div class="d-flex flex-column me-3 w-50">
+                                                                    <label class="form-label">Proveedor</label>
+                                                                    <select class="form-select form-control w-100" id="edit-proveedor" name="proveedor" required>
+                                                                        <option value="">Proveedor</option>
+                                                                        <% clientes.forEach(cliente=> { %>
+                                                                            <option value="<%= cliente.numclie %>"><%= cliente.nomclie %></option>
+                                                                        <% }); %>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="d-flex flex-column w-50">
+                                                                    <label class="form-label">Cliente</label>
+                                                                    <select class="form-select w-100" id="edit-nombre" name="nombre" required>
+                                                                        <option value="">Cliente</option>
+                                                                        <% clientes.forEach(cliente=> { %>
+                                                                            <option value="<%= cliente.numclie %>"><%= cliente.nomclie %></option>
+                                                                        <% }); %>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            
                                                         </div>
-                                                        <div class="mb-3">
-                                                            <label class="form-label">Unidad</label>
-                                                            <select class="form-control" id="edit-unidad" name="unidad">
-                                                                <option value="bultos">Bultos</option>
-                                                                <option value="palets">Palets</option>
-                                                            </select>
+                                                        <div class="d-flex w-100">
+                                                            <div class="d-flex flex-column me-3 w-50">
+                                                                <label class="form-label">Unidad</label>
+                                                                <select class="form-control w-100" id="edit-unidad" name="unidad">
+                                                                    <option value="bultos">Bultos</option>
+                                                                    <option value="palets">Palets</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="d-flex flex-column w-50">
+                                                                <label class="form-label">Cantidad</label>
+                                                                <input type="number" class="form-control w-100" id="edit-cantidad" name="cantidad">
+                                                            </div>
                                                         </div>
-                                                        <div class="mb-3">
-                                                            <label class="form-label">Cantidad</label>
-                                                            <input type="number" class="form-control" id="edit-cantidad"
-                                                                name="cantidad">
-                                                        </div>
-                                                        <div class="mb-3">
+                                                        
+                                                        <div class="mb-3 mt-2">
                                                             <label class="form-label">Valor Declarado</label>
                                                             <input type="text" class="form-control" id="edit-valor"
                                                                 name="valor">
@@ -140,9 +163,14 @@
                                                                 name="destino">
                                                         </div>
                                                         <div class="mb-3">
-                                                            <label class="form-label">Prioridad</label>
-                                                            <input type="text" class="form-control" id="edit-prioridad"
+                                                            
+                                                            <input type="hidden" class="form-control" id="edit-prioridad"
                                                                 name="prioridad">
+                                                        </div>
+                                                        <div class="mb-3" >
+                                                            <label class="form-label">Fecha</label>
+                                                            <input type="datetime-local" class="form-control"
+                                                                id="edit-fecha" name="fecha">
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer">
@@ -174,10 +202,16 @@
     <!-- Bootstrap JS y Popper.js -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.13.4/sorting/datetime-moment.js"></script>
+
 
     <!-- Modificar tabla de depósitos -->
     <script>
+
         $(document).ready(function () {
+            // Registrar el formato de fecha en DataTables
+            $.fn.dataTable.moment('DD/MM/YYYY HH:mm');
             var table = $('#tablaDepositos').DataTable({
                 "language": {
                     "decimal": ",",
@@ -195,32 +229,46 @@
                         "last": "Último",
                         "next": "Siguiente",
                         "previous": "Anterior"
-                    },
-                    "aria": {
-                        "sortAscending": ": activar para ordenar la columna de manera ascendente",
-                        "sortDescending": ": activar para ordenar la columna de manera descendente"
                     }
                 },
                 "orderCellsTop": true,
                 "fixedHeader": true,
-                "bSortCellsTop": true
+                "bSortCellsTop": true,
+                "columnDefs": [
+                    { "type": "datetime-moment", "targets": 9 } // Asegúrate de poner el índice correcto de la columna fecha
+                ]
             });
 
-            // Función para cargar datos dinámicamente
+            $('#tablaDepositos thead input').on('keyup change', function () {
+                let columnIndex = $(this).closest('th').index();
+                table.column(columnIndex).search(this.value).draw();
+            });
+
             function loadTableData(depositoId) {
                 $.ajax({
                     url: `/api/cargas?depositoId=${depositoId}`,
                     method: 'GET',
                     success: function (data) {
-                        table.clear(); // Limpiar la tabla
+                        table.clear();
                         let modalContainer = $('#modalContainer');
-                        modalContainer.empty(); // Limpiar los modales previos
+                        modalContainer.empty();
 
                         if (data.length > 0) {
                             data.forEach(carga => {
                                 let modalId = `eliminarCarga-${carga.id}`;
+                                let fechaFormateada = moment(carga.fecha, "YYYY-MM-DD HH:mm:ss").format("DD/MM/YYYY HH:mm");
 
-                                // Agregar la fila a la tabla
+
+                                // Botón de prioridad dinámico
+                                let prioridadBtn = `
+                            <button class="btn btn-sm toggle-prioridad"
+                                data-id="${carga.id}" 
+                                data-prioridad="${carga.prioridad}"
+                                style="background-color: ${carga.prioridad === 1 ? 'green' : 'gray'}; color: white;">
+                                ${carga.prioridad === 1 ? 'Prioridad' : 'No Prioritario'}
+                            </button>
+                        `;
+
                                 table.row.add([
                                     carga.id,
                                     carga.nomprov,
@@ -229,58 +277,63 @@
                                     carga.cantidad,
                                     carga.valordeclarado,
                                     carga.destino,
-                                    carga.prioridad,
-                                    `<button class="btn btn-sx btn-editar" 
-                                        data-bs-toggle="modal" 
-                                        data-bs-target="#modalEditarCarga" 
-                                        data-id="${carga.id}" 
-                                        data-nombre="${carga.nomclie}" 
-                                        data-unidad="${carga.unidad}" 
-                                        data-cantidad="${carga.cantidad}" 
-                                        data-valor="${carga.valordeclarado}" 
-                                        data-destino="${carga.destino}" 
-                                        data-prioridad="${carga.prioridad}">
-                                    <i class='bx bx-edit' style='color:#867f7f' ></i>
-                                </button>
-                                <button class="btn btn-sx btn-danger" 
-                                        data-bs-toggle="modal" 
-                                        data-bs-target="#eliminarCarga-${carga.id}" 
-                                        data-id="${carga.id}" 
-                                        data-nombre="${carga.nomclie}">
-                                    <i class='bx bxs-trash' ></i>
-                                </button>`
+                                    prioridadBtn,  // Reemplazamos el texto por el botón
+                                    fechaFormateada,
+                                    `<div class="d-flex gap-2">
+        <button class="btn btn-sx btn-editar" 
+            data-bs-toggle="modal" 
+            data-bs-target="#modalEditarCarga" 
+            data-id="${carga.id}"
+            data-nombre="${carga.idcliente}" 
+            data-proveedor="${carga.idproveedor}" 
+            data-fecha="${carga.fecha}" 
+            data-unidad="${carga.unidad}" 
+            data-cantidad="${carga.cantidad}" 
+            data-valor="${carga.valordeclarado}" 
+            data-destino="${carga.destino}" 
+            data-prioridad="${carga.prioridad}">
+        <i class='bx bx-edit' style='color:#867f7f'></i>
+        </button>
+        
+        <button class="btn btn-sx btn-danger" 
+            data-bs-toggle="modal" 
+            data-bs-target="#eliminarCarga-${carga.id}" 
+            data-id="${carga.id}" 
+            data-nombre="${carga.nomclie}">
+        <i class='bx bxs-trash'></i>
+        </button>
+    </div>`
                                 ]);
 
-                                // Agregar el modal de eliminación dinámicamente
                                 modalContainer.append(`
-                        <div class="modal fade" id="${modalId}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="centrado text-center">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">¿Estás seguro que deseas eliminar esta carga?</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <div class="modal fade" id="${modalId}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="centrado text-center">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">¿Estás seguro que deseas eliminar esta carga?</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <i class='bx bx-info-circle' style="font-size: 5rem; color:red"></i>
+                                                <h3>CLIENTE: ${carga.nomclie}</h3>
+                                            </div>
                                         </div>
-                                        <div class="modal-body">
-                                            <i class='bx bx-info-circle' style="font-size: 5rem; color:red"></i>
-                                            <h3>CLIENTE: ${carga.nomclie}</h3>
+                                        <div class="modal-footer">
+                                            <form action="/carga/delete" method="post">
+                                                <input id="id" name="id" value="${carga.id}" hidden>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                <button type="submit" class="btn btn-outline-danger">Eliminar</button>
+                                            </form>
                                         </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <form action="/carga/delete" method="post">
-                                            <input id="id" name="id" value="${carga.id}" hidden>
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                            <button type="submit" class="btn btn-outline-danger">Eliminar</button>
-                                        </form>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    `);
+                        `);
                             });
                         }
 
-                        table.draw(); // Redibujar la tabla
+                        table.draw();
                     },
                     error: function () {
                         alert('Error al cargar los datos.');
@@ -288,47 +341,78 @@
                 });
             }
 
-
-            // Cargar datos iniciales según el primer depósito
             loadTableData($('#filterSelect').val());
 
-            // Cargar datos al cambiar el depósito
             $('#filterSelect').on('change', function () {
                 loadTableData($(this).val());
             });
 
             $(document).on("click", ".btn-editar", function () {
                 let id = $(this).data("id");
+                let proveedor = $(this).data("proveedor");
                 let nombre = $(this).data("nombre");
                 let unidad = $(this).data("unidad");
                 let cantidad = $(this).data("cantidad");
                 let valor = $(this).data("valor");
                 let destino = $(this).data("destino");
                 let prioridad = $(this).data("prioridad");
+                let fecha = $(this).data("fecha");
 
-                // Llenar los campos del modal con los datos de la carga seleccionada
+                let fechaFormateada = fecha.replace(" ", "T").slice(0, 16);
+
                 $("#edit-id").val(id);
+                $("#edit-proveedor").val(proveedor);
                 $("#edit-nombre").val(nombre);
                 $("#edit-unidad").val(unidad);
                 $("#edit-cantidad").val(cantidad);
                 $("#edit-valor").val(valor);
                 $("#edit-destino").val(destino);
                 $("#edit-prioridad").val(prioridad);
+                $("#edit-fecha").val(fechaFormateada);
+                
+                
+              
+
+            });
+
+            // **Evento para cambiar la prioridad**
+            $(document).on("click", ".toggle-prioridad", function () {
+                let button = $(this);
+                let cargaId = button.data("id");
+                let nuevaPrioridad = button.data("prioridad") === 1 ? 0 : 1;
+
+                $.ajax({
+                    url: "/api/carga/update-prioridad",
+                    method: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ id: cargaId, prioridad: nuevaPrioridad }),
+                    success: function () {
+                        button.data("prioridad", nuevaPrioridad);
+                        button.text(nuevaPrioridad === 1 ? "Prioridad" : "No Prioritario");
+                        button.css("background-color", nuevaPrioridad === 1 ? "green" : "gray");
+                    },
+                    error: function () {
+                        alert("Error al actualizar la prioridad.");
+                    }
+                });
             });
 
         });
+
     </script>
+
     <script>
-    // Verificar si el parámetro 'openModal' está presente en la URL
-const params = new URLSearchParams(window.location.search);
-if (params.has('openModal') && params.get('openModal') === 'true') {
-    // Esperar un momento para asegurar que el modal esté completamente cargado
-    window.addEventListener('load', function() {
-        const modal = new bootstrap.Modal(document.getElementById('modalAgregarCarga'));
-        modal.show(); // Abre el modal automáticamente
-    });
-}
+        // Verificar si el parámetro 'openModal' está presente en la URL
+        const params = new URLSearchParams(window.location.search);
+        if (params.has('openModal') && params.get('openModal') === 'true') {
+            // Esperar un momento para asegurar que el modal esté completamente cargado
+            window.addEventListener('load', function () {
+                const modal = new bootstrap.Modal(document.getElementById('modalAgregarCarga'));
+                modal.show(); // Abre el modal automáticamente
+            });
+        }
     </script>
+
 </body>
 
 </html>

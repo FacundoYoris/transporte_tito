@@ -77,7 +77,8 @@ router.get('/api/cargas', (req, res) => {
             carga.prioridad, 
             carga.idcliente, 
             cliente.nomclie AS nomclie, -- Nombre del cliente
-            carga.valordeclarado 
+            carga.valordeclarado,
+            carga.fecha
         FROM carga 
         LEFT JOIN clientes AS cliente ON carga.idcliente = cliente.numclie
         LEFT JOIN clientes AS proveedor ON carga.idproveedor = proveedor.numclie
@@ -118,6 +119,8 @@ import save from '../controllers/carga.js';
 router.post('/save', save.save);//Guardar una nueva carga
 router.post('/update', save.update);//Editar una carga en depósito 
 router.post('/carga/delete', save.eliminarCarga);//Eliminar una carga
+router.post('/api/carga/update-prioridad', save.updatePrioridad);//Cambiar prioridad
+
 
 import saveClientes from '../controllers/clientes.js';
 router.post('/saveClientes', saveClientes.saveClientes);//Guardar nuevo cliente
