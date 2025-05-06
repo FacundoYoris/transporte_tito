@@ -11,7 +11,15 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet">
     <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet">
-
+    <!-- Agrega el CSS de Select2 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <style>
+        #tablaDepositos td,
+        #tablaDepositos th {
+            text-align: center;
+            vertical-align: middle;
+        }
+    </style>
     <%- include('partes/header.ejs') %>
 </head>
 
@@ -60,31 +68,34 @@
                             </div>
                         </div>
                         <div class="table-responsive">
-                            <table id="tablaDepositos" class="table table-striped table-bordered" >
+                            <table id="tablaDepositos" class="table table-striped table-bordered">
                                 <thead class="thead-dark">
                                     <tr>
-                                        <th style="width: 35px; white-space: nowrap; text-align: center;">ID</th>
-                                        <th style="text-align: center;">PROVEEDOR</th>
-                                        <th style="text-align: center;"">CLIENTE</th>
-                                        <th style="text-align: center;"">UNIDAD</th>
-                                        <th style="text-align: center;"">CANTIDAD</th>
-                                        <th style="text-align: center;"">VALOR DECLARADO</th>
-                                        <th style="text-align: center;"">DESTINO</th>
-                                        <th style="width: 100px; white-space: nowrap; text-align: center;">PRIORIDAD</th>
-                                        <th style="text-align: center;"">FECHA</th>
-                                        <th style="text-align: center;"">ACCIONES</th>
+                                        
+                                        <th>CLIENTE</th>
+                                        <th>PROVEEDOR</th>
+                                        <th>CANTIDAD</th>
+                                        <th>UNIDAD</th>
+                                        <th>REMITO</th>
+                                        <th>VALOR DECLARADO</th>
+                                        <th>DESTINO</th>
+                                        <th style=" width: 100px; white-space: nowrap; ">PRIORIDAD
+                                        </th>
+                                        <th>FECHA</th>
+                                        <th>ACCIONES</th>
                                     </tr>
                                     <tr>
-                                        <th><input type="text" class="form-control form-control-sm"
-                                                placeholder="Buscar ID"></th>
-                                        <th><input type="text" class="form-control form-control-sm"
-                                                placeholder="Buscar proveedor"></th>
+                                        
                                         <th><input type="text" class="form-control form-control-sm"
                                                 placeholder="Buscar cliente"></th>
                                         <th><input type="text" class="form-control form-control-sm"
-                                                placeholder="Buscar unidad"></th>
+                                                placeholder="Buscar proveedor"></th>
                                         <th><input type="text" class="form-control form-control-sm"
                                                 placeholder="Buscar cantidad"></th>
+                                        <th><input type="text" class="form-control form-control-sm"
+                                                placeholder="Buscar remito"></th>
+                                        <th><input type="text" class="form-control form-control-sm"
+                                                placeholder="Buscar unidad"></th>
                                         <th><input type="text" class="form-control form-control-sm"
                                                 placeholder="Buscar valor"></th>
                                         <th><input type="text" class="form-control form-control-sm"
@@ -119,39 +130,51 @@
                                                             <div class="d-flex w-100">
                                                                 <div class="d-flex flex-column me-3 w-50">
                                                                     <label class="form-label">Proveedor</label>
-                                                                    <select class="form-select form-control w-100" id="edit-proveedor" name="proveedor" required>
+                                                                    <select class="form-select form-control w-100"
+                                                                        id="edit-proveedor" name="proveedor" required>
                                                                         <option value="">Proveedor</option>
                                                                         <% clientes.forEach(cliente=> { %>
-                                                                            <option value="<%= cliente.numclie %>"><%= cliente.nomclie %></option>
-                                                                        <% }); %>
+                                                                            <option value="<%= cliente.numclie %>">
+                                                                                <%= cliente.nomclie %>
+                                                                            </option>
+                                                                            <% }); %>
                                                                     </select>
                                                                 </div>
                                                                 <div class="d-flex flex-column w-50">
                                                                     <label class="form-label">Cliente</label>
-                                                                    <select class="form-select w-100" id="edit-nombre" name="nombre" required>
+                                                                    <select class="form-select w-100" id="edit-nombre"
+                                                                        name="nombre" required>
                                                                         <option value="">Cliente</option>
                                                                         <% clientes.forEach(cliente=> { %>
-                                                                            <option value="<%= cliente.numclie %>"><%= cliente.nomclie %></option>
-                                                                        <% }); %>
+                                                                            <option value="<%= cliente.numclie %>">
+                                                                                <%= cliente.nomclie %>
+                                                                            </option>
+                                                                            <% }); %>
                                                                     </select>
                                                                 </div>
                                                             </div>
-                                                            
+
                                                         </div>
                                                         <div class="d-flex w-100">
                                                             <div class="d-flex flex-column me-3 w-50">
                                                                 <label class="form-label">Unidad</label>
-                                                                <select class="form-control w-100" id="edit-unidad" name="unidad">
+                                                                <select class="form-control w-100" id="edit-unidad"
+                                                                    name="unidad">
                                                                     <option value="bultos">Bultos</option>
                                                                     <option value="palets">Palets</option>
                                                                 </select>
                                                             </div>
                                                             <div class="d-flex flex-column w-50">
                                                                 <label class="form-label">Cantidad</label>
-                                                                <input type="number" class="form-control w-100" id="edit-cantidad" name="cantidad">
+                                                                <input type="number" class="form-control w-100"
+                                                                    id="edit-cantidad" name="cantidad">
                                                             </div>
                                                         </div>
-                                                        
+                                                        <div class="mb-3 mt-2">
+                                                            <label class="form-label">Remito</label>
+                                                            <input type="text" class="form-control" id="edit-remito"
+                                                                name="remito">
+                                                        </div>
                                                         <div class="mb-3 mt-2">
                                                             <label class="form-label">Valor Declarado</label>
                                                             <input type="text" class="form-control" id="edit-valor"
@@ -163,11 +186,11 @@
                                                                 name="destino">
                                                         </div>
                                                         <div class="mb-3">
-                                                            
-                                                            <input type="hidden" class="form-control" id="edit-prioridad"
-                                                                name="prioridad">
+
+                                                            <input type="hidden" class="form-control"
+                                                                id="edit-prioridad" name="prioridad">
                                                         </div>
-                                                        <div class="mb-3" >
+                                                        <div class="mb-3">
                                                             <label class="form-label">Fecha</label>
                                                             <input type="datetime-local" class="form-control"
                                                                 id="edit-fecha" name="fecha">
@@ -204,6 +227,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
     <script src="https://cdn.datatables.net/plug-ins/1.13.4/sorting/datetime-moment.js"></script>
+
 
 
     <!-- Modificar tabla de depósitos -->
@@ -270,11 +294,12 @@
                         `;
 
                                 table.row.add([
-                                    carga.id,
-                                    carga.nomprov,
+                                    
                                     carga.nomclie,
-                                    carga.unidad,
+                                    carga.nomprov,
                                     carga.cantidad,
+                                    carga.unidad,
+                                    carga.remito,
                                     carga.valordeclarado,
                                     carga.destino,
                                     prioridadBtn,  // Reemplazamos el texto por el botón
@@ -287,8 +312,9 @@
             data-nombre="${carga.idcliente}" 
             data-proveedor="${carga.idproveedor}" 
             data-fecha="${carga.fecha}" 
-            data-unidad="${carga.unidad}" 
             data-cantidad="${carga.cantidad}" 
+            data-unidad="${carga.unidad}"
+            data-remito="${carga.remito}" 
             data-valor="${carga.valordeclarado}" 
             data-destino="${carga.destino}" 
             data-prioridad="${carga.prioridad}">
@@ -351,8 +377,9 @@
                 let id = $(this).data("id");
                 let proveedor = $(this).data("proveedor");
                 let nombre = $(this).data("nombre");
-                let unidad = $(this).data("unidad");
                 let cantidad = $(this).data("cantidad");
+                let unidad = $(this).data("unidad");
+                let remito = $(this).data("remito");
                 let valor = $(this).data("valor");
                 let destino = $(this).data("destino");
                 let prioridad = $(this).data("prioridad");
@@ -363,15 +390,16 @@
                 $("#edit-id").val(id);
                 $("#edit-proveedor").val(proveedor);
                 $("#edit-nombre").val(nombre);
-                $("#edit-unidad").val(unidad);
                 $("#edit-cantidad").val(cantidad);
+                $("#edit-unidad").val(unidad);
+                $("#edit-remito").val(remito);
                 $("#edit-valor").val(valor);
                 $("#edit-destino").val(destino);
                 $("#edit-prioridad").val(prioridad);
                 $("#edit-fecha").val(fechaFormateada);
-                
-                
-              
+
+
+
 
             });
 

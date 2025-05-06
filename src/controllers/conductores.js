@@ -4,8 +4,8 @@ import express from 'express';
 
 
 // Función para guardar un cliente en la base de datos
-const saveClientes = (req, res) => {
-    
+const saveConductores = (req, res) => {
+    return;
 
     const { 
         nomclie, domclie, locclie, telclie, 
@@ -30,33 +30,9 @@ const saveClientes = (req, res) => {
 };
 
 
-// Función para guardar un cliente en la base de datos
-const saveClientes2 = (req, res) => {
-    
 
-    const { 
-        nomclie, domclie, locclie, telclie, 
-        sitclie, cuiclie, maiclie, obsclie 
-    } = req.body;
-
-    if (!nomclie || !domclie || !locclie || !telclie || !sitclie || !cuiclie || !maiclie) {
-        return res.status(400).json({ success: false, error: "Faltan datos obligatorios." });
-    }
-
-    const clienteData = { nomclie, domclie, locclie, telclie, sitclie, cuiclie, maiclie, obsclie };
-
-    connection.query('INSERT INTO clientes SET ?', clienteData, (error, results) => {
-        if (error) {
-            console.error("Error al guardar el cliente:", error);
-            return res.status(500).json({ success: false, error: "Error al guardar el cliente" });
-        }
-
-        // Redirigir a la ruta de los depósitos con un parámetro para abrir el modal
-        res.redirect(`/clientes`);
-    });
-};
-
-const updateCliente = (req, res)=>{
+const updateConductor = (req, res)=>{
+    return;
     const id = req.body.id;
     const nombre = req.body.nomclie;
     const domicilio = req.body.domclie; 
@@ -76,7 +52,8 @@ const updateCliente = (req, res)=>{
  };
 
 
-const eliminarCliente = (req, res)=>{
+const eliminarConductor = (req, res)=>{
+    return;
     const id = req.body.id;
     connection.query('DELETE FROM clientes WHERE numclie = ?', [id], (error, results)=>{
         
@@ -89,8 +66,7 @@ const eliminarCliente = (req, res)=>{
         });
  };
 export default {
-    saveClientes,
-    saveClientes2,
-    updateCliente,
-    eliminarCliente,
+    saveConductor,
+    updateConductor,
+    eliminarConductor,
  };

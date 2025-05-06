@@ -1,0 +1,84 @@
+<!-- Modal Mejorado -->
+<div class="modal fade" id="editarCliente<%=id%>" tabindex="-1" aria-labelledby="agregarClienteLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg"> <!-- Modal más ancho -->
+    <div class="modal-content shadow-lg rounded-3">
+      <div class="modal-header bg-secondary text-white">
+        <h5 class="modal-title fw-bold" id="agregarClienteLabel">
+          <i class="bx bxs-user-plus me-2"></i> EDITAR CLIENTE
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body bg-light">
+        <form action="/updateCliente" method="post" class="p-3">
+          <input id="id" name="id" value="<%=datos.numclie%>" hidden>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Nombre del Cliente</label>
+              <input type="text" class="form-control" placeholder="Ej: Juan Pérez" name="nomclie"
+                value="<%= datos.nomclie %>" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Domicilio</label>
+              <input type="text" class="form-control" placeholder="Ej: Calle 123" name="domclie"
+                value="<%= datos.domclie %>" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Localidad</label>
+              <input type="text" class="form-control" placeholder="Ej: Buenos Aires" name="locclie"
+                value="<%= datos.locclie %>" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Número de Teléfono</label>
+              <input type="number" class="form-control" placeholder="Ej: 1122334455" name="telclie"
+                value="<%= datos.telclie %>" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Situación ante el IVA</label>
+             
+              <select class="form-select" name="sitclie" required>
+                <option value="" disabled>Situación ante el IVA</option>
+                <% iva.forEach(i => { %>
+                    <option 
+                        value="<%= i.sitiva.trim() %>" 
+                        <%= (String(datos.sitclie).trim() === String(i.sitiva).trim()) ? "selected" : "" %>
+                    >
+                        <%= i.sitiva %>      
+                    </option>
+                <% }); %>
+            </select>
+            
+
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">CUIL / CUIT</label>
+              <input type="number" class="form-control" placeholder="Ej: 20XXXXXXXXX" name="cuiclie"
+                value="<%= datos.cuiclie %>" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Correo Electrónico</label>
+              <input type="email" class="form-control" placeholder="Ej: usuario@email.com" name="maiclie"
+                value="<%= datos.maiclie %>" required>
+            </div>
+            <div class="col-md-12">
+              <label class="form-label fw-semibold">Observaciones</label>
+              <textarea class="form-control" rows="2" placeholder="Notas adicionales..."
+                name="obsclie"><%= datos.obsclie %></textarea>
+            </div>
+          </div>
+          <div class="mt-4 d-grid gap-2">
+            <button type="submit" class="btn btn-success fw-bold">
+              <i class="bx bx-save"></i> Guardar Cliente
+            </button>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer d-flex justify-content-between bg-light">
+        <small class="text-muted">* Todos los campos son obligatorios.</small>
+        <button type="button" class="btn btn-danger fw-bold" data-bs-dismiss="modal">
+          <i class="bx bx-x-circle"></i> Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

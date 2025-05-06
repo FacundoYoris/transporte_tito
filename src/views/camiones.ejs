@@ -10,6 +10,55 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.1/main.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
     <%- include('partes/header.ejs') %>
+    <style>
+         body {
+    background-color: #f2f6f9;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .modern-pastel-table {
+    background-color: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    font-size: 1rem;
+  }
+
+  .modern-pastel-table thead tr:first-child {
+    background-color: #d1c4e9;
+    color: #212121;
+  }
+
+  .modern-pastel-table thead tr.filters input {
+    border: 1px solid #b39ddb;
+    background-color: #ede7f6;
+    color: #000;
+    font-weight: 500;
+  }
+
+  .modern-pastel-table tbody tr:hover {
+    background-color: #f8bbd0;
+  }
+
+  .modern-pastel-table th,
+  .modern-pastel-table td {
+    padding: 12px;
+    vertical-align: middle;
+  }
+
+  .modern-pastel-table th {
+    font-weight: 700;
+  }
+
+  .btn-outline-primary {
+    border-color: #7e57c2;
+    color: #7e57c2;
+  }
+
+  .btn-outline-primary:hover {
+    background-color: #7e57c2;
+    color: white;
+  }
+    </style>
 </head>
 
 <body>
@@ -29,9 +78,59 @@
             </div>
 
         </div>
+
+        <div eblclass="container">
+
+
+            <!-- Boton agregar camión -->
+            <button type="button" class="btn btn-outline-secondary  mt-4" style="font-size: 2rem;"
+                data-bs-toggle="modal" data-bs-target="#agregarCliente" id="botonAgregarStock">
+                <i class='bx bxs-user-plus' undefined></i>
+            </button>
+            <%- include('partes/modalAgregarCamion.ejs') %>
+
+            <table class="table modern-pastel-table table-hover text-center mt-4 shadow" id="tabla">
+                <thead>
+                  <tr class="bg-light text-dark text-uppercase fw-bold border-bottom">
+                    <th class="align-middle">ID</th>
+                    <th class="align-middle">Descripción</th>
+                    <th class="align-middle">Patente Chásis</th>
+                    <th class="align-middle">Patente Acoplado</th>
+                    <th class="align-middle">Acciones</th>
+                  </tr>
+                  <tr class="filters bg-white">
+                    <th><input type="text" class="form-control form-control-sm text-center" placeholder="Buscar ID"></th>
+                    <th><input type="text" class="form-control form-control-sm text-center" placeholder="Buscar Descripción"></th>
+                    <th><input type="text" class="form-control form-control-sm text-center" placeholder="Buscar Chásis"></th>
+                    <th><input type="text" class="form-control form-control-sm text-center" placeholder="Buscar Acoplado"></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% camiones.forEach((camion)=>{ %>
+                    <tr>
+                      <td class="align-middle fw-bold text-secondary"><%= camion.nummovil %></td>
+                      <td class="align-middle text-primary fw-semibold"><%= camion.desmovil %></td>
+                      <td class="align-middle text-info fw-semibold"><%= camion.patmovil %></td>
+                      <td class="align-middle text-info fw-semibold"><%= camion.pacmovil %></td>
+                      <td class="align-middle">
+                        <button class="btn btn-sm btn-outline-primary me-1 fw-bold" data-bs-toggle="modal" data-bs-target="#editarCamion<%= camion.nummovil %>"><i class='bx bx-edit-alt'></i></button>
+                        <button class="btn btn-sm btn-outline-danger fw-bold" data-bs-toggle="modal" data-bs-target="#eliminarCamion<%= camion.nummovil %>"><i class='bx bx-trash'></i></button>
+                      </td>
+                    </tr>
+                    <%- include('partes/modalEditarCamion.ejs', { id: camion.nummovil, datos: camion }) %>
+                    <%- include('partes/modalEliminarCamion.ejs', { id: camion.nummovil, datos: camion }) %>
+                  <% }) %>
+                </tbody>
+              </table>
+              
+        </div>
+
+
     </main>
 
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    
 </body>
 </html>

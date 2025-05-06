@@ -1,5 +1,60 @@
+<style>
+    /* Contenedor general del modal personalizado */
+    .custom-modal .modal-content {
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        border: none;
+        background: #f8f9fa;
+    }
+    
+    /* Encabezado con fondo degradado y tipografía mejorada */
+    .custom-modal .modal-header {
+        background: linear-gradient(90deg, #007bff, #6610f2);
+        color: #fff;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        padding: 1rem 1.5rem;
+    }
+    
+    .custom-modal .modal-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+    
+    /* Cuerpo del modal con mayor separación */
+    .custom-modal .modal-body {
+        padding: 2rem;
+    }
+    
+    /* Botón de cerrar más limpio */
+    .custom-modal .btn-close {
+        filter: brightness(0) invert(1); /* Asegura que el botón se vea bien sobre el encabezado oscuro */
+        opacity: 0.8;
+    }
+    
+    .custom-modal .btn-close:hover {
+        opacity: 1;
+    }
+    
+    /* Estilos para los formularios dentro del modal */
+    .custom-modal .form-control,
+    .custom-modal .form-select {
+        border-radius: 5px;
+        border: 1px solid #ced4da;
+    }
+    
+    /* Estilo para el botón del formulario */
+    .custom-modal .btn-primary,
+    .custom-modal .btn-success,
+    .custom-modal .btn-outline-secondary,
+    .custom-modal .btn-secondary {
+        border-radius: 5px;
+    }
+  </style>
+  
+
 <!-- Modal -->
-<div class="modal fade" id="modalAgregarCarga" tabindex="-1" aria-hidden="true">
+<div class="modal fade custom-modal" id="modalAgregarCarga" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -11,18 +66,20 @@
                     <!-- Cliente ORIGEN -->
                     <div class="mb-2">
                         <div class="d-flex align-items-center">
-                            <select class="form-select me-2" id="clienteOrigen" name="clienteOrigen" required>
-                                <option value="">Proveedor</option>
-                                <% clientes.forEach(cliente => { %>
-                                    <option value="<%= cliente.numclie %>"><%= cliente.nomclie %></option>
-                                <% }); %>
-                            </select>
-                            <select class="form-select me-2" id="clienteDestino" name="clienteDestino" required>
-                                <option value="">Cliente</option>
-                                <% clientes.forEach(cliente => { %>
-                                    <option value="<%= cliente.numclie %>"><%= cliente.nomclie %></option>
-                                <% }); %>
-                            </select> 
+                            <!-- Tus selects -->
+<select class="form-select me-2 select-buscador" id="clienteOrigen" name="clienteOrigen" required>
+    <option value="">Proveedor</option>
+    <% clientes.forEach(cliente => { %>
+        <option value="<%= cliente.numclie %>"><%= cliente.nomclie %></option>
+    <% }); %>
+</select>
+
+<select class="form-select me-2 select-buscador" id="clienteDestino" name="clienteDestino" required>
+    <option value="">Cliente</option>
+    <% clientes.forEach(cliente => { %>
+        <option value="<%= cliente.numclie %>"><%= cliente.nomclie %></option>
+    <% }); %>
+</select>
                             <button type="button" class="btn btn-outline-secondary" id="btnAgregarCliente">
                                 <i class='bx bx-plus' style='color:#097707'></i>
                             </button>
@@ -40,6 +97,7 @@
 
                     <!-- Otros campos -->
                     <input type="number" class="form-control mb-2" placeholder="Cantidad" name="cantidad" required>
+                    <input type="text" class="form-control mb-2" placeholder="Remito" name="remito" required>
                     <input type="number" class="form-control mb-2" placeholder="Valor declarado" name="valor" required>
                     <input type="text" class="form-control mb-2" placeholder="Destino" name="destino" required>
                     <input type="datetime-local" class="form-control mb-2" placeholder="Fecha ingreso" name="fecha" required>
@@ -73,7 +131,7 @@
 
                     <!-- Botón para volver al formulario de carga -->
                     <button type="button" class="btn btn-secondary w-100 mt-3" id="btnVolverCarga">
-                        Volver a Carga
+                        Ir a carga
                     </button>
                 </div>
             </div>
@@ -94,3 +152,4 @@
         document.getElementById('formAgregarCarga').classList.remove('d-none');
     });
 </script>
+

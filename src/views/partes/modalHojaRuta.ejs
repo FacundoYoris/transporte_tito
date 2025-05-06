@@ -1,0 +1,82 @@
+<!-- Modal para ver una orden -->
+<div class="modal fade" id="verHojaRuta<%= id %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl w-80">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Hoja de Ruta</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="container mt-3">
+          <div class="card border-secondary">
+            <div class="card-header bg-info text-white text-center">HOJA DE RUTA</div>
+            <div class="card-body">
+              <div class="card">
+                <div class="card-body">
+
+                  <% const fechaHora=new Date(datos.fecha); const fecha=fechaHora.toLocaleDateString('es-AR'); const
+                    hora=fechaHora.toLocaleTimeString('es-AR', { hour: '2-digit' , minute: '2-digit' }); %>
+
+                    <!-- Primer fila -->
+                    <div class="row mb-3">
+                      <div class="col-md-4">
+                        <strong>Fecha:</strong> <span>
+                          <%= fecha %>
+                        </span>
+                      </div>
+                      <div class="col-md-4">
+                        <strong>Hora:</strong> <span>
+                          <%= hora %>
+                        </span>
+                      </div>
+                      <div class="col-md-4">
+                        <strong>Hoja de Ruta:</strong> <span>
+                          <%= datos.id %>
+                        </span>
+                      </div>
+                    </div>
+
+                    <!-- Segunda fila -->
+                    <div class="row mb-3">
+                      <div class="col-md-4">
+                        <strong>Camión:</strong> <span>
+                          <%= datos.desmovil %>
+                        </span>
+                      </div>
+                      <div class="col-md-4">
+                        <strong>Patente Camión:</strong> <span>
+                          <%= datos.patmovil %>
+                        </span>
+                      </div>
+                      <div class="col-md-4">
+                        <strong>Patente Acoplado:</strong> <span>
+                          <%= datos.pacmovil %>
+                        </span>
+                      </div>
+                    </div>
+
+                    <!-- Tercera fila -->
+                    <div class="row mb-4">
+                      <div class="col-md-12">
+                        <strong>Chofer:</strong> <span>
+                          <%= datos.nomchof %>
+                        </span>
+                      </div>
+                    </div>
+                    
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+
+    </div>
+  </div>
+</div>
