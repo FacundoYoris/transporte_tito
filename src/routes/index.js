@@ -6,6 +6,7 @@
 import { Router } from 'express'
 import connection from '../database/db.js'
 
+
 const router = Router()
 
 
@@ -64,20 +65,20 @@ router.get('/depositos', (req, res) => {
 router.get('/api/cargas', (req, res) => {
     const depositoId = req.query.depositoId;
 
-    // Consulta que une la tabla carga con clientes dos veces para obtener nomclie y nomprov
     const query = `
         SELECT 
             carga.id, 
             carga.unidad, 
             carga.idproveedor,
-            proveedor.nomclie AS nomprov, -- Nombre del proveedor
+            proveedor.nomclie AS nomprov,     -- Nombre del proveedor
             carga.iddeposito, 
             carga.cantidad, 
-            carga.destino, 
             carga.prioridad, 
             carga.idcliente, 
             carga.remito,
-            cliente.nomclie AS nomclie, -- Nombre del cliente
+            cliente.nomclie AS nomclie,       -- Nombre del cliente
+            cliente.locclie AS loccliente,    -- Localidad del cliente
+            cliente.domclie AS domcliente,    -- Domicilio del cliente
             carga.valordeclarado,
             carga.fecha
         FROM carga 
@@ -89,10 +90,9 @@ router.get('/api/cargas', (req, res) => {
         if (error) {
             return res.status(500).json({ error: 'Error en la consulta' });
         }
-        res.json(results); // Enviamos las cargas con nomclie y nomprov como respuesta JSON
+        res.json(results);
     });
 });
-
 
 
 router.get('/envios', (req, res) => {
@@ -186,8 +186,6 @@ router.get('/envios', (req, res) => {
     });
   });
   
-
-
   router.get('/cargarenvionuevo', (req, res) => {
     const userName = req.session.userName;
 
@@ -211,7 +209,7 @@ router.get('/envios', (req, res) => {
         let enviosQuery, cargaQuery;
         let queryParams = [];
 
-        if (idDepositoUsuario === 1) {
+    
             enviosQuery = `
                 SELECT 
                     e.id, 
@@ -224,41 +222,41 @@ router.get('/envios', (req, res) => {
                     e.fecha, 
                     c.id AS cargaporenvio_id, 
                     c.idenvio, 
-                    c.idcarga
+                    c.idcarga,
+                    ca.idcliente,
+                    cl.nomclie, 
+                    cl.locclie, 
+                    cl.domclie
                 FROM hojaderuta e
                 LEFT JOIN cargaporenvio c ON e.id = c.idenvio
-                LEFT JOIN depositos d_origen ON e.id_origen = d_origen.id
-                LEFT JOIN depositos d_destino ON e.id_destino = d_destino.id;
-            `;
-            cargaQuery = `SELECT * FROM carga;`;
-        } else {
-            enviosQuery = `
-                SELECT 
-                    e.id, 
-                    e.id_origen, 
-                    d_origen.nombre AS nombre_origen,
-                    e.id_destino, 
-                    d_destino.nombre AS nombre_destino,
-                    e.idchofer, 
-                    e.idcamion, 
-                    e.fecha, 
-                    c.id AS cargaporenvio_id, 
-                    c.idenvio, 
-                    c.idcarga
-                FROM hojaderuta e
-                LEFT JOIN cargaporenvio c ON e.id = c.idenvio
+                LEFT JOIN carga ca ON c.idcarga = ca.id
+                LEFT JOIN clientes cl ON ca.idcliente = cl.numclie
                 LEFT JOIN depositos d_origen ON e.id_origen = d_origen.id
                 LEFT JOIN depositos d_destino ON e.id_destino = d_destino.id
                 WHERE e.id_origen = ?;
             `;
-            cargaQuery = `SELECT * FROM carga WHERE iddeposito = ?;`;
+
+            cargaQuery = `
+                SELECT 
+                    c.*, 
+                    cl.nomclie, 
+                    cl.locclie, 
+                    cl.domclie,
+                    prov.nomclie AS nomproveedor
+                FROM carga c
+                LEFT JOIN clientes cl ON c.idcliente = cl.numclie
+                LEFT JOIN clientes prov ON c.idproveedor = prov.numclie
+                WHERE c.iddeposito = ?;
+            `;
+
             queryParams.push(idDepositoUsuario);
-        }
+        
 
         const conductoresQuery = `
             SELECT 
                 c.nomchof, 
-                c.dnichof, 
+                c.dnichof,
+                c.nrochof,
                 c.idcamion, 
                 m.patmovil AS patente_camion, 
                 m.pacmovil AS patente_acoplado
@@ -285,6 +283,7 @@ router.get('/envios', (req, res) => {
                     }
 
                     res.render('nuevoenvio.ejs', {
+                        
                         envios: enviosResults,
                         cargas: cargaResults,
                         choferes: conductoresResults
@@ -294,10 +293,6 @@ router.get('/envios', (req, res) => {
         });
     });
 });
-
-
-
-
 
 
 router.get('/clientes', (req, res) => {

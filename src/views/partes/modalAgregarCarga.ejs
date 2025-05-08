@@ -6,7 +6,7 @@
         border: none;
         background: #f8f9fa;
     }
-    
+
     /* Encabezado con fondo degradado y tipografía mejorada */
     .custom-modal .modal-header {
         background: linear-gradient(90deg, #007bff, #6610f2);
@@ -15,34 +15,35 @@
         border-top-right-radius: 10px;
         padding: 1rem 1.5rem;
     }
-    
+
     .custom-modal .modal-title {
         font-size: 1.5rem;
         font-weight: 600;
     }
-    
+
     /* Cuerpo del modal con mayor separación */
     .custom-modal .modal-body {
         padding: 2rem;
     }
-    
+
     /* Botón de cerrar más limpio */
     .custom-modal .btn-close {
-        filter: brightness(0) invert(1); /* Asegura que el botón se vea bien sobre el encabezado oscuro */
+        filter: brightness(0) invert(1);
+        /* Asegura que el botón se vea bien sobre el encabezado oscuro */
         opacity: 0.8;
     }
-    
+
     .custom-modal .btn-close:hover {
         opacity: 1;
     }
-    
+
     /* Estilos para los formularios dentro del modal */
     .custom-modal .form-control,
     .custom-modal .form-select {
         border-radius: 5px;
         border: 1px solid #ced4da;
     }
-    
+
     /* Estilo para el botón del formulario */
     .custom-modal .btn-primary,
     .custom-modal .btn-success,
@@ -50,8 +51,8 @@
     .custom-modal .btn-secondary {
         border-radius: 5px;
     }
-  </style>
-  
+</style>
+
 
 <!-- Modal -->
 <div class="modal fade custom-modal" id="modalAgregarCarga" tabindex="-1" aria-hidden="true">
@@ -67,19 +68,25 @@
                     <div class="mb-2">
                         <div class="d-flex align-items-center">
                             <!-- Tus selects -->
-<select class="form-select me-2 select-buscador" id="clienteOrigen" name="clienteOrigen" required>
-    <option value="">Proveedor</option>
-    <% clientes.forEach(cliente => { %>
-        <option value="<%= cliente.numclie %>"><%= cliente.nomclie %></option>
-    <% }); %>
-</select>
+                            <select class="form-select me-2 select-buscador" id="clienteOrigen" name="clienteOrigen"
+                                required>
+                                <option value="">Proveedor</option>
+                                <% clientes.forEach(cliente=> { %>
+                                    <option value="<%= cliente.numclie %>">
+                                        <%= cliente.nomclie %>
+                                    </option>
+                                    <% }); %>
+                            </select>
 
-<select class="form-select me-2 select-buscador" id="clienteDestino" name="clienteDestino" required>
-    <option value="">Cliente</option>
-    <% clientes.forEach(cliente => { %>
-        <option value="<%= cliente.numclie %>"><%= cliente.nomclie %></option>
-    <% }); %>
-</select>
+                            <select class="form-select me-2 select-buscador" id="clienteDestino" name="clienteDestino"
+                                required>
+                                <option value="">Cliente</option>
+                                <% clientes.forEach(cliente=> { %>
+                                    <option value="<%= cliente.numclie %>">
+                                        <%= cliente.nomclie %>
+                                    </option>
+                                    <% }); %>
+                            </select>
                             <button type="button" class="btn btn-outline-secondary" id="btnAgregarCliente">
                                 <i class='bx bx-plus' style='color:#097707'></i>
                             </button>
@@ -100,19 +107,22 @@
                     <input type="text" class="form-control mb-2" placeholder="Remito" name="remito" required>
                     <input type="number" class="form-control mb-2" placeholder="Valor declarado" name="valor" required>
                     <input type="text" class="form-control mb-2" placeholder="Destino" name="destino" required>
-                    <input type="datetime-local" class="form-control mb-2" placeholder="Fecha ingreso" name="fecha" required>
-                    
+                    <input type="datetime-local" class="form-control mb-2" placeholder="Fecha ingreso" name="fecha"
+                        required>
+
                     <button type="submit" class="btn btn-primary w-100">Agregar</button>
                 </form>
 
                 <!-- Formulario para agregar nuevo cliente -->
                 <div id="formAgregarCliente" class="mt-3 d-none">
                     <h6>Agregar Nuevo Cliente</h6>
-                    <form action="/saveClientes" method="post" >
-                        <input type="text" class="form-control mb-2" placeholder="Nombre del Cliente" name="nomclie" required>
+                    <form action="/saveClientes" method="post">
+                        <input type="text" class="form-control mb-2" placeholder="Nombre del Cliente" name="nomclie"
+                            required>
                         <input type="text" class="form-control mb-2" placeholder="Domicilio" name="domclie" required>
                         <input type="text" class="form-control mb-2" placeholder="Localidad" name="locclie" required>
-                        <input type="number" class="form-control mb-2" placeholder="Número de teléfono" name="telclie" required>
+                        <input type="number" class="form-control mb-2" placeholder="Número de teléfono" name="telclie"
+                            required>
                         <select class="form-control mb-2" name="sitclie" required>
                             <option value="" disabled selected>Seleccione la situación ante el IVA</option>
                             <option value="RI">Responsable Inscripto</option>
@@ -122,10 +132,13 @@
                             <option value="CF">Consumidor Final</option>
                             <option value="RD">Relación de Dependencia</option>
                         </select>
-                        <input type="number" class="form-control mb-2" placeholder="CUIL - CUIT" name="cuiclie" required>
-                        <input type="email" class="form-control mb-2" placeholder="Correo electrónico" name="maiclie" required>
-                        <input type="text" class="form-control mb-2" placeholder="Observaciones" name="obsclie" required>
-                        
+                        <input type="number" class="form-control mb-2" placeholder="CUIL - CUIT" name="cuiclie"
+                            required>
+                        <input type="email" class="form-control mb-2" placeholder="Correo electrónico" name="maiclie"
+                            required>
+                        <input type="text" class="form-control mb-2" placeholder="Observaciones" name="obsclie"
+                            required>
+
                         <button type="submit" class="btn btn-success w-100">Guardar Cliente</button>
                     </form>
 
@@ -152,4 +165,3 @@
         document.getElementById('formAgregarCarga').classList.remove('d-none');
     });
 </script>
-

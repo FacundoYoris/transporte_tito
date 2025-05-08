@@ -1,179 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ENVÍOS</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet">
-    <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet">
-
-    <%- include('partes/header.ejs') %>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ENVÍOS</title>
+  <!-- CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+  <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
+  <%- include('partes/header.ejs') %>
 </head>
 
 <body>
-    <div id="menu">
-        <%- include('partes/navegacion.ejs') %>
-    </div>
+  <div id="menu">
+    <%- include('partes/navegacion.ejs') %>
+  </div>
 
-    <main id="mainEstadistica">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <div class="card h-100"></div>
-                    <div id="titulo-container" style="padding-top: 5px; padding-right: 0px;">
-                        <div id="titulo" style="color: black;">ENVÍOS</div>
-                    </div>
-                </div>
-            </div>
-            <button onclick="window.location.href='/cargarenvionuevo'" style="background-color: #007bff; color: white; border: none; padding: 12px 24px; 
-                    font-size: 14px; border-radius: 5px; cursor: pointer; font-weight: bold; 
-                    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); transition: background-color 0.3s, transform 0.2s;"
-                onmouseover="this.style.backgroundColor='#0056b3'; this.style.transform='scale(1.05)';"
-                onmouseout="this.style.backgroundColor='#007bff'; this.style.transform='scale(1)';"
-                onmousedown="this.style.backgroundColor='#00408a'; this.style.transform='scale(0.98)';"
-                onmouseup="this.style.backgroundColor='#0056b3'; this.style.transform='scale(1.05)';">
-                Nuevo envío
-            </button>
-            <div class="row mt-4">
-                <div class="col-12">
-                    <div class="table-responsive">
-                        <table id="tablaEnvios" class="table table-striped table-bordered">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th style="width: 35px; white-space: nowrap; text-align: center;">HOJA DE RUTA</th>
-                                    <th style=" text-align: center;"">FECHA</th>
-                                    <th style="text-align: center;">ORIGEN</th>
-                                    <th style="text-align: center;"">DESTINO</th>
-                                    <th style=" text-align: center;"">CONDUCTOR</th>
-                                    <th style="text-align: center;"">MÓVIL</th>
-                                    
-                                    <th style="text-align: center;"">DETALLE</th>
-                        </tr>
-                        <tr>
-                            <th><input type=" text" class="form-control form-control-sm" placeholder="ID"></th>
-                            <th><input type="text" class="form-control form-control-sm"
-                                    placeholder="Buscar fecha"></th>
-                                    <th><input type="text" class="form-control form-control-sm"
-                                            placeholder="Buscar origen"></th>
-                                    <th><input type="text" class="form-control form-control-sm"
-                                            placeholder="Buscar destino"></th>
-                                    <th><input type="text" class="form-control form-control-sm"
-                                            placeholder="Buscar conductor"></th>
-                                    <th><input type="text" class="form-control form-control-sm"
-                                            placeholder="Buscar móvil"></th>
-                                    
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <% envios.forEach(envio=> { %>
-                                    <tr>
-                                        <td style="text-align: center;">
-                                            <%= envio.id %>
-                                        </td>
-                                        <td style="text-align: center;">
-                                            <%= envio.fecha %>
-                                        </td>
-                                        <td style="text-align: center;">
-                                            <%= envio.nombre_origen %>
-                                        </td>
-                                        <td style="text-align: center;">
-                                            <%= envio.nombre_destino %>
-                                        </td>
-                                        <td style="text-align: center;">
-                                            <%= envio.nomchof %>
-                                        </td>
-                                        <td style="text-align: center;">
-                                            <%= envio.patmovil %>
-                                        </td>
-                                        
-                                        <td style="text-align: center;">
-                                            <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#verHojaRuta<%= envio.id %>">
-                                                <i class='bx bx-show bx-sm'></i>
-                                              </button>
-                                        </td>
-                                    </tr>
-                                    <%- include('partes/modalHojaRuta.ejs',{"id":envio.id,"datos":envio}) %>
-                                    <% }); %>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+  <main id="mainEstadistica">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <div class="card h-100"></div>
+          <div id="titulo-container" style="padding-top: 5px; padding-right: 0px;">
+            <div id="titulo" style="color: black;">ENVÍOS</div>
+          </div>
         </div>
+      </div>
 
+      <button onclick="window.location.href='/cargarenvionuevo'" style="background-color: #007bff; color: white; border: none; padding: 12px 24px; font-size: 14px; border-radius: 5px; cursor: pointer; font-weight: bold; box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); transition: background-color 0.3s, transform 0.2s;"
+        onmouseover="this.style.backgroundColor='#0056b3'; this.style.transform='scale(1.05)';"
+        onmouseout="this.style.backgroundColor='#007bff'; this.style.transform='scale(1)';"
+        onmousedown="this.style.backgroundColor='#00408a'; this.style.transform='scale(0.98)';"
+        onmouseup="this.style.backgroundColor='#0056b3'; this.style.transform='scale(1.05)';">
+        Nuevo envío
+      </button>
 
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="table-responsive">
+            <table id="tablaEnvios" class="table table-striped table-bordered">
+              <thead class="thead-dark">
+                <tr>
+                  <th style="width: 35px; white-space: nowrap; text-align: center;">HOJA DE RUTA</th>
+                  <th style="text-align: center;">FECHA</th>
+                  <th style="text-align: center;">ORIGEN</th>
+                  <th style="text-align: center;">DESTINO</th>
+                  <th style="text-align: center;">CONDUCTOR</th>
+                  <th style="text-align: center;">MÓVIL</th>
+                  <th style="text-align: center;">DETALLE</th>
+                </tr>
+                <tr>
+                  <th><input type="text" class="form-control form-control-sm" placeholder="ID"></th>
+                  <th><input type="text" class="form-control form-control-sm" placeholder="Buscar fecha"></th>
+                  <th><input type="text" class="form-control form-control-sm" placeholder="Buscar origen"></th>
+                  <th><input type="text" class="form-control form-control-sm" placeholder="Buscar destino"></th>
+                  <th><input type="text" class="form-control form-control-sm" placeholder="Buscar conductor"></th>
+                  <th><input type="text" class="form-control form-control-sm" placeholder="Buscar móvil"></th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% envios.forEach(envio => { %>
+                  <tr>
+                    <td style="text-align: center;"><%= envio.id %></td>
+                    <td style="text-align: center;"><%= envio.fecha %></td>
+                    <td style="text-align: center;"><%= envio.nombre_origen %></td>
+                    <td style="text-align: center;"><%= envio.nombre_destino %></td>
+                    <td style="text-align: center;"><%= envio.nomchof %></td>
+                    <td style="text-align: center;"><%= envio.patmovil %></td>
+                    <td style="text-align: center;">
+                      <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#verHojaRuta<%= envio.id %>">
+                        <i class='bx bx-show bx-sm'></i>
+                      </button>
+                    </td>
+                  </tr>
+                  <%- include('partes/modalHojaRuta.ejs', { id: envio.id, datos: envio }) %>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
 
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
 
-    </main>
+  <script>
+    $(document).ready(function () {
+      var table = $('#tablaEnvios').DataTable({
+        orderCellsTop: true,
+        fixedHeader: true,
+        responsive: true,
+        scrollY: 500,
+        scrollX: true,
+        columnDefs: [
+          { targets: [6], orderable: false }
+        ],
+        language: {
+          processing: "Tratamiento en curso...",
+          search: "Buscar&nbsp;:",
+          lengthMenu: "Visualizar _MENU_",
+          info: "_START_ a _END_ -- Total: _TOTAL_ items",
+          infoEmpty: "No existen datos.",
+          infoFiltered: "(filtrado de _MAX_ elementos en total)",
+          loadingRecords: "Cargando...",
+          zeroRecords: "No se encontraron datos con tu búsqueda",
+          emptyTable: "No hay datos disponibles en la tabla.",
+          paginate: {
+            first: "Primero",
+            previous: "Anterior",
+            next: "Siguiente",
+            last: "Último"
+          },
+        },
+        lengthMenu: [[5, 10, 25, -1], [5, 10, 25, "Mostrar todo"]],
+        drawCallback: function () {
+  $('#tablaEnvios tbody tr').each(function () {
+    let fechaCell = $(this).find('td:eq(1)');
+    let fechaTexto = fechaCell.text().trim();
 
-    <!-- Scripts -->
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
-    <!-- Bootstrap JS y Popper.js -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
-    <script src="https://cdn.datatables.net/plug-ins/1.13.4/sorting/datetime-moment.js"></script>
+    // Convertir string a Date
+    let fecha = new Date(fechaTexto);
 
-    <script>
+    if (!isNaN(fecha.getTime()) && !fechaCell.hasClass('formatted')) {
+      // Formatear como DD/MM/YYYY HH:mm
+      let dia = String(fecha.getDate()).padStart(2, '0');
+      let mes = String(fecha.getMonth() + 1).padStart(2, '0');
+      let año = fecha.getFullYear();
+      let hora = String(fecha.getHours()).padStart(2, '0');
+      let minutos = String(fecha.getMinutes()).padStart(2, '0');
 
+      let formateada = `${dia}/${mes}/${año} ${hora}:${minutos}`;
+      fechaCell.text(formateada).addClass('formatted');
+    }
+  });
+}
 
-        $(document).ready(function () {
-            // Registrar el formato de fecha en DataTables
-
-            $('#tablaEnvios tbody tr').each(function () {
-                let fechaCell = $(this).find("td:eq(1)"); // La columna 6 (índice base 0 es 5)
-                let fechaTexto = fechaCell.text().trim();
-                if (fechaTexto) {
-                    fechaCell.text(moment(fechaTexto).format("DD/MM/YYYY HH:mm"));
-                }
-            });
-            var table = $('#tablaEnvios').DataTable({
-                "language": {
-                    "decimal": ",",
-                    "emptyTable": "No hay datos disponibles en la tabla",
-                    "info": "Mostrando _START_ a _END_ de _TOTAL_ entradas",
-                    "infoEmpty": "Mostrando 0 a 0 de 0 entradas",
-                    "infoFiltered": "(filtrado de _MAX_ entradas totales)",
-                    "lengthMenu": "Mostrar _MENU_ entradas",
-                    "loadingRecords": "Cargando...",
-                    "processing": "Procesando...",
-                    "search": "Buscar:",
-                    "zeroRecords": "No se encontraron registros coincidentes",
-                    "paginate": {
-                        "first": "Primero",
-                        "last": "Último",
-                        "next": "Siguiente",
-                        "previous": "Anterior"
-                    }
-                },
-                "orderCellsTop": true,
-                "fixedHeader": true,
-                "bSortCellsTop": true,
-
-            });
-
-            $('#tablaEnvios thead input').on('keyup change', function () {
-                let columnIndex = $(this).closest('th').index();
-                table.column(columnIndex).search(this.value).draw();
-            });
-
-
-            loadTableData($('#filterSelect').val());
-
-            $('#filterSelect').on('change', function () {
-                loadTableData($(this).val());
-            });
-
-        });
-
-    </script>
+      });
+    });
+  </script>
 </body>
-
 </html>

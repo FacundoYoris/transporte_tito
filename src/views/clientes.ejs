@@ -13,6 +13,96 @@
 
     <%- include('partes/header.ejs') %>
         <title>CLIENTE</title>
+        <style>/* Estilo pastel personalizado para CLIENTES */
+            .table.pastel-clientes {
+              border-radius: 12px;
+              overflow: hidden;
+              background-color: #ffffff;
+              box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+              color: #000; /* letras negras */
+            }
+            
+            /* Encabezado con gradiente celeste-violeta */
+            .table.pastel-clientes thead tr:first-child {
+              background: linear-gradient(to right, #c2e9fb, #a1c4fd);
+              color: #000;
+            }
+            
+            /* Titulos */
+            .table.pastel-clientes thead th {
+              padding: 12px;
+              font-size: 0.9rem;
+              vertical-align: middle;
+              border: none;
+              text-transform: uppercase;
+            }
+            
+            /* Campos de búsqueda (incluyendo ID) */
+            .table.pastel-clientes thead tr.filters input {
+              width: 100%;
+              border: 2px solid #6c63ff;
+              background-color: #e6e6ff;
+              color: #000;
+              font-weight: 500;
+              text-align: center;
+              border-radius: 6px;
+              font-size: 0.8rem;
+              padding: 4px 6px;
+              transition: border 0.2s ease, background-color 0.2s ease;
+            }
+            
+            .table.pastel-clientes thead tr.filters input:focus {
+              outline: none;
+              border-color: #4a47a3;
+              background-color: #dcdcff;
+            }
+            
+            /* Celdas del cuerpo */
+            .table.pastel-clientes tbody td {
+              padding: 10px;
+              font-size: 0.95rem;
+              vertical-align: middle;
+              border: none;
+              color: #000;
+              transition: background-color 0.2s ease, color 0.2s ease;
+            }
+            
+            /* Filas alternadas */
+            .table.pastel-clientes tbody tr:nth-child(odd) {
+              background-color: #f0f8ff;
+            }
+            
+            .table.pastel-clientes tbody tr:nth-child(even) {
+              background-color: #ffffff;
+            }
+            
+            /* Hover */
+            .table.pastel-clientes tbody tr:hover {
+              background-color: #c6f6d5;
+              color: #000;
+            }
+            
+            /* Botones */
+            .btn-outline-info:hover {
+              background-color: #cce5ff;
+              border-color: #cce5ff;
+            }
+            
+            .btn-outline-danger:hover {
+              background-color: #f8d7da;
+              border-color: #f8d7da;
+            }
+            
+            /* Campo ID más angosto */
+            .col-id {
+              width: 60px;
+              min-width: 60px;
+              max-width: 60px;
+              white-space: nowrap;
+            }
+            </style>
+          
+          
 </head>
 
 <body>
@@ -38,71 +128,46 @@
             </button>
             <%- include('partes/modalAgregarCliente.ejs') %>
 
-                <table class="table table-bordered table-striped text-center mt-4" id="tabla">
-                    <thead>
-                        <tr class="bg-primary text-white">
-                            <th scope="col" class="p-1 col-id">ID</th>
-                            <th scope="col" class="p-1">NOMBRE</th>
-                            <th scope="col" class="p-1">DOMICILIO</th>
-                            <th scope="col" class="p-1">LOCALIDAD</th>
-                            <th scope="col" class="p-1">TELÉFONO</th>
-                            <th scope="col" class="p-1">CUIL</th>
-                            <th scope="col" class="p-1">EMAIL</th>
-                            <th scope="col" class="p-1">OBSERVACIÓN</th>
-
-                            <th scope="col" class="p-1 col-acciones">ACCIONES</th>
-
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- //Los results que yo paso en el index.js, acá los uso con la variable orden declarada dentro del forEach                                  -->
-                        <% clientes.forEach((cliente)=>{ %>
-                            <tr>
-                                <td class="p-1 col-id">
-                                    <%= cliente.numclie %>
-                                </td>
-                                <td class="p-1">
-                                    <%= cliente.nomclie %>
-                                </td>
-                                <td class="p-1">
-                                    <%= cliente.domclie %>
-                                </td>
-                                <td class="p-1">
-                                    <%= cliente.locclie %>
-                                </td>
-                                <td class="p-1">
-                                    <%= cliente.telclie %>
-                                </td>
-                                <td class="p-1">
-                                    <%= cliente.cuiclie %>
-                                </td>
-                                <td class="p-1">
-                                    <%= cliente.maiclie %>
-                                </td>
-                                <td class="p-1">
-                                    <%= cliente.obsclie %>
-                                </td>
-
-                                <td class="p-1 col-acciones">
-                                    <!-- Boton editar tercero -->
-                                    <button type="button" class="btn btn-outline-info" data-bs-toggle="modal"
-                                        data-bs-target="#editarCliente<%= cliente.numclie %>">
-                                        <i class='bx bx-edit-alt bx-sm'></i>
-                                    </button>
-                                    <!-- Boton eliminar tercero -->
-                                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
-                                        data-bs-target="#eliminarCliente<%= cliente.numclie %>">
-                                        <i class='bx bx-trash bx-sm bx-flip-horizontal' style='color:#0f1010'></i>
-                                    </button>
-                                </td>
-
-
-                            </tr>
-                            <%- include('partes/modalEditarCliente.ejs',{"id":cliente.numclie, "datos" :cliente, "iva": situacionesIVA}) %>
-                                <%- include('partes/modalEliminarCliente.ejs',{"id":cliente.numclie,"datos":cliente}) %>
-                                    <% }) %>
-                    </tbody>
-                </table>
+            <table class="table pastel-clientes table-bordered text-center mt-4" id="tabla">
+                <thead>
+                  <tr>
+                    <th class="p-1 col-id">ID</th>
+                    <th class="p-1">NOMBRE</th>
+                    <th class="p-1">DOMICILIO</th>
+                    <th class="p-1">LOCALIDAD</th>
+                    <th class="p-1">TELÉFONO</th>
+                    <th class="p-1">CUIL</th>
+                    <th class="p-1">EMAIL</th>
+                    <th class="p-1">OBSERVACIÓN</th>
+                    <th class="p-1 col-acciones">ACCIONES</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% clientes.forEach((cliente) => { %>
+                    <tr>
+                      <td class="p-1 col-id"><%= cliente.numclie %></td>
+                      <td class="p-1"><%= cliente.nomclie %></td>
+                      <td class="p-1"><%= cliente.domclie %></td>
+                      <td class="p-1"><%= cliente.locclie %></td>
+                      <td class="p-1"><%= cliente.telclie %></td>
+                      <td class="p-1"><%= cliente.cuiclie %></td>
+                      <td class="p-1"><%= cliente.maiclie %></td>
+                      <td class="p-1"><%= cliente.obsclie %></td>
+                      <td class="p-1 col-acciones">
+                        <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#editarCliente<%= cliente.numclie %>">
+                          <i class='bx bx-edit-alt bx-sm'></i>
+                        </button>
+                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#eliminarCliente<%= cliente.numclie %>">
+                          <i class='bx bx-trash bx-sm bx-flip-horizontal' style='color:#0f1010'></i>
+                        </button>
+                      </td>
+                    </tr>
+                    <%- include('partes/modalEditarCliente.ejs', { id: cliente.numclie, datos: cliente, iva: situacionesIVA }) %>
+                    <%- include('partes/modalEliminarCliente.ejs', { id: cliente.numclie, datos: cliente }) %>
+                  <% }) %>
+                </tbody>
+              </table>
+              
         </div>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
@@ -121,63 +186,61 @@
 
 
     <script>
-
-$(document).ready(function () {
-
-// Creamos una fila en el head de la tabla y la clonamos para cada columna
-var $headerRow = $('#tabla thead tr');
-var $clonedHeaderRow = $headerRow.clone(true).appendTo('#tabla thead');
-
-$clonedHeaderRow.find('th').each(function (i) {
-    if (i < 8) {
-        var title = $(this).text(); // Es el nombre de la columna
-        $(this).html('<input type="text" class="' + title + '" placeholder="' + title + '..." />');
-
-        $(this).on('click', 'input', function (e) {
-            e.stopPropagation(); // Evitar que el evento de clic se propague a la columna para ordenar
-        }).on('keyup change', 'input', function () {
-            var columnIndex = $(this).closest('th').index();
-            if (table.column(columnIndex).search() !== this.value) {
-                table.column(columnIndex).search(this.value).draw();
-            }
+        $(document).ready(function () {
+          // Clona la fila del encabezado y genera los filtros
+          $('#tabla thead tr').clone(true).addClass('filters').appendTo('#tabla thead');
+        
+          var table = $('#tabla').DataTable({
+            orderCellsTop: true,
+            fixedHeader: true,
+            responsive: true,
+            initComplete: function () {
+              var api = this.api();
+        
+              api.columns().eq(0).each(function (colIdx) {
+                var cell = $('.filters th').eq(colIdx);
+                if (colIdx < 8) { // sólo columnas filtrables (excluye "acciones")
+                  $(cell).html('<input type="text" placeholder="Buscar" />');
+                  $('input', cell).on('keyup change clear', function () {
+                    if (api.column(colIdx).search() !== this.value) {
+                      api.column(colIdx).search(this.value).draw();
+                    }
+                  });
+                } else {
+                  $(cell).html(''); // No agregar input a "Acciones"
+                }
+              });
+            },
+            language: {
+              processing: "Tratamiento en curso...",
+              search: "Buscar&nbsp;:",
+              lengthMenu: "Visualizar _MENU_",
+              info: "_START_ a _END_ -- Total: _TOTAL_ items",
+              infoEmpty: "No existen datos.",
+              infoFiltered: "(filtrado de _MAX_ elementos en total)",
+              loadingRecords: "Cargando...",
+              zeroRecords: "No se encontraron datos con tu búsqueda",
+              emptyTable: "No hay datos disponibles en la tabla.",
+              paginate: {
+                first: "Primero",
+                previous: "Anterior",
+                next: "Siguiente",
+                last: "Último"
+              },
+            },
+            lengthMenu: [[5, 10, 25, -1], [5, 10, 25, "Mostrar todo"]],
+            columnDefs: [
+              { targets: -1, orderable: false }
+            ],
+            scrollY: 400,
+            scrollX: true
+          });
         });
-    }
-});
-
-var table = $('#tabla').DataTable({
-    orderCellsTop: true,
-    responsive: true,
-    language: {
-        processing: "Tratamiento en curso...",
-        search: "Buscar&nbsp;:",
-        lengthMenu: "Visualizar _MENU_",
-        info: "_START_ a _END_ -- Total: _TOTAL_ items",
-        infoEmpty: "No existen datos.",
-        infoFiltered: "(filtrado de _MAX_ elementos en total)",
-        loadingRecords: "Cargando...",
-        zeroRecords: "No se encontraron datos con tu búsqueda",
-        emptyTable: "No hay datos disponibles en la tabla.",
-        paginate: {
-            first: "Primero",
-            previous: "Anterior",
-            next: "Siguiente",
-            last: "Último"
-        },
-    },
-    lengthMenu: [[5, 10, 25, -1], [5, 10, 25, "Mostrar todo"]],
-    columnDefs: [
-        { targets: -1, orderable: false } // La última columna (Acciones) no es ordenable
-    ],
-    scrollY: 400, // Agregamos scroll en Y
-    scrollX: true,
-});
-
-$clonedHeaderRow.find('th:last-child').text('');
-
-});
-
-
-    </script>
+        </script>
+        
+        
+        
+      
 </body>
 
 </html>

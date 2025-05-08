@@ -152,23 +152,28 @@
               <table id="tablaDepositos" class="table table-striped table-bordered">
                 <thead>
                   <tr>
-                    <th style="width: 35px;">ID</th>
+                    <th style="width: 35px;" >ID</th>
                     <th>CLIENTE</th>
-                    <th style="width: 35px;">UNIDAD</th>
+                    <th>PROVEEDOR</th>
                     <th style="width: 35px;">CANTIDAD</th>
-                    <th>DESTINO</th>
+                    <th style="width: 35px;">UNIDAD</th>
+                    <th>REMITO</th>
+                    <th>LOCALIDAD</th>
+                    <th>VALOR</th>
                     <th>FECHA</th>
                   </tr>
                 </thead>
                 <tbody>
                   <% cargas.forEach(carga => { %>
                     <tr class="<%= carga.prioridad == 1 ? 'prioridad-alta' : '' %>">
-                      <td><%= carga.id %></td>
-                      <td><%= carga.idcliente %></td>
-                      <td><%= carga.unidad %></td>
+                      <td ><%= carga.id %></td>
+                      <td><%= carga.nomclie %></td>
+                      <td><%= carga.nomproveedor %></td>
                       <td><%= carga.cantidad %></td>
-                    <!-- CAMBIAR ESTA CARGA.DESTINO POR LA LOCALIDAD DEL CLIENTE -->
-                      <td><%= carga.destino %></td>
+                      <td><%= carga.unidad %></td>
+                      <td><%= carga.remito %></td>
+                      <td><%= carga.locclie %></td>
+                      <td><%= carga.valordeclarado %></td>
                       <td>
                         <%= new Date(carga.fecha).toLocaleString('es-ES', { 
                             day: '2-digit', month: '2-digit', year: 'numeric', 
@@ -200,11 +205,14 @@
               <table id="tablaSeleccionados" class="table table-striped table-bordered">
                 <thead>
                   <tr>
-                    <th style="width: 35px;">ID</th>
+                    <th style="width: 35px;" >ID</th>
                     <th>CLIENTE</th>
-                    <th style="width: 35px;">UNIDAD</th>
+                    <th>PROVEEDOR</th>
                     <th style="width: 35px;">CANTIDAD</th>
-                    <th>DESTINO</th>
+                    <th style="width: 35px;">UNIDAD</th>
+                    <th>REMITO</th>
+                    <th>LOCALIDAD</th>
+                    <th>VALOR</th>
                     <th>FECHA</th>
                     <th style="width: 25px;">Acción</th>
                   </tr>
@@ -227,21 +235,24 @@
   <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  
+  <!-- Esto maneja toda la lógica de las tablas, cargar datos dinamicamente y mandar al backend los datos -->
   <script>
-    $(document).ready(function() {
-      // Inicialización de DataTables para ambas tablas
+    $(document).ready(function () {
+      // Inicialización de DataTables
       let tablaDepositos = $('#tablaDepositos').DataTable({
         paging: false,
         info: false,
         searching: false
       });
+  
       let tablaSeleccionados = $('#tablaSeleccionados').DataTable({
-        searching: false,
         paging: false,
-        info: false
+        info: false,
+        searching: false
       });
-
-      // Función para formatear fechas
+  
+      // Función para formatear fecha
       function formatearFecha(fechaISO) {
         let fecha = new Date(fechaISO);
         return fecha.toLocaleString('es-ES', {
@@ -249,20 +260,24 @@
           hour: '2-digit', minute: '2-digit'
         });
       }
-
-      // Transferir filas mediante botón "Pasar" de Depósito a Seleccionados
-      $('#pasarDatos').click(function() {
-        $('#tablaDepositos tbody tr.selected').each(function() {
+  
+      // Transferir fila de Depósito a Seleccionados (botón →)
+      $('#pasarDatos').click(function () {
+        $('#tablaDepositos tbody tr.selected').each(function () {
           let datos = tablaDepositos.row(this).data();
           if (datos) {
             let prioridad = $(this).hasClass('prioridad-alta') ? 'prioridad-alta' : '';
+            
             let nuevaFila = tablaSeleccionados.row.add([
-              datos[0],
-              datos[1],
-              datos[2],
-              datos[3],
-              datos[4],
-              formatearFecha(datos[5]),
+              datos[0], // ID (hidden)
+              datos[1], // Cliente
+              datos[2], // Proveedor
+              datos[3], // Cantidad
+              datos[4], // Unidad
+              datos[5], // Remito
+              datos[6], // Localidad
+              datos[7], // Valor
+              formatearFecha(datos[8]), // Fecha
               '<button class="btn btn-danger btn-sm eliminarCarga">X</button>'
             ]).draw().node();
             $(nuevaFila).removeClass('selected').addClass(prioridad);
@@ -270,29 +285,32 @@
           }
         });
       });
-
-      // Transferir filas mediante botón "Quitar" de Seleccionados a Depósito
-      $('#quitarDatos').click(function() {
-        $('#tablaSeleccionados tbody tr.selected').each(function() {
+  
+      // Transferir fila de Seleccionados a Depósito (botón ←)
+      $('#quitarDatos').click(function () {
+        $('#tablaSeleccionados tbody tr.selected').each(function () {
           let datos = tablaSeleccionados.row(this).data();
           if (datos) {
             let prioridad = $(this).hasClass('prioridad-alta') ? 'prioridad-alta' : '';
             let nuevaFila = tablaDepositos.row.add([
-              datos[0],
-              datos[1],
-              datos[2],
-              datos[3],
-              datos[4],
-              formatearFecha(datos[5])
+              datos[0], // ID
+              datos[1], // Cliente
+              datos[2], // Proveedor
+              datos[3], // Cantidad
+              datos[4], // Unidad
+              datos[5], // Remito
+              datos[6], // Localidad
+              datos[7], // Valor
+              formatearFecha(datos[8]) // Fecha
             ]).draw().node();
             $(nuevaFila).addClass(prioridad);
             tablaSeleccionados.row(this).remove().draw();
           }
         });
       });
-
-      // Transferir fila al hacer doble clic en tabla de Depósito
-      $('#tablaDepositos tbody').on('dblclick', 'tr', function() {
+  
+      // Doble clic en tabla de Depósito para pasar a Seleccionados
+      $('#tablaDepositos tbody').on('dblclick', 'tr', function () {
         let datos = tablaDepositos.row(this).data();
         if (datos) {
           let prioridad = $(this).hasClass('prioridad-alta') ? 'prioridad-alta' : '';
@@ -302,16 +320,19 @@
             datos[2],
             datos[3],
             datos[4],
-            formatearFecha(datos[5]),
+            datos[5],
+            datos[6],
+            datos[7],
+            formatearFecha(datos[8]),
             '<button class="btn btn-danger btn-sm eliminarCarga">X</button>'
           ]).draw().node();
           $(nuevaFila).removeClass('selected').addClass(prioridad);
           tablaDepositos.row(this).remove().draw();
         }
       });
-
-      // Transferir fila al hacer doble clic en tabla de Seleccionados
-      $('#tablaSeleccionados tbody').on('dblclick', 'tr', function() {
+  
+      // Doble clic en tabla de Seleccionados para devolver a Depósito
+      $('#tablaSeleccionados tbody').on('dblclick', 'tr', function () {
         let datos = tablaSeleccionados.row(this).data();
         if (datos) {
           let prioridad = $(this).hasClass('prioridad-alta') ? 'prioridad-alta' : '';
@@ -321,15 +342,18 @@
             datos[2],
             datos[3],
             datos[4],
-            formatearFecha(datos[5])
+            datos[5],
+            datos[6],
+            datos[7],
+            formatearFecha(datos[8])
           ]).draw().node();
           $(nuevaFila).addClass(prioridad);
           tablaSeleccionados.row(this).remove().draw();
         }
       });
-
-      // Eliminar una fila de Cargas Seleccionadas y devolverla a Depósito con el botón "X"
-      $(document).on('click', '.eliminarCarga', function() {
+  
+      // Botón "X" para eliminar de Seleccionados y devolver a Depósito
+      $(document).on('click', '.eliminarCarga', function () {
         let fila = $(this).closest('tr');
         let datos = tablaSeleccionados.row(fila).data();
         if (datos) {
@@ -340,57 +364,64 @@
             datos[2],
             datos[3],
             datos[4],
-            formatearFecha(datos[5])
+            datos[5],
+            datos[6],
+            datos[7],
+            formatearFecha(datos[8])
           ]).draw().node();
           $(nuevaFila).addClass(prioridad);
           tablaSeleccionados.row(fila).remove().draw();
         }
       });
-
-      // Marcar o desmarcar filas con clic (para usar con botones de transferencia)
+  
+      // Clic para seleccionar/deseleccionar filas
       function manejarSeleccion(selector) {
-        $(selector + ' tbody').on('click', 'tr', function() {
+        $(selector + ' tbody').on('click', 'tr', function () {
           $(this).toggleClass('selected');
         });
       }
+  
       manejarSeleccion('#tablaDepositos');
       manejarSeleccion('#tablaSeleccionados');
-
-      // Guardar Envío: recopilar datos del formulario central y las cargas seleccionadas
-      $('#enviarDatos').click(function() {
+  
+      // Enviar datos al backend
+      $('#enviarDatos').click(function () {
         let cargasSeleccionadas = [];
-        $('#tablaSeleccionados tbody tr').each(function() {
+        $('#tablaSeleccionados tbody tr').each(function () {
           let fila = tablaSeleccionados.row(this).data();
           if (fila) {
             cargasSeleccionadas.push({
               id: fila[0],
               cliente: fila[1],
-              unidad: fila[2],
+              proveedor: fila[2],
               cantidad: fila[3],
-              destino: fila[4],
-              fecha: fila[5]
+              unidad: fila[4],
+              remito: fila[5],
+              localidad: fila[6],
+              valor: fila[7],
+              fecha: fila[8]
             });
           }
         });
+  
         const envioData = {
-          descripcionCamion: $('#descripcionCamion').val(),
-          patenteCamion: $('#patenteCamion').val(),
-          patenteAcoplado: $('#patenteAcoplado').val(),
-          chofer: $('#chofer').val(),
+          idCamion: $('#patenteCamion').val(),
+          dniChofer: $('#chofer').val(),
           cargas: cargasSeleccionadas
         };
-
+  
         fetch('/guardarEnvio', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(envioData)
         })
-        .then(response => response.json())
-        .then(data => alert(data.success ? 'Envío registrado.' : 'Error al guardar.'))
-        .catch(error => console.error('Error:', error));
+          .then(response => response.json())
+          .then(data => alert(data.success ? 'Envío registrado.' : 'Error al guardar.'))
+          .catch(error => console.error('Error:', error));
       });
     });
   </script>
+  <!-- SCRIPT PARA LOS SELECTED DEL CHOFER Y DEL CAMION (AUTOCOMPLEMENTAR) -->
   <script>
     const choferes = JSON.parse(document.getElementById('choferesData').textContent);
   
@@ -465,14 +496,20 @@
     });
   
     // Inicializar Select2 en todos los campos
-    ['#chofer', '#dni', '#patenteCamion', '#patenteAcoplado'].forEach(selector => {
-      $(selector).select2({
-        width: '100%',
-        dropdownAutoWidth: true,
-        placeholder: 'Seleccione una opción',
-        allowClear: true
-      });
-    });
+    $('#chofer, #dni').select2({
+  width: '100%',
+  dropdownAutoWidth: true,
+  placeholder: 'Seleccione una opción',
+  allowClear: true
+});
+
+$('#patenteCamion, #patenteAcoplado').select2({
+  width: '100%',
+  dropdownAutoWidth: true,
+  placeholder: 'Seleccione una opción',
+  allowClear: true,
+  tags: true // Habilita escritura manual
+});
   </script>
   
 </body>

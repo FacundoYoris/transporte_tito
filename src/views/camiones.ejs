@@ -11,54 +11,93 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
     <%- include('partes/header.ejs') %>
     <style>
-         body {
-    background-color: #f2f6f9;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  }
-
-  .modern-pastel-table {
-    background-color: #ffffff;
-    border-radius: 12px;
-    overflow: hidden;
-    font-size: 1rem;
-  }
-
-  .modern-pastel-table thead tr:first-child {
-    background-color: #d1c4e9;
-    color: #212121;
-  }
-
-  .modern-pastel-table thead tr.filters input {
-    border: 1px solid #b39ddb;
-    background-color: #ede7f6;
-    color: #000;
-    font-weight: 500;
-  }
-
-  .modern-pastel-table tbody tr:hover {
-    background-color: #f8bbd0;
-  }
-
-  .modern-pastel-table th,
-  .modern-pastel-table td {
-    padding: 12px;
-    vertical-align: middle;
-  }
-
-  .modern-pastel-table th {
-    font-weight: 700;
-  }
-
-  .btn-outline-primary {
-    border-color: #7e57c2;
-    color: #7e57c2;
-  }
-
-  .btn-outline-primary:hover {
-    background-color: #7e57c2;
-    color: white;
-  }
+      body {
+        background-color: #f2f6f9;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+    
+      .modern-pastel-table {
+        background-color: #ffffff;
+        border-radius: 12px;
+        overflow: hidden;
+        font-size: 1rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        color: #000; /* Color por defecto en la tabla */
+      }
+    
+      /* Encabezado pastel celeste-violeta */
+      .modern-pastel-table thead tr:first-child {
+        background: linear-gradient(to right, #b2ebf2, #d1c4e9);
+        color: #000;
+      }
+    
+      .modern-pastel-table thead th {
+        font-weight: 700;
+        padding: 12px;
+        vertical-align: middle;
+        border-bottom: 2px solid #d1c4e9;
+      }
+    
+      /* Campos de búsqueda destacados */
+      .modern-pastel-table thead tr.filters input {
+        border: 2px solid #6c63ff;
+        background-color: #e6e6ff;
+        color: #000;
+        font-weight: 500;
+        text-align: center;
+        border-radius: 6px;
+        transition: border 0.2s ease, background-color 0.2s ease;
+      }
+    
+      .modern-pastel-table thead tr.filters input:focus {
+        outline: none;
+        border-color: #4a47a3;
+        background-color: #dcdcff;
+      }
+    
+      /* Celdas */
+      .modern-pastel-table tbody td {
+        padding: 12px;
+        vertical-align: middle;
+        color: #000; /* Letras negras */
+      }
+    
+      /* Filas alternadas */
+      .modern-pastel-table tbody tr:nth-child(odd) {
+        background-color: #f0f8ff;
+      }
+    
+      .modern-pastel-table tbody tr:nth-child(even) {
+        background-color: #ffffff;
+      }
+    
+      /* Hover unificado */
+      .modern-pastel-table tbody tr:hover {
+        background-color: #c6f6d5;
+        color: #000;
+        transition: background-color 0.2s ease;
+      }
+    
+      /* Botones */
+      .btn-outline-primary {
+        border-color: #6c63ff;
+        color: #6c63ff;
+      }
+    
+      .btn-outline-primary:hover {
+        background-color: #6c63ff;
+        color: white;
+      }
+    
+      .btn-outline-danger:hover {
+        background-color: #f8d7da;
+        border-color: #f8d7da;
+      }
     </style>
+    
+    
+    
+    
 </head>
 
 <body>
@@ -90,29 +129,24 @@
             <%- include('partes/modalAgregarCamion.ejs') %>
 
             <table class="table modern-pastel-table table-hover text-center mt-4 shadow" id="tabla">
-                <thead>
-                  <tr class="bg-light text-dark text-uppercase fw-bold border-bottom">
-                    <th class="align-middle">ID</th>
-                    <th class="align-middle">Descripción</th>
-                    <th class="align-middle">Patente Chásis</th>
-                    <th class="align-middle">Patente Acoplado</th>
-                    <th class="align-middle">Acciones</th>
-                  </tr>
-                  <tr class="filters bg-white">
-                    <th><input type="text" class="form-control form-control-sm text-center" placeholder="Buscar ID"></th>
-                    <th><input type="text" class="form-control form-control-sm text-center" placeholder="Buscar Descripción"></th>
-                    <th><input type="text" class="form-control form-control-sm text-center" placeholder="Buscar Chásis"></th>
-                    <th><input type="text" class="form-control form-control-sm text-center" placeholder="Buscar Acoplado"></th>
-                    <th></th>
-                  </tr>
-                </thead>
+              <thead>
+                <tr>
+                  <th class="align-middle">ID</th>
+                  <th class="align-middle">DESCRIPCIÓN</th>
+                  <th class="align-middle">PATENTE CHÁSIS</th>
+                  <th class="align-middle">PATENTE ACOPLADO</th>
+                  <th class="align-middle">CONDUCTOR ASOCIADO</th>
+                  <th class="align-middle">ACCIONES</th>
+                </tr>
+              </thead>
                 <tbody>
                   <% camiones.forEach((camion)=>{ %>
                     <tr>
-                      <td class="align-middle fw-bold text-secondary"><%= camion.nummovil %></td>
-                      <td class="align-middle text-primary fw-semibold"><%= camion.desmovil %></td>
-                      <td class="align-middle text-info fw-semibold"><%= camion.patmovil %></td>
-                      <td class="align-middle text-info fw-semibold"><%= camion.pacmovil %></td>
+                      <td class="align-middle fw-bold"><%= camion.nummovil %></td>
+<td class="align-middle fw-semibold"><%= camion.desmovil %></td>
+<td class="align-middle fw-semibold"><%= camion.patmovil %></td>
+<td class="align-middle fw-semibold"><%= camion.pacmovil %></td>
+<td class="align-middle fw-semibold">Conductor</td>
                       <td class="align-middle">
                         <button class="btn btn-sm btn-outline-primary me-1 fw-bold" data-bs-toggle="modal" data-bs-target="#editarCamion<%= camion.nummovil %>"><i class='bx bx-edit-alt'></i></button>
                         <button class="btn btn-sm btn-outline-danger fw-bold" data-bs-toggle="modal" data-bs-target="#eliminarCamion<%= camion.nummovil %>"><i class='bx bx-trash'></i></button>
@@ -129,8 +163,62 @@
 
     </main>
 
-    <!-- Scripts -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    // Clona la fila del encabezado y agrega filtros
+    $('#tabla thead tr').clone(true).addClass('filters').appendTo('#tabla thead');
+
+    var table = $('#tabla').DataTable({
+      orderCellsTop: true,
+      fixedHeader: true,
+      responsive: true,
+      initComplete: function () {
+        const api = this.api();
+        api.columns().eq(0).each(function (colIdx) {
+          var cell = $('.filters th').eq(colIdx);
+          if (colIdx < 5) {
+            $(cell).html('<input type="text" placeholder="Buscar" class="form-control form-control-sm text-center" />');
+            $('input', cell).on('keyup change clear', function () {
+              if (api.column(colIdx).search() !== this.value) {
+                api.column(colIdx).search(this.value).draw();
+              }
+            });
+          } else {
+            $(cell).html('');
+          }
+        });
+      },
+      language: {
+        processing: "Tratamiento en curso...",
+        search: "Buscar&nbsp;:",
+        lengthMenu: "Visualizar _MENU_",
+        info: "_START_ a _END_ -- Total: _TOTAL_ items",
+        infoEmpty: "No existen datos.",
+        infoFiltered: "(filtrado de _MAX_ elementos en total)",
+        loadingRecords: "Cargando...",
+        zeroRecords: "No se encontraron datos con tu búsqueda",
+        emptyTable: "No hay datos disponibles en la tabla.",
+        paginate: {
+          first: "Primero",
+          previous: "Anterior",
+          next: "Siguiente",
+          last: "Último"
+        },
+      },
+      lengthMenu: [[5, 10, 25, -1], [5, 10, 25, "Mostrar todo"]],
+      columnDefs: [
+        { targets: -1, orderable: false } // "Acciones" no ordenable
+      ],
+      scrollY: 400,
+      scrollX: true
+    });
+  });
+</script>
+
     
 </body>
 </html>

@@ -28,7 +28,6 @@ const save = (req, res) => {
             unidad: req.body.unidad,
             iddeposito: idDepositoUsuario, // Usar el iddeposito del usuario actual
             cantidad: req.body.cantidad,
-            destino: req.body.destino,
             prioridad: 0,
             idcliente: req.body.clienteDestino,
             valordeclarado: req.body.valor,
@@ -50,11 +49,11 @@ const save = (req, res) => {
 
 // PROVEEDOR Y NOMBRE EN REALIDAD SON IDPROVEEDOR Y IDCLIENTE
 const update = (req, res) => {
-    const { id, proveedor, nombre, unidad, cantidad, valor, destino, prioridad, fecha, remito } = req.body;
+    const { id, proveedor, nombre, unidad, cantidad, valor, prioridad, fecha, remito } = req.body;
     
     // Ahora actualizar la tabla cargas con los demás datos
     connection.query(
-        "UPDATE carga SET unidad=?, cantidad=?, destino=?, idcliente=?, valordeclarado=?, idproveedor=?, fecha=?, remito=? WHERE id=?",
+        "UPDATE carga SET unidad=?, cantidad=?, idcliente=?, valordeclarado=?, idproveedor=?, fecha=?, remito=? WHERE id=?",
         [unidad, cantidad, destino, nombre,  valor, proveedor, fecha, remito, id],
         (error) => {
             if (error) {
