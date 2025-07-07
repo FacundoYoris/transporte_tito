@@ -1,3 +1,5 @@
+
+
 <!-- Modal para ver una orden -->
 <div class="modal fade" id="verHojaRuta<%= id %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl w-80">
@@ -10,66 +12,78 @@
 
       <div class="modal-body">
         <div class="container mt-3">
-          <div class="card border-secondary">
+          <!-- Encabezado -->
+          <div class="card border-secondary mb-4">
             <div class="card-header bg-info text-white text-center">HOJA DE RUTA</div>
             <div class="card-body">
               <div class="card">
                 <div class="card-body">
+                  <% const fechaHora = new Date(datos.fecha); 
+                     const fecha = fechaHora.toLocaleDateString('es-AR'); 
+                     const hora = fechaHora.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' }); %>
+                  <div class="row mb-3">
+                    <div class="col-md-4"><strong>Fecha:</strong> <%= fecha %></div>
+                    <div class="col-md-4"><strong>Hora:</strong> <%= hora %></div>
+                    <div class="col-md-4"><strong>Hoja de Ruta:</strong> <%= datos.id %></div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-md-4"><strong>Camión:</strong> <%= datos.desmovil %></div>
+                    <div class="col-md-4"><strong>Patente Camión:</strong> <%= datos.patmovil %></div>
+                    <div class="col-md-4"><strong>Patente Acoplado:</strong> <%= datos.pacmovil %></div>
+                  </div>
+                  <div class="row mb-0">
+                    <div class="col-md-4"><strong>Chofer:</strong> <%= datos.nomchof %></div>
+                    <div class="col-md-4"><strong>DNI:</strong> <%= datos.dnichof %></div>
+                    <div class="col-md-4"><strong>TOTAL:</strong> $<%= datos.total_valor.toLocaleString('es-AR') %></div>
 
-                  <% const fechaHora=new Date(datos.fecha); const fecha=fechaHora.toLocaleDateString('es-AR'); const
-                    hora=fechaHora.toLocaleTimeString('es-AR', { hour: '2-digit' , minute: '2-digit' }); %>
-
-                    <!-- Primer fila -->
-                    <div class="row mb-3">
-                      <div class="col-md-4">
-                        <strong>Fecha:</strong> <span>
-                          <%= fecha %>
-                        </span>
-                      </div>
-                      <div class="col-md-4">
-                        <strong>Hora:</strong> <span>
-                          <%= hora %>
-                        </span>
-                      </div>
-                      <div class="col-md-4">
-                        <strong>Hoja de Ruta:</strong> <span>
-                          <%= datos.id %>
-                        </span>
-                      </div>
-                    </div>
-
-                    <!-- Segunda fila -->
-                    <div class="row mb-3">
-                      <div class="col-md-4">
-                        <strong>Camión:</strong> <span>
-                          <%= datos.desmovil %>
-                        </span>
-                      </div>
-                      <div class="col-md-4">
-                        <strong>Patente Camión:</strong> <span>
-                          <%= datos.patmovil %>
-                        </span>
-                      </div>
-                      <div class="col-md-4">
-                        <strong>Patente Acoplado:</strong> <span>
-                          <%= datos.pacmovil %>
-                        </span>
-                      </div>
-                    </div>
-
-                    <!-- Tercera fila -->
-                    <div class="row mb-4">
-                      <div class="col-md-12">
-                        <strong>Chofer:</strong> <span>
-                          <%= datos.nomchof %>
-                        </span>
-                      </div>
-                    </div>
-                    
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+
+          <!-- ACORDEONES CON BOTONES EN CABECERA -->
+          <% if (datos.detalles.length === 0) { %>
+            <p class="text-center text-muted">No hay cargas asociadas.</p>
+          <% } else { %>
+            <div class="accordion" id="accordionCargas<%= id %>">
+              <% datos.detalles.forEach((detalle, index) => {
+                   const carga = detalle.carga;
+                   const cargaFecha = new Date(carga?.fecha || '').toLocaleString('es-AR', {
+                     day: '2-digit', month: '2-digit', year: 'numeric',
+                     hour: '2-digit', minute: '2-digit'
+                   });
+                   const collapseId = `collapseCarga${id}_${index}`;
+                   const headingId = `headingCarga${id}_${index}`;
+              %>
+                <div class="accordion-item">
+                  <h2 class="accordion-header d-flex justify-content-between align-items-center px-2" id="<%= headingId %>">
+                    <button class="accordion-button collapsed flex-grow-1 text-start" type="button" data-bs-toggle="collapse" data-bs-target="#<%= collapseId %>" aria-expanded="false" aria-controls="<%= collapseId %>">
+                      #<%= index + 1 %> - Cliente: <%= carga?.nombre_cliente || '-' %> | Proveedor: <%= carga?.nombre_proveedor || '-' %> | Remito: <%= carga?.remito || '-' %>
+                    </button>
+                    <div class="ms-2 d-flex gap-2">
+                      <button class="btn btn-sm btn-outline-success" title="Aceptar">
+                        ✅
+                      </button>
+                      <button class="btn btn-sm btn-outline-danger" title="Eliminar">
+                        🗑️
+                      </button>
+                    </div>
+                  </h2>
+                  <div id="<%= collapseId %>" class="accordion-collapse collapse" aria-labelledby="<%= headingId %>" data-bs-parent="#accordionCargas<%= id %>">
+                    <div class="accordion-body">
+                      <p><strong>Cantidad:</strong> <%= carga?.cantidad || '-' %> <%= carga?.unidad || '' %></p>
+                      <p><strong>Localidad:</strong> <%= carga?.localidad_cliente || '-' %></p>
+
+                      <p><strong>Valor declarado:</strong> $<%= carga?.valordeclarado || '0' %></p>
+                      <p><strong>Fecha:</strong> <%= cargaFecha %></p>
+                    </div>
+                  </div>
+                </div>
+              <% }) %>
+            </div>
+          <% } %>
+
         </div>
       </div>
 

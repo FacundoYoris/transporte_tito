@@ -96,95 +96,115 @@ router.get('/api/cargas', (req, res) => {
 
 
 router.get('/envios', (req, res) => {
-    const userName = req.session.userName;
-  
-    if (!userName) {
-      return res.status(401).send("Usuario no autenticado.");
+  const userName = req.session.userName; // Saca el nombre del usuario actual
+
+  if (!userName) {
+    return res.status(401).send("Usuario no autenticado.");
+  }
+
+  const userQuery = `SELECT iddeposito FROM usuarios WHERE usuario = ?;`; // Saca el id del depósito del usuario
+
+  connection.query(userQuery, [userName], (error, userResults) => {
+    if (error) return res.status(500).send("Error al obtener el iddeposito del usuario.");
+    if (userResults.length === 0) return res.status(404).send("Usuario no encontrado.");
+
+    const idDepositoUsuario = userResults[0].iddeposito;
+    let enviosQuery;
+    let queryParams = [];
+
+    const baseQuery = `
+      SELECT 
+        e.id,
+        e.id_origen, 
+        d_origen.nombre AS nombre_origen,
+        e.id_destino, 
+        d_destino.nombre AS nombre_destino,
+        e.idchofer, 
+        e.idcamion, 
+        e.fecha,
+        conductores.*,
+        moviles.*
+      FROM hojaderuta e
+      LEFT JOIN depositos d_origen ON e.id_origen = d_origen.id
+      LEFT JOIN depositos d_destino ON e.id_destino = d_destino.id
+      LEFT JOIN conductores ON conductores.nrochof = e.idchofer
+      LEFT JOIN moviles ON moviles.nummovil = e.idcamion
+    `;
+
+    if (idDepositoUsuario === 1) {
+      enviosQuery = baseQuery;
+    } else {
+      enviosQuery = baseQuery + ' WHERE e.id_origen = ?';
+      queryParams = [idDepositoUsuario];
     }
-  
-    const userQuery = `SELECT iddeposito FROM usuarios WHERE usuario = ?;`;
-  
-    connection.query(userQuery, [userName], (error, userResults) => {
-      if (error) return res.status(500).send("Error al obtener el iddeposito del usuario.");
-      if (userResults.length === 0) return res.status(404).send("Usuario no encontrado.");
-  
-      const idDepositoUsuario = userResults[0].iddeposito;
-      let enviosQuery;
-      let queryParams = [];
-  
-      const baseQuery = `
-        SELECT 
-          e.id, 
-          e.id_origen, 
-          d_origen.nombre AS nombre_origen,
-          e.id_destino, 
-          d_destino.nombre AS nombre_destino,
-          e.idchofer, 
-          e.idcamion, 
-          e.fecha,
-          conductores.*,
-          moviles.*
-        FROM hojaderuta e
-        LEFT JOIN depositos d_origen ON e.id_origen = d_origen.id
-        LEFT JOIN depositos d_destino ON e.id_destino = d_destino.id
-        LEFT JOIN conductores ON conductores.nrochof = e.idchofer
-        LEFT JOIN moviles ON moviles.nummovil = e.idcamion
-      `;
-  
-      if (idDepositoUsuario === 1) {
-        enviosQuery = baseQuery;
-      } else {
-        enviosQuery = baseQuery + ' WHERE e.id_origen = ?';
-        queryParams = [idDepositoUsuario];
+
+    connection.query(enviosQuery, queryParams, (error, envios) => {
+      if (error) return res.status(500).send("Error al obtener los envíos.");
+
+      const envioIds = envios.map(e => e.id);
+      if (envioIds.length === 0) {
+        return res.render('envios.ejs', { envios: [] });
       }
-  
-      connection.query(enviosQuery, queryParams, (error, envios) => {
-        if (error) return res.status(500).send("Error al obtener los envíos.");
-  
-        const envioIds = envios.map(e => e.id);
-        if (envioIds.length === 0) {
-          return res.render('envios.ejs', { envios: [] });
-        }
-  
-        const cargaporenvioQuery = `SELECT * FROM cargaporenvio WHERE idenvio IN (?)`;
-  
-        connection.query(cargaporenvioQuery, [envioIds], (error, detalles) => {
-          if (error) return res.status(500).send("Error al obtener las cargas.");
-  
-          const cargaIds = detalles.map(d => d.idcarga);
-  
-          // Ahora traemos todos los registros de la tabla 'carga'
-          const cargaQuery = `SELECT * FROM carga WHERE id IN (?)`;
-  
-          connection.query(cargaQuery, [cargaIds], (error, cargas) => {
-            if (error) return res.status(500).send("Error al obtener detalles de la tabla carga.");
-  
-            // Mapear cada carga por ID
-            const cargasMap = {};
-            cargas.forEach(c => {
-              cargasMap[c.id] = c;
-            });
-  
-            // Agregar la carga a cada detalle
-            const detallesConCarga = detalles.map(det => ({
-              ...det,
-              carga: cargasMap[det.idcarga] || null
-            }));
-  
-            // Asociar los detalles con cada envío
-            const enviosConTodo = envios.map(envio => {
-              return {
-                ...envio,
-                detalles: detallesConCarga.filter(d => d.idenvio === envio.id)
-              };
-            });
-  
-            res.render('envios.ejs', { envios: enviosConTodo });
+
+      const cargaporenvioQuery = `SELECT * FROM cargaporenvio WHERE idenvio IN (?)`;
+
+      connection.query(cargaporenvioQuery, [envioIds], (error, detalles) => {
+        if (error) return res.status(500).send("Error al obtener las cargas por envío.");
+
+        const cargaIds = detalles.map(d => d.idcarga);
+
+        const cargaQuery = `
+  SELECT 
+    carga.*, 
+    cli.nomclie AS nombre_cliente, 
+    cli.locclie AS localidad_cliente,
+    prov.nomclie AS nombre_proveedor,
+    prov.locclie AS localidad_proveedor
+  FROM carga
+  LEFT JOIN clientes AS cli ON carga.idcliente = cli.numclie
+  LEFT JOIN clientes AS prov ON carga.idproveedor = prov.numclie
+  WHERE carga.id IN (?)
+`;
+
+
+        connection.query(cargaQuery, [cargaIds], (error, cargas) => {
+          if (error) return res.status(500).send("Error al obtener detalles de la tabla carga.");
+
+          // Mapeo por ID de carga
+          const cargasMap = {};
+          cargas.forEach(c => {
+            cargasMap[c.id] = c;
           });
+
+          // Asociar carga a cada detalle
+          const detallesConCarga = detalles.map(det => ({
+            ...det,
+            carga: cargasMap[det.idcarga] || null
+          }));
+
+          // Agrupar detalles por envío y calcular total
+          const enviosConTodo = envios.map(envio => {
+            const detallesEnvio = detallesConCarga.filter(d => d.idenvio === envio.id);
+            const totalValorDeclarado = detallesEnvio.reduce((sum, det) => {
+              const valor = Number(det.carga?.valordeclarado || 0);
+              return sum + valor;
+            }, 0);
+
+            return {
+              ...envio,
+              detalles: detallesEnvio,
+              total_valor: totalValorDeclarado
+            };
+          });
+
+          res.render('envios.ejs', { envios: enviosConTodo });
         });
       });
     });
   });
+});
+
+
   
   router.get('/cargarenvionuevo', (req, res) => {
     const userName = req.session.userName;
@@ -322,41 +342,66 @@ router.get('/clientes', (req, res) => {
 });
 
 router.get('/conductores', (req, res) => {
-    const sqlConductores = 'SELECT * FROM conductores';   
+    const sqlConductores = `
+        SELECT c.nrochof, c.nomchof, c.dnichof, m.patmovil AS patente_camion 
+        FROM conductores c
+        LEFT JOIN moviles m ON c.idcamion = m.nummovil
+    `;
+    const sqlCamiones = 'SELECT nummovil, patmovil FROM moviles';
 
     connection.query(sqlConductores, (errorConductores, resultsConductores) => {
         if (errorConductores) {
             console.error('Error obteniendo conductores:', errorConductores);
             return res.status(500).send('Error en el servidor');
         }
-            // Pasamos ambas listas a la vista
-            res.render('conductores.ejs', { 
-                conductores: resultsConductores
+
+        connection.query(sqlCamiones, (errorCamiones, resultsCamiones) => {
+            if (errorCamiones) {
+                console.error('Error obteniendo camiones:', errorCamiones);
+                return res.status(500).send('Error en el servidor');
+            }
+
+            res.render('conductores.ejs', {
+                conductores: resultsConductores,
+                camiones: resultsCamiones
             });
-        
+        });
     });
 });
+
+
 
 
 router.get('/camiones', (req, res) => {
-    const sqlMoviles = 'SELECT * FROM moviles';   
+  const sql = `
+    SELECT m.*, c.nomchof 
+    FROM moviles m
+    LEFT JOIN conductores c ON c.idcamion = m.nummovil
+  `;
+  const sqlConductores = 'SELECT nrochof, nomchof FROM conductores';
 
-    connection.query(sqlMoviles, (errorMoviles, resultsMoviles) => {
-        if (errorMoviles) {
-            console.error('Error obteniendo Moviles:', errorMoviles);
-            return res.status(500).send('Error en el servidor');
-        }
-            // Pasamos ambas listas a la vista
-            res.render('camiones.ejs', { 
-                camiones: resultsMoviles
-            });
-        
+  connection.query(sql, (errorCamiones, resultsCamiones) => {
+    if (errorCamiones) {
+      console.error('Error obteniendo camiones:', errorCamiones);
+      return res.status(500).send('Error en el servidor');
+    }
+
+    connection.query(sqlConductores, (errorConductores, resultsConductores) => {
+      if (errorConductores) {
+        console.error('Error obteniendo conductores:', errorConductores);
+        return res.status(500).send('Error en el servidor');
+      }
+
+      res.render('camiones.ejs', {
+        camiones: resultsCamiones,
+        conductores: resultsConductores
+      });
     });
+  });
 });
 
-router.get('/proveedores', (req, res) => res.render('proveedores.ejs'));
 
-router.get('/camiones', (req, res) => res.render('camiones.ejs'));
+
 
 router.get('/modificarDatosPersonales', (req,res) => res.render('modificarDatosPersonales.ejs'))
 router.get('/newPassword', (req,res) =>{
@@ -389,5 +434,17 @@ router.post('/eliminarCliente', saveClientes.eliminarCliente);//Eliminar cliente
 
 import saveEnvio from '../controllers/envios.js'
 router.post('/guardarEnvio', saveEnvio.saveEnvio);//guardar un envío
+
+
+import saveConductor from '../controllers/conductores.js'
+router.post('/saveConductor', saveConductor.saveConductor);//guardar un conductor
+router.post('/updateConductor', saveConductor.updateConductor)//Editar un Conductor
+router.post('/eliminarConductor', saveConductor.eliminarConductor)//eliminar un Conductor
+
+import saveCamion from '../controllers/camiones.js'
+router.post('/saveCamion', saveCamion.saveCamion);//guardar un Camion
+router.post('/updateCamion', saveCamion.updateCamion)//Editar un Camion
+router.post('/eliminarCamion', saveCamion.eliminarCamion)//eliminar un Camion
+
 
 export default router

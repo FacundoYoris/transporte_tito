@@ -1,72 +1,65 @@
-import moment from "moment";
 import connection from "../database/db.js";
-import express from 'express';
 
+// Crear un nuevo conductor
+const saveConductor = (req, res) => {
+    const { nomchof, dnichof, idcamion } = req.body;
 
-// Función para guardar un cliente en la base de datos
-const saveConductores = (req, res) => {
-    return;
-
-    const { 
-        nomclie, domclie, locclie, telclie, 
-        sitclie, cuiclie, maiclie, obsclie 
-    } = req.body;
-
-    if (!nomclie || !domclie || !locclie || !telclie || !sitclie || !cuiclie || !maiclie) {
+    if (!nomchof || !dnichof || !idcamion) {
         return res.status(400).json({ success: false, error: "Faltan datos obligatorios." });
     }
 
-    const clienteData = { nomclie, domclie, locclie, telclie, sitclie, cuiclie, maiclie, obsclie };
+    const conductorData = { nomchof, dnichof, idcamion };
 
-    connection.query('INSERT INTO clientes SET ?', clienteData, (error, results) => {
+    connection.query('INSERT INTO conductores SET ?', conductorData, (error, results) => {
         if (error) {
-            console.error("Error al guardar el cliente:", error);
-            return res.status(500).json({ success: false, error: "Error al guardar el cliente" });
+            console.error("Error al guardar el conductor:", error);
+            return res.status(500).json({ success: false, error: "Error al guardar el conductor." });
         }
 
-        // Redirigir a la ruta de los depósitos con un parámetro para abrir el modal
-        res.redirect(`/depositos?openModal=true`);
+        res.redirect('/conductores');
     });
 };
 
+// Actualizar un conductor existente
+const updateConductor = (req, res) => {
+    const { nrochof, nomchof, dnichof, idcamion } = req.body;
 
+    if (!nrochof || !nomchof || !dnichof || !idcamion) {
+        return res.status(400).json({ success: false, error: "Faltan datos obligatorios." });
+    }
 
-const updateConductor = (req, res)=>{
-    return;
-    const id = req.body.id;
-    const nombre = req.body.nomclie;
-    const domicilio = req.body.domclie; 
-    const locclie = req.body.locclie;
-    const telclie = req.body.telclie;
-    const maiclie = req.body.maiclie;
-    const sitclie = req.body.sitclie;
-    const cuiclie = req.body.cuiclie;
-    const obsclie = req.body.obsclie;
-    connection.query('UPDATE clientes SET ? WHERE numclie = ?', [{nomclie: nombre, domclie: domicilio, locclie:locclie, telclie:telclie,maiclie:maiclie,sitclie:sitclie, cuiclie:cuiclie, obsclie:obsclie },id],(error,results)=>{
-       if(error){
-          console.log(error);
-       }else{
-          res.redirect('/clientes');
-       }
-    })
- };
+    const conductorData = { nomchof, dnichof, idcamion };
 
-
-const eliminarConductor = (req, res)=>{
-    return;
-    const id = req.body.id;
-    connection.query('DELETE FROM clientes WHERE numclie = ?', [id], (error, results)=>{
-        
-        if(error){
-            throw error;
-        }else{
-            res.redirect('/clientes');
+    connection.query('UPDATE conductores SET ? WHERE nrochof = ?', [conductorData, nrochof], (error, results) => {
+        if (error) {
+            console.error("Error al actualizar el conductor:", error);
+            return res.status(500).json({ success: false, error: "Error al actualizar el conductor." });
         }
- 
-        });
- };
+
+        res.redirect('/conductores');
+    });
+};
+
+// Eliminar un conductor
+const eliminarConductor = (req, res) => {
+    const { nrochof } = req.body;
+
+    if (!nrochof) {
+        return res.status(400).json({ success: false, error: "ID del conductor no recibido." });
+    }
+
+    connection.query('DELETE FROM conductores WHERE nrochof = ?', [nrochof], (error, results) => {
+        if (error) {
+            console.error("Error al eliminar el conductor:", error);
+            return res.status(500).json({ success: false, error: "Error al eliminar el conductor." });
+        }
+
+        res.redirect('/conductores');
+    });
+};
+
 export default {
     saveConductor,
     updateConductor,
     eliminarConductor,
- };
+};

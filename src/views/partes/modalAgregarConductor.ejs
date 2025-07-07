@@ -1,70 +1,62 @@
-<!-- Modal Mejorado -->
-<div class="modal fade" id="agregarConductor" tabindex="-1" aria-labelledby="agregarClienteLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg"> <!-- Modal más ancho -->
-        <div class="modal-content shadow-lg rounded-3">
-            <div class="modal-header bg-secondary text-white">
-                <h5 class="modal-title fw-bold" id="agregarClienteLabel">
-                    <i class="bx bxs-user-plus me-2"></i> Agregar Nuevo Cliente
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-            </div>
-            <div class="modal-body bg-light">
-                <form action="/saveConductor" method="post" class="p-3">
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">Nombre del Cliente</label>
-                            <input type="text" class="form-control" placeholder="Ej: Juan Pérez" name="nomclie" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">Domicilio</label>
-                            <input type="text" class="form-control" placeholder="Ej: Calle 123" name="domclie" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">Localidad</label>
-                            <input type="text" class="form-control" placeholder="Ej: Buenos Aires" name="locclie" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">Número de Teléfono</label>
-                            <input type="number" class="form-control" placeholder="Ej: 1122334455" name="telclie" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">Situación ante el IVA</label>
-                            <select class="form-select" name="sitclie" required>
-                                <option value="" disabled selected>Seleccione una opción</option>
-                                <option value="RI">Responsable Inscripto</option>
-                                <option value="MT">Monotributista</option>
-                                <option value="EX">Exento</option>
-                                <option value="NR">No Responsable</option>
-                                <option value="CF">Consumidor Final</option>
-                                <option value="RD">Relación de Dependencia</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">CUIL / CUIT</label>
-                            <input type="number" class="form-control" placeholder="Ej: 20XXXXXXXXX" name="cuiclie" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">Correo Electrónico</label>
-                            <input type="email" class="form-control" placeholder="Ej: usuario@email.com" name="maiclie" required>
-                        </div>
-                        <div class="col-md-12">
-                            <label class="form-label fw-semibold">Observaciones</label>
-                            <textarea class="form-control" rows="2" placeholder="Notas adicionales..." name="obsclie"></textarea>
-                        </div>
-                    </div>
-                    <div class="mt-4 d-grid gap-2">
-                        <button type="submit" class="btn btn-success fw-bold">
-                            <i class="bx bx-save"></i> Guardar Cliente
-                        </button>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer d-flex justify-content-between bg-light">
-                <small class="text-muted">* Todos los campos son obligatorios.</small>
-                <button type="button" class="btn btn-danger fw-bold" data-bs-dismiss="modal">
-                    <i class="bx bx-x-circle"></i> Cerrar
-                </button>
-            </div>
-        </div>
+<!-- MODAL AGREGAR CONDUCTOR -->
+<div class="modal fade" id="agregarConductor" tabindex="-1" aria-labelledby="agregarConductorLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content shadow-lg rounded-3">
+
+      <!-- ENCABEZADO CON GRADIENTE VERDE -->
+      <div class="modal-header text-white" style="background: linear-gradient(to right, #4fd1c5, #48bb78);">
+        <h5 class="modal-title fw-bold" id="agregarConductorLabel">
+          <i class="bx bxs-user-plus me-2"></i> Agregar Nuevo Conductor
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+
+      <!-- CUERPO -->
+      <div class="modal-body bg-light">
+        <form action="/saveConductor" method="POST" class="p-3">
+
+          <!-- Campo: Nombre -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Nombre del Conductor</label>
+            <input type="text" class="form-control" placeholder="Ej: Juan Pérez" name="nomchof" required>
+          </div>
+
+          <!-- Campo: DNI -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">DNI</label>
+            <input type="number" class="form-control" placeholder="Ej: 30123456" name="dnichof" required>
+          </div>
+
+          <!-- Campo: Camión asociado -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Camión Asociado</label>
+            <select class="form-select" name="idcamion" required>
+              <option value="" disabled selected>Seleccione un camión</option>
+              <% camiones.forEach(camion => { %>
+                <option value="<%= camion.nummovil %>"><%= camion.patmovil %></option>
+              <% }); %>
+            </select>
+          </div>
+
+          <!-- Botón -->
+          <div class="mt-4 d-flex justify-content-center">
+            <button type="submit" class="btn btn-success fw-bold px-4">
+              <i class="bx bx-save"></i> Guardar Conductor
+            </button>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- PIE DE MODAL -->
+      <div class="modal-footer d-flex justify-content-between bg-light">
+        <small class="text-muted">* Todos los campos son obligatorios.</small>
+        <button type="button" class="btn btn-danger fw-bold" data-bs-dismiss="modal">
+          <i class="bx bx-x-circle"></i> Cerrar
+        </button>
+      </div>
+
     </div>
+  </div>
 </div>
+ 

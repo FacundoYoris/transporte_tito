@@ -1,11 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-</body>
-</html>
+<!-- MODAL CONFIRMAR ELIMINAR CAMIÓN (BOOTSTRAP 4) -->
+<div class="modal fade" id="eliminarCamion<%= id %>" tabindex="-1" role="dialog" aria-labelledby="eliminarCamionLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content shadow rounded-3">
+
+      <!-- Encabezado con gradiente celeste-violeta -->
+      <div class="modal-header text-dark" style="background: linear-gradient(to right, #b2ebf2, #d1c4e9);">
+        <h5 class="modal-title fw-bold" id="eliminarCamionLabel">Confirmar Eliminación</h5>
+        <button type="button" class="close text-dark" data-dismiss="modal" aria-label="Cerrar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <!-- Cuerpo -->
+      <div class="modal-body text-center bg-light">
+        <i class='bx bx-info-circle mb-3' style="font-size: 5rem; color: red;"></i>
+        <h5>¿Estás seguro que deseas eliminar este camión?</h5>
+        <p class="mt-3 mb-0"><strong>Descripción:</strong> "<%= datos.desmovil %>"</p>
+        <p class="mt-3 mb-0"><strong>Patente del móvil:</strong> "<%= datos.patmovil %>"</p>
+        <p class="text-muted">Esta acción no se puede deshacer.</p>
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer d-flex justify-content-between bg-light">
+        <form action="/eliminarCamion" method="POST" class="w-100 d-flex justify-content-between">
+          <input type="hidden" name="nummovil" value="<%= id %>">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-outline-danger font-weight-bold">
+            <i class="bx bx-trash"></i> Eliminar
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>

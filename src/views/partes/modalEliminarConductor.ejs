@@ -1,24 +1,33 @@
-<!-- Cartel de confirmar eliminar  Activa -->
-<div class="modal fade" id="eliminarConductor<%=id%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="centrado" style="text-align: center;">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">¿Estás seguro que deseas eliminar este conductor?</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <i class='bx bx-info-circle' style="font-size: 5rem; color:red"></i>
-            <h3>Nombre: "<%= %>" </h3>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <form action="/eliminarConductor" method="post">
-            <input id="id" name="id" value="<%=id%>" hidden>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button type="submit" class="btn btn-outline-danger" tabindex="5">Eliminar</button>
-          </form>
-        </div>
+<!-- MODAL CONFIRMAR ELIMINAR CONDUCTOR -->
+<div class="modal fade" id="eliminarConductor<%= id %>" tabindex="-1" aria-labelledby="eliminarConductorLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content shadow rounded-3">
+
+      <!-- Encabezado con estilo verde -->
+      <div class="modal-header text-white" style="background: linear-gradient(to right, #4fd1c5, #48bb78);">
+        <h5 class="modal-title fw-bold" id="eliminarConductorLabel">Confirmar Eliminación</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
       </div>
+
+      <!-- Cuerpo -->
+      <div class="modal-body text-center bg-light">
+        <i class='bx bx-info-circle mb-3' style="font-size: 5rem; color: red;"></i>
+        <h5>¿Estás seguro que deseas eliminar este conductor?</h5>
+        <p class="mt-3 mb-0"><strong>Nombre:</strong> "<%= datos.nomchof %>"</p>
+        <p class="text-muted">Esta acción no se puede deshacer.</p>
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer d-flex justify-content-between bg-light">
+        <form action="/eliminarConductor" method="POST" class="w-100 d-flex justify-content-between">
+          <input type="hidden" name="nrochof" value="<%= id %>">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-outline-danger fw-bold">
+            <i class="bx bx-trash"></i> Eliminar
+          </button>
+        </form>
+      </div>
+
     </div>
   </div>
+</div>

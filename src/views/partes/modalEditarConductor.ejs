@@ -1,79 +1,63 @@
-<!-- Modal Mejorado -->
-<div class="modal fade" id="editarConductor<%=id%>" tabindex="-1" aria-labelledby="agregarClienteLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-lg"> <!-- Modal más ancho -->
-      <div class="modal-content shadow-lg rounded-3">
-        <div class="modal-header bg-secondary text-white">
-          <h5 class="modal-title fw-bold" id="agregarClienteLabel">
-            <i class="bx bxs-user-plus me-2"></i> EDITAR CLIENTE
-          </h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-        </div>
-        <div class="modal-body bg-light">
-          <form action="/updateConductor" method="post" class="p-3">
-            <input id="id" name="id" value="<%=datos.numclie%>" hidden>
-            <div class="row g-3">
-              <div class="col-md-6">
-                <label class="form-label fw-semibold">Nombre del conductor</label>
-                <input type="text" class="form-control" placeholder="Ej: Juan Pérez" name="nomclie"
-                  value="<%=  %>" required>
-              </div>
-              <div class="col-md-6">
-                <label class="form-label fw-semibold">Domicilio</label>
-                <input type="text" class="form-control" placeholder="Ej: Calle 123" name="domclie"
-                  value="<%= %>" required>
-              </div>
-              <div class="col-md-6">
-                <label class="form-label fw-semibold">Localidad</label>
-                <input type="text" class="form-control" placeholder="Ej: Buenos Aires" name="locclie"
-                  value="<%=  %>" required>
-              </div>
-              <div class="col-md-6">
-                <label class="form-label fw-semibold">Número de Teléfono</label>
-                <input type="number" class="form-control" placeholder="Ej: 1122334455" name="telclie"
-                  value="<%=  %>" required>
-              </div>
-              <div class="col-md-6">
-                <label class="form-label fw-semibold">Situación ante el IVA</label>
-               
-                <select class="form-select" name="sitclie" required>
-                  <option value="" disabled>Situación ante el IVA</option>
-                  
+<!-- MODAL EDITAR CONDUCTOR -->
+<div class="modal fade" id="editarConductor<%= id %>" tabindex="-1" aria-labelledby="editarConductorLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content shadow-lg rounded-3">
 
-                  
-              </select>
-              
-  
-              </div>
-              <div class="col-md-6">
-                <label class="form-label fw-semibold">CUIL / CUIT</label>
-                <input type="number" class="form-control" placeholder="Ej: 20XXXXXXXXX" name="cuiclie"
-                  value="<%=  %>" required>
-              </div>
-              <div class="col-md-6">
-                <label class="form-label fw-semibold">Correo Electrónico</label>
-                <input type="email" class="form-control" placeholder="Ej: usuario@email.com" name="maiclie"
-                  value="<%=  %>" required>
-              </div>
-              <div class="col-md-12">
-                <label class="form-label fw-semibold">Observaciones</label>
-                <textarea class="form-control" rows="2" placeholder="Notas adicionales..."
-                  name="obsclie"><%=  %></textarea>
-              </div>
-            </div>
-            <div class="mt-4 d-grid gap-2">
-              <button type="submit" class="btn btn-success fw-bold">
-                <i class="bx bx-save"></i> Guardar Cliente
-              </button>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer d-flex justify-content-between bg-light">
-          <small class="text-muted">* Todos los campos son obligatorios.</small>
-          <button type="button" class="btn btn-danger fw-bold" data-bs-dismiss="modal">
-            <i class="bx bx-x-circle"></i> Cerrar
-          </button>
-        </div>
+      <!-- ENCABEZADO CON GRADIENTE VERDE -->
+      <div class="modal-header text-white" style="background: linear-gradient(to right, #4fd1c5, #48bb78);">
+        <h5 class="modal-title fw-bold" id="editarConductorLabel">
+          <i class="bx bxs-user-detail me-2"></i> Editar Conductor
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
       </div>
+
+      <!-- CUERPO -->
+      <div class="modal-body bg-light">
+        <form action="/updateConductor" method="POST" class="p-3">
+          <input type="hidden" name="nrochof" value="<%= datos.nrochof %>">
+
+          <!-- Campo: Nombre -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Nombre del Conductor</label>
+            <input type="text" class="form-control" name="nomchof" value="<%= datos.nomchof %>" required>
+          </div>
+
+          <!-- Campo: DNI -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">DNI</label>
+            <input type="number" class="form-control" name="dnichof" value="<%= datos.dnichof %>" required>
+          </div>
+
+          <!-- Campo: Camión asociado -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Camión Asociado</label>
+            <select class="form-select" name="idcamion" required>
+              <option value="" disabled>Seleccione un camión</option>
+              <% camiones.forEach(camion => { %>
+                <option value="<%= camion.nummovil %>" <%= camion.nummovil == datos.idcamion ? 'selected' : '' %>>
+                  <%= camion.patmovil %>
+                </option>
+              <% }); %>
+            </select>
+          </div>
+
+          <!-- Botón -->
+          <div class="mt-4 d-flex justify-content-center">
+            <button type="submit" class="btn btn-success fw-bold px-4">
+              <i class="bx bx-save"></i> Guardar Cambios
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- PIE DE MODAL -->
+      <div class="modal-footer d-flex justify-content-between bg-light">
+        <small class="text-muted">* Todos los campos son obligatorios.</small>
+        <button type="button" class="btn btn-danger fw-bold" data-bs-dismiss="modal">
+          <i class="bx bx-x-circle"></i> Cerrar
+        </button>
+      </div>
+
     </div>
   </div>
+</div>

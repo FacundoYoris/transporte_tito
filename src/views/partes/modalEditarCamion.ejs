@@ -1,11 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Camion</title>
-</head>
-<body>
-    
-</body>
-</html>
+<!-- MODAL EDITAR CAMIÓN -->
+<div class="modal fade" id="editarCamion<%= id %>" tabindex="-1" role="dialog" aria-labelledby="editarCamionLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content shadow-lg rounded-3">
+
+      <!-- ENCABEZADO CELESTE-VIOLETA -->
+      <div class="modal-header text-dark" style="background: linear-gradient(to right, #b2ebf2, #d1c4e9);">
+        <h5 class="modal-title fw-bold" id="editarCamionLabel">
+          <i class="bx bxs-truck me-2"></i> Editar Camión
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <!-- CUERPO DEL MODAL -->
+      <div class="modal-body bg-light">
+        <form action="/updateCamion" method="POST" class="p-3">
+          <input type="hidden" name="nummovil" value="<%= datos.nummovil %>">
+
+          <!-- Descripción -->
+          <div class="form-group">
+            <label class="font-weight-bold">Descripción</label>
+            <input type="text" class="form-control" name="desmovil" value="<%= datos.desmovil %>" required>
+          </div>
+
+          <!-- Patente Chasis -->
+          <div class="form-group">
+            <label class="font-weight-bold">Patente Chasis</label>
+            <input type="text" class="form-control" name="patmovil" value="<%= datos.patmovil %>" required>
+          </div>
+
+          <!-- Patente Acoplado -->
+          <div class="form-group">
+            <label class="font-weight-bold">Patente Acoplado</label>
+            <input type="text" class="form-control" name="pacmovil" value="<%= datos.pacmovil %>" required>
+          </div>
+
+          <!-- Botón Guardar -->
+          <div class="mt-4 d-flex justify-content-center">
+            <button type="submit" class="btn btn-outline-primary font-weight-bold px-4">
+              <i class="bx bx-save"></i> Guardar Cambios
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- PIE DEL MODAL -->
+      <div class="modal-footer d-flex justify-content-between bg-light">
+        <small class="text-muted">* Todos los campos son obligatorios.</small>
+        <button type="button" class="btn btn-outline-danger font-weight-bold" data-dismiss="modal">
+          <i class="bx bx-x-circle"></i> Cerrar
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
