@@ -103,66 +103,58 @@
 
     <!-- Fila 1: Formulario para completar datos del camión y chofer -->
     <div class="row mb-3">
-      <div class="col-12">
-        <div class="card p-2 border-0 shadow-sm" style="height: 140px; background-color: lemonchiffon;">
-          <div class="row g-2 align-items-end justify-content-center text-center">
+  <div class="col-12">
+    <div class="card p-2 border-0 shadow-sm" style="height: 140px; background-color: lemonchiffon;">
+      <div class="row g-2 align-items-end justify-content-center text-center">
 
-            <!-- SELECT CHOFER -->
-            <div class="col-md-3">
-              <label for="chofer" class="form-label"><strong>CHOFER</strong></label>
-              <select id="chofer" class="form-select form-select-sm text-center">
-                <option selected disabled>Seleccione un chofer</option>
-                <% choferes.forEach(c=> { %>
-                  <option value="<%= c.dnichof %>">
-                    <%= c.nomchof %>
-                  </option>
-                  <% }) %>
-              </select>
-            </div>
-
-            <!-- SELECT DNI -->
-            <div class="col-md-3">
-              <label for="dni" class="form-label"><strong>DNI</strong></label>
-              <select id="dni" class="form-select form-select-sm text-center">
-                <option selected disabled>Seleccione un DNI</option>
-                <% choferes.forEach(c=> { %>
-                  <option value="<%= c.dnichof %>">
-                    <%= c.dnichof %>
-                  </option>
-                  <% }) %>
-              </select>
-            </div>
-
-            <!-- SELECT PATENTE CAMIÓN -->
-            <div class="col-md-2">
-              <label for="patenteCamion" class="form-label"><strong>PATENTE CAMIÓN</strong></label>
-              <select id="patenteCamion" class="form-select form-select-sm text-center">
-                <option selected disabled>Seleccione un camión</option>
-                <% choferes.forEach(c=> { %>
-                  <option value="<%= c.idcamion %>">
-                    <%= c.patente_camion %>
-                  </option>
-                  <% }) %>
-              </select>
-            </div>
-
-            <!-- SELECT PATENTE ACOPLADO -->
-            <div class="col-md-2">
-              <label for="patenteAcoplado" class="form-label"><strong>PATENTE ACOPLADO</strong></label>
-              <select id="patenteAcoplado" class="form-select form-select-sm text-center">
-                <option selected disabled>Seleccione un acoplado</option>
-                <% choferes.forEach(c=> { %>
-                  <option value="<%= c.idcamion %>">
-                    <%= c.patente_acoplado %>
-                  </option>
-                  <% }) %>
-              </select>
-            </div>
-
-          </div>
+        <!-- SELECT CHOFER -->
+        <div class="col-md-3">
+          <label for="chofer" class="form-label"><strong>CHOFER</strong></label>
+          <select id="chofer" name="dniChofer" class="form-select form-select-sm text-center">
+            <option value="" disabled selected>Seleccione un chofer</option>
+            <% choferes.forEach(c => { %>
+              <option value="<%= c.dnichof %>"><%= c.nomchof %></option>
+            <% }) %>
+          </select>
         </div>
+
+        <!-- SELECT DNI -->
+        <div class="col-md-3">
+          <label for="dni" class="form-label"><strong>DNI</strong></label>
+          <select id="dni" name="dni" class="form-select form-select-sm text-center">
+            <option value="" disabled selected>Seleccione un DNI</option>
+            <% choferes.forEach(c => { %>
+              <option value="<%= c.dnichof %>"><%= c.dnichof %></option>
+            <% }) %>
+          </select>
+        </div>
+
+        <!-- SELECT PATENTE CAMIÓN -->
+        <div class="col-md-2">
+          <label for="patenteCamion" class="form-label"><strong>PATENTE CAMIÓN</strong></label>
+          <select id="patenteCamion" name="idCamion" class="form-select form-select-sm text-center">
+            <option value="" disabled selected>Seleccione un camión</option>
+            <% choferes.forEach(c => { %>
+              <option value="<%= c.idcamion %>"><%= c.patente_camion %></option>
+            <% }) %>
+          </select>
+        </div>
+
+        <!-- SELECT PATENTE ACOPLADO -->
+        <div class="col-md-2">
+          <label for="patenteAcoplado" class="form-label"><strong>PATENTE ACOPLADO</strong></label>
+          <select id="patenteAcoplado" name="patenteAcoplado" class="form-select form-select-sm text-center">
+            <option value="" disabled selected>Seleccione un acoplado</option>
+            <% choferes.forEach(c => { %>
+              <option value="<%= c.idcamion %>"><%= c.patente_acoplado %></option>
+            <% }) %>
+          </select>
+        </div>
+
       </div>
     </div>
+  </div>
+</div>
 
 
     <!-- Fila 2: Tablas y botones de transferencia -->
@@ -276,209 +268,162 @@
 
   <!-- Esto maneja toda la lógica de las tablas, cargar datos dinamicamente y mandar al backend los datos -->
   <script>
-    $(document).ready(function () {
-      // Inicialización de DataTables
-      let tablaDepositos = $('#tablaDepositos').DataTable({
-        paging: false,
-        info: false,
-        searching: false
-      });
+$(document).ready(function () {
+  let tablaDepositos = $('#tablaDepositos').DataTable({
+    paging: false,
+    info: false,
+    searching: false
+  });
 
-      let tablaSeleccionados = $('#tablaSeleccionados').DataTable({
-        paging: false,
-        info: false,
-        searching: false
-      });
+  let tablaSeleccionados = $('#tablaSeleccionados').DataTable({
+    paging: false,
+    info: false,
+    searching: false
+  });
 
-      // Función para formatear fecha
-      function formatearFecha(fechaISO) {
-        let fecha = new Date(fechaISO);
-        return fecha.toLocaleString('es-ES', {
-          day: '2-digit', month: '2-digit', year: 'numeric',
-          hour: '2-digit', minute: '2-digit'
-        });
+  // Transferir a Seleccionados
+  $('#pasarDatos').click(function () {
+    $('#tablaDepositos tbody tr.selected').each(function () {
+      let datos = tablaDepositos.row(this).data();
+      if (datos) {
+        let prioridad = $(this).hasClass('prioridad-alta') ? 'prioridad-alta' : '';
+        let nuevaFila = tablaSeleccionados.row.add([
+          datos[0], datos[1], datos[2], datos[3], datos[4],
+          datos[5], datos[6], datos[7], datos[8],
+          '<button class="btn btn-danger btn-sm eliminarCarga">X</button>'
+        ]).draw().node();
+        $(nuevaFila).removeClass('selected').addClass(prioridad);
+        tablaDepositos.row(this).remove().draw();
       }
-
-      // Transferir fila de Depósito a Seleccionados (botón →)
-      $('#pasarDatos').click(function () {
-        $('#tablaDepositos tbody tr.selected').each(function () {
-          let datos = tablaDepositos.row(this).data();
-          if (datos) {
-            let prioridad = $(this).hasClass('prioridad-alta') ? 'prioridad-alta' : '';
-
-            let nuevaFila = tablaSeleccionados.row.add([
-              datos[0], // ID (hidden)
-              datos[1], // Cliente
-              datos[2], // Proveedor
-              datos[3], // Cantidad
-              datos[4], // Unidad
-              datos[5], // Remito
-              datos[6], // Localidad
-              datos[7], // Valor
-              formatearFecha(datos[8]), // Fecha
-              '<button class="btn btn-danger btn-sm eliminarCarga">X</button>'
-            ]).draw().node();
-            $(nuevaFila).removeClass('selected').addClass(prioridad);
-            tablaDepositos.row(this).remove().draw();
-          }
-        });
-      });
-
-      // Transferir fila de Seleccionados a Depósito (botón ←)
-      $('#quitarDatos').click(function () {
-        $('#tablaSeleccionados tbody tr.selected').each(function () {
-          let datos = tablaSeleccionados.row(this).data();
-          if (datos) {
-            let prioridad = $(this).hasClass('prioridad-alta') ? 'prioridad-alta' : '';
-            let nuevaFila = tablaDepositos.row.add([
-              datos[0], // ID
-              datos[1], // Cliente
-              datos[2], // Proveedor
-              datos[3], // Cantidad
-              datos[4], // Unidad
-              datos[5], // Remito
-              datos[6], // Localidad
-              datos[7], // Valor
-              formatearFecha(datos[8]) // Fecha
-            ]).draw().node();
-            $(nuevaFila).addClass(prioridad);
-            tablaSeleccionados.row(this).remove().draw();
-          }
-        });
-      });
-
-      // Doble clic en tabla de Depósito para pasar a Seleccionados
-      $('#tablaDepositos tbody').on('dblclick', 'tr', function () {
-        let datos = tablaDepositos.row(this).data();
-        if (datos) {
-          let prioridad = $(this).hasClass('prioridad-alta') ? 'prioridad-alta' : '';
-          let nuevaFila = tablaSeleccionados.row.add([
-            datos[0],
-            datos[1],
-            datos[2],
-            datos[3],
-            datos[4],
-            datos[5],
-            datos[6],
-            datos[7],
-            formatearFecha(datos[8]),
-            '<button class="btn btn-danger btn-sm eliminarCarga">X</button>'
-          ]).draw().node();
-          $(nuevaFila).removeClass('selected').addClass(prioridad);
-          tablaDepositos.row(this).remove().draw();
-        }
-      });
-
-      // Doble clic en tabla de Seleccionados para devolver a Depósito
-      $('#tablaSeleccionados tbody').on('dblclick', 'tr', function () {
-        let datos = tablaSeleccionados.row(this).data();
-        if (datos) {
-          let prioridad = $(this).hasClass('prioridad-alta') ? 'prioridad-alta' : '';
-          let nuevaFila = tablaDepositos.row.add([
-            datos[0],
-            datos[1],
-            datos[2],
-            datos[3],
-            datos[4],
-            datos[5],
-            datos[6],
-            datos[7],
-            formatearFecha(datos[8])
-          ]).draw().node();
-          $(nuevaFila).addClass(prioridad);
-          tablaSeleccionados.row(this).remove().draw();
-        }
-      });
-
-      // Botón "X" para eliminar de Seleccionados y devolver a Depósito
-      $(document).on('click', '.eliminarCarga', function () {
-        let fila = $(this).closest('tr');
-        let datos = tablaSeleccionados.row(fila).data();
-        if (datos) {
-          let prioridad = fila.hasClass('prioridad-alta') ? 'prioridad-alta' : '';
-          let nuevaFila = tablaDepositos.row.add([
-            datos[0],
-            datos[1],
-            datos[2],
-            datos[3],
-            datos[4],
-            datos[5],
-            datos[6],
-            datos[7],
-            formatearFecha(datos[8])
-          ]).draw().node();
-          $(nuevaFila).addClass(prioridad);
-          tablaSeleccionados.row(fila).remove().draw();
-        }
-      });
-
-      // Clic para seleccionar/deseleccionar filas
-      function manejarSeleccion(selector) {
-        $(selector + ' tbody').on('click', 'tr', function () {
-          $(this).toggleClass('selected');
-        });
-      }
-
-      manejarSeleccion('#tablaDepositos');
-      manejarSeleccion('#tablaSeleccionados');
-
-      // Enviar datos al backend
-      $('#enviarDatos').click(function () {
-        let cargasSeleccionadas = [];
-        $('#tablaSeleccionados tbody tr').each(function () {
-          let fila = tablaSeleccionados.row(this).data();
-          if (fila) {
-            cargasSeleccionadas.push({
-              id: fila[0],
-              cliente: fila[1],
-              proveedor: fila[2],
-              cantidad: fila[3],
-              unidad: fila[4],
-              remito: fila[5],
-              localidad: fila[6],
-              valor: fila[7],
-              fecha: fila[8]
-            });
-          }
-        });
-
-        const envioData = {
-          idCamion: document.getElementById('patenteCamion').value.trim(),
-          dniChofer: $('#chofer').val(), // este puede seguir igual
-          patenteAcoplado: document.getElementById('patenteAcoplado').value.trim(),
-          cargas: cargasSeleccionadas
-        };
-
-        fetch('/guardarEnvio', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(envioData)
-        })
-          .then(response => {
-            if (!response.ok) throw new Error('Error al guardar el envío.');
-            return response.blob(); // obtenemos el PDF como Blob
-          })
-          .then(blob => {
-            // Creamos un enlace para descargar el archivo
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'hoja_ruta.pdf';
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            window.URL.revokeObjectURL(url);
-            alert('Envío registrado y PDF descargado.');
-          })
-          .catch(error => {
-            console.error('Error:', error);
-            alert('Ocurrió un error al guardar el envío o descargar el PDF.');
-          });
-
-
-      });
     });
-  </script>
+  });
+
+  // Transferir a Depósitos
+  $('#quitarDatos').click(function () {
+    $('#tablaSeleccionados tbody tr.selected').each(function () {
+      let datos = tablaSeleccionados.row(this).data();
+      if (datos) {
+        let prioridad = $(this).hasClass('prioridad-alta') ? 'prioridad-alta' : '';
+        let nuevaFila = tablaDepositos.row.add([
+          datos[0], datos[1], datos[2], datos[3], datos[4],
+          datos[5], datos[6], datos[7], datos[8]
+        ]).draw().node();
+        $(nuevaFila).addClass(prioridad);
+        tablaSeleccionados.row(this).remove().draw();
+      }
+    });
+  });
+
+  // Doble clic para mover filas
+  $('#tablaDepositos tbody').on('dblclick', 'tr', function () {
+    let datos = tablaDepositos.row(this).data();
+    if (datos) {
+      let prioridad = $(this).hasClass('prioridad-alta') ? 'prioridad-alta' : '';
+      let nuevaFila = tablaSeleccionados.row.add([
+        datos[0], datos[1], datos[2], datos[3], datos[4],
+        datos[5], datos[6], datos[7], datos[8],
+        '<button class="btn btn-danger btn-sm eliminarCarga">X</button>'
+      ]).draw().node();
+      $(nuevaFila).removeClass('selected').addClass(prioridad);
+      tablaDepositos.row(this).remove().draw();
+    }
+  });
+
+  $('#tablaSeleccionados tbody').on('dblclick', 'tr', function () {
+    let datos = tablaSeleccionados.row(this).data();
+    if (datos) {
+      let prioridad = $(this).hasClass('prioridad-alta') ? 'prioridad-alta' : '';
+      let nuevaFila = tablaDepositos.row.add([
+        datos[0], datos[1], datos[2], datos[3], datos[4],
+        datos[5], datos[6], datos[7], datos[8]
+      ]).draw().node();
+      $(nuevaFila).addClass(prioridad);
+      tablaSeleccionados.row(this).remove().draw();
+    }
+  });
+
+  // Botón X
+  $(document).on('click', '.eliminarCarga', function () {
+    let fila = $(this).closest('tr');
+    let datos = tablaSeleccionados.row(fila).data();
+    if (datos) {
+      let prioridad = fila.hasClass('prioridad-alta') ? 'prioridad-alta' : '';
+      let nuevaFila = tablaDepositos.row.add([
+        datos[0], datos[1], datos[2], datos[3], datos[4],
+        datos[5], datos[6], datos[7], datos[8]
+      ]).draw().node();
+      $(nuevaFila).addClass(prioridad);
+      tablaSeleccionados.row(fila).remove().draw();
+    }
+  });
+
+  // Seleccionar filas
+  $('#tablaDepositos tbody, #tablaSeleccionados tbody').on('click', 'tr', function () {
+    $(this).toggleClass('selected');
+  });
+
+  // ✅ Guardar envío
+  $('#enviarDatos').click(function () {
+    let cargasSeleccionadas = [];
+    $('#tablaSeleccionados tbody tr').each(function () {
+      let fila = tablaSeleccionados.row(this).data();
+      if (fila) {
+        cargasSeleccionadas.push({
+          id: fila[0],
+          cliente: fila[1],
+          proveedor: fila[2],
+          cantidad: fila[3],
+          unidad: fila[4],
+          remito: fila[5],
+          localidad: fila[6],
+          valor: fila[7],
+          fecha: fila[8]
+        });
+      }
+    });
+
+    const envioData = {
+      idCamion: $('#patenteCamion').val(),
+      dniChofer: $('#chofer').val(),
+      patenteAcoplado: $('#patenteAcoplado').val(),
+      cargas: cargasSeleccionadas
+    };
+
+    if (!envioData.idCamion || !envioData.dniChofer || envioData.cargas.length === 0) {
+      alert('⚠️ Debe seleccionar un camión, un chofer y al menos una carga.');
+      return;
+    }
+
+    fetch('/guardarEnvio', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(envioData)
+    })
+    .then(response => {
+      if (!response.ok) throw new Error('Error al guardar el envío.');
+      return response.blob(); // PDF
+    })
+    .then(blob => {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `hoja_ruta_${Date.now()}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+
+      alert('✅ Envío registrado y PDF descargado.');
+      setTimeout(() => location.reload(), 500);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('❌ Ocurrió un error al guardar el envío o descargar el PDF.');
+    });
+  });
+});
+</script>
+
   <!-- SCRIPT PARA LOS SELECTED DEL CHOFER Y DEL CAMION (AUTOCOMPLEMENTAR) -->
   <script>
     const choferes = JSON.parse(document.getElementById('choferesData').textContent);
@@ -569,6 +514,7 @@
       tags: true // Habilita escritura manual
     });
   </script>
+
 
 </body>
 

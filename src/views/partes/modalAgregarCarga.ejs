@@ -87,6 +87,8 @@
                                     </option>
                                     <% }); %>
                             </select>
+
+
                             <button type="button" class="btn btn-outline-secondary" id="btnAgregarCliente">
                                 <i class='bx bx-plus' style='color:#097707'></i>
                             </button>
@@ -107,9 +109,7 @@
                     <input type="text" class="form-control mb-2" placeholder="Remito" name="remito" required>
                     <input type="number" class="form-control mb-2" placeholder="Valor declarado" name="valor" required>
                     <input type="text" class="form-control mb-2" placeholder="Destino" name="destino" required>
-                    <input type="datetime-local" class="form-control mb-2" placeholder="Fecha ingreso" name="fecha"
-                        required>
-
+                    <textarea class="form-control mb-2" name="observaciones" placeholder="Observaciones" rows="3" style="resize: both;"></textarea>
                     <button type="submit" class="btn btn-primary w-100">Agregar</button>
                 </form>
 
@@ -151,6 +151,24 @@
         </div>
     </div>
 </div>
+<script>
+  $('#clienteDestino').on('select2:select', function(e) {
+  const clienteId = e.params.data.id;
+
+  $.ajax({
+    url: `/api/destinoCliente/${clienteId}`,
+    method: 'GET',
+    success: function(data) {
+      $('input[name="destino"]').val(data.locclie || '');
+    },
+    error: function() {
+      alert('No se pudo obtener la localidad del cliente');
+      $('input[name="destino"]').val('');
+    }
+  });
+});
+
+</script>
 
 <script>
     // Botón para cambiar de formulario

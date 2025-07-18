@@ -139,6 +139,7 @@
               <th class="align-middle columna-id">ID</th>
               <th class="align-middle">Nombre</th>
               <th class="align-middle">DNI</th>
+              <th class="align-middle">Teléfono</th>
               <th class="align-middle">Camión Asociado</th>
               <th class="align-middle">Acciones</th>
             </tr>
@@ -155,6 +156,9 @@
                 </td>
                 <td class="align-middle text-dark fw-medium fs-6">
                   <%= conductor.dnichof %>
+                </td>
+                <td class="align-middle">
+                  <%= conductor.telchof ? conductor.telchof : '—' %>
                 </td>
                 <td class="align-middle">
                     <%= conductor.patente_camion ? conductor.patente_camion : '—' %>
@@ -196,7 +200,7 @@
       $('#tabla thead').append('<tr class="filters"></tr>');
       $('#tabla thead tr:eq(0) th').each(function (index) {
         let title = $(this).text();
-        if (index < 4) {
+        if (index < 5) {
           $('.filters').append('<th><input type="text" placeholder="Buscar" class="form-control form-control-sm text-center" /></th>');
         } else {
           $('.filters').append('<th></th>');

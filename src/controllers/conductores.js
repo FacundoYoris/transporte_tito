@@ -2,13 +2,13 @@ import connection from "../database/db.js";
 
 // Crear un nuevo conductor
 const saveConductor = (req, res) => {
-    const { nomchof, dnichof, idcamion } = req.body;
+    const { nomchof, dnichof, idcamion, telchof } = req.body;
 
     if (!nomchof || !dnichof || !idcamion) {
         return res.status(400).json({ success: false, error: "Faltan datos obligatorios." });
     }
 
-    const conductorData = { nomchof, dnichof, idcamion };
+    const conductorData = { nomchof, dnichof, idcamion, telchof };
 
     connection.query('INSERT INTO conductores SET ?', conductorData, (error, results) => {
         if (error) {
@@ -22,13 +22,13 @@ const saveConductor = (req, res) => {
 
 // Actualizar un conductor existente
 const updateConductor = (req, res) => {
-    const { nrochof, nomchof, dnichof, idcamion } = req.body;
+    const { nrochof, nomchof, dnichof, idcamion, telchof } = req.body;
 
     if (!nrochof || !nomchof || !dnichof || !idcamion) {
         return res.status(400).json({ success: false, error: "Faltan datos obligatorios." });
     }
 
-    const conductorData = { nomchof, dnichof, idcamion };
+    const conductorData = { nomchof, dnichof, idcamion, telchof };
 
     connection.query('UPDATE conductores SET ? WHERE nrochof = ?', [conductorData, nrochof], (error, results) => {
         if (error) {

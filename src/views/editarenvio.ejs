@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editar Envío</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #f4f6f9;
+      font-family: Arial, sans-serif;
+      padding-top: 70px;
+    }
+    .card {
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      background-color: #fff;
+      height: 450px;
+    }
+    .card-header {
+      background-color: #343a40;
+      color: #fff;
+      font-size: 1.2rem;
+      text-align: center;
+      border-radius: 10px 10px 0 0;
+      padding: 10px;
+    }
+    .table-container {
+      height: calc(100% - 50px);
+      overflow-y: auto;
+    }
+    .table th,
+    .table td {
+      text-align: center;
+      vertical-align: middle;
+    }
+    .table tbody tr {
+      cursor: pointer;
+    }
+    .prioridad-alta {
+      background-color: #f8d7da !important;
+    }
+    .selected {
+      background-color: #ffc107 !important;
+    }
+    .btn-accion {
+      width: 60px;
+      height: 60px;
+      font-size: 1.8rem;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .form-container {
+      padding: 15px;
+    }
+    .form-container .form-label {
+      font-weight: bold;
+    }
+    .hidden {
+      display: none !important;
+    }
+  </style>
+  <%- include('partes/header.ejs') %>
+</head>
+
+<body>
+  <div id="menu">
+    <%- include('partes/navegacion.ejs') %>
+  </div>
+
+  <main class="container-fluid my-4">
+    <!-- Formulario chofer/camión -->
+    <div class="row mb-3">
+      <div class="col-12">
+        <div class="card p-2 border-0 shadow-sm" style="height: 140px; background-color: lemonchiffon;">
+          <div class="row g-2 align-items-end justify-content-center text-center">
+            <div class="col-md-3">
+              <label for="chofer" class="form-label"><strong>CHOFER</strong></label>
+              <select id="chofer" name="dniChofer" class="form-select form-select-sm text-center">
+                <% choferes.forEach(c => { %>
+                  <option value="<%= c.dnichof %>" <%= c.dnichof === envio.dnichof ? 'selected' : '' %>><%= c.nomchof %></option>
+                <% }) %>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label for="dni" class="form-label"><strong>DNI</strong></label>
+              <select id="dni" name="dni" class="form-select form-select-sm text-center">
+                <% choferes.forEach(c => { %>
+                  <option value="<%= c.dnichof %>" <%= c.dnichof === envio.dnichof ? 'selected' : '' %>><%= c.dnichof %></option>
+                <% }) %>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <label for="patenteCamion" class="form-label"><strong>PATENTE CAMIÓN</strong></label>
+              <select id="patenteCamion" name="idCamion" class="form-select form-select-sm text-center">
+                <% choferes.forEach(c => { %>
+                  <option value="<%= c.idcamion %>" <%= c.idcamion === envio.idcamion ? 'selected' : '' %>><%= c.patente_camion %></option>
+                <% }) %>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <label for="patenteAcoplado" class="form-label"><strong>PATENTE ACOPLADO</strong></label>
+              <select id="patenteAcoplado" name="patenteAcoplado" class="form-select form-select-sm text-center">
+                <% choferes.forEach(c => { %>
+                  <option value="<%= c.idcamion %>" <%= c.idcamion === envio.idcamion ? 'selected' : '' %>><%= c.patente_acoplado %></option>
+                <% }) %>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tablas -->
+    <div class="row">
+      <div class="col-md-5">
+        <div class="card">
+          <div class="card-header">CARGA EN DEPÓSITO</div>
+          <div class="card-body p-0">
+            <div class="table-container">
+              <table id="tablaDepositos" class="table table-striped table-bordered">
+                <thead>
+                  <tr>
+                    <th>ID</th><th>CLIENTE</th><th>PROVEEDOR</th><th>CANTIDAD</th><th>UNIDAD</th><th>REMITO</th><th>LOCALIDAD</th><th>VALOR</th><th>FECHA</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% cargas.forEach(carga => { %>
+                    <tr class="<%= carga.prioridad == 1 ? 'prioridad-alta' : '' %>">
+                      <td><%= carga.id %></td>
+                      <td><%= carga.nomclie %></td>
+                      <td><%= carga.nomproveedor %></td>
+                      <td><%= carga.cantidad %></td>
+                      <td><%= carga.unidad %></td>
+                      <td><%= carga.remito %></td>
+                      <td><%= carga.locclie %></td>
+                      <td><%= carga.valordeclarado %></td>
+                      <td><%= new Date(carga.fecha).toLocaleString('es-ES') %></td>
+                    </tr>
+                  <% }); %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-2 d-flex flex-column align-items-center justify-content-center">
+        <button id="pasarDatos" class="btn btn-primary btn-accion">→</button>
+        <button id="quitarDatos" class="btn btn-secondary btn-accion">←</button>
+        <button id="enviarDatos" class="btn btn-success">Guardar Cambios</button>
+      </div>
+      <div class="col-md-5">
+        <div class="card">
+          <div class="card-header">CARGAS SELECCIONADAS</div>
+          <div class="card-body p-0">
+            <div class="table-container">
+              <table id="tablaSeleccionados" class="table table-striped table-bordered">
+                <thead>
+                  <tr>
+                    <th>ID</th><th>CLIENTE</th><th>PROVEEDOR</th><th>CANTIDAD</th><th>UNIDAD</th><th>REMITO</th><th>LOCALIDAD</th><th>VALOR</th><th>FECHA</th><th>Acción</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+
+
+  <!-- Scripts externos -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <!-- Inicializacion y carga inicial -->
+<script>
+  const detalles = JSON.parse('<%- envio.detalles %>');
+
+  const tablaSeleccionados = $('#tablaSeleccionados').DataTable({
+    paging: false,
+    info: false,
+    searching: false
+  });
+
+  const tablaDepositos = $('#tablaDepositos').DataTable({
+    paging: false,
+    info: false,
+    searching: false
+  });
+
+  // Cargar cargas seleccionadas en la tabla derecha
+  detalles.forEach(det => {
+    const c = det.carga;
+    if (c) {
+      const fecha = new Date(c.fecha).toLocaleString('es-ES', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+      tablaSeleccionados.row.add([
+        c.id,
+        c.nombre_cliente,
+        c.nombre_proveedor,
+        c.cantidad,
+        c.unidad,
+        c.remito,
+        c.localidad_cliente,
+        c.valordeclarado,
+        fecha,
+        '<button class="btn btn-danger btn-sm eliminarCarga">X</button>'
+      ]).draw();
+    }
+  });
+
+  // Permitir seleccionar filas
+  $('#tablaDepositos tbody, #tablaSeleccionados tbody').on('click', 'tr', function () {
+    $(this).toggleClass('selected');
+  });
+</script>
+<script type="application/json" id="choferesData">
+  <%- JSON.stringify(choferes) %>
+</script>
+<!-- Botón pasar (→) -->
+<script>
+  $('#pasarDatos').click(() => {
+    tablaDepositos.rows('.selected').every(function () {
+      const data = this.data();
+      tablaSeleccionados.row.add([
+        data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8],
+        '<button class="btn btn-danger btn-sm eliminarCarga">X</button>'
+      ]).draw();
+    });
+    tablaDepositos.rows('.selected').remove().draw();
+  });
+</script>
+
+<!-- Botón quitar (←) -->
+<script>
+  $('#quitarDatos').click(() => {
+    tablaSeleccionados.rows('.selected').every(function () {
+      const data = this.data();
+      const rowData = data.slice(0, -1); // Quitamos el botón
+      tablaDepositos.row.add(rowData).draw();
+    });
+    tablaSeleccionados.rows('.selected').remove().draw();
+  });
+</script>
+
+<!-- Botón eliminar fila (X) -->
+<script>
+  $('#tablaSeleccionados tbody').on('click', '.eliminarCarga', function () {
+    const row = $(this).closest('tr');
+    const data = tablaSeleccionados.row(row).data();
+
+    // 1. Quitar la fila de la tabla seleccionados
+    tablaSeleccionados.row(row).remove().draw();
+
+    // 2. Agregar la fila a la tabla de depósitos
+    const filaSinBoton = data.slice(0, -1);
+    tablaDepositos.row.add(filaSinBoton).draw();
+  });
+</script>
+
+<script>
+  $('#enviarDatos').click(() => {
+    // Cargas finales (tabla derecha)
+    const datos = tablaSeleccionados.rows().data().toArray();
+    const cargasActuales = datos.map(fila => parseInt(fila[0]));
+
+    // Cargas originales (al cargar la página)
+    const cargasOriginales = detalles.map(d => parseInt(d.idcarga));
+
+    const envioData = {
+      idHojaRuta: "<%= envio.id %>",
+      idCamion: $('#patenteCamion').val(),
+      dniChofer: $('#chofer').val(),
+      cargasOriginales,
+      cargasActuales
+    };
+
+    fetch('/updateEnvio', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(envioData)
+    })
+    .then(resp => resp.blob())
+    .then(blob => {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `hoja_ruta_<%= envio.id %>_editada.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      alert('✅ Cambios guardados y PDF descargado.');
+      setTimeout(() => window.location.href = '/envios', 500);
+    })
+    .catch(() => alert('❌ Error al guardar.'));
+  });
+</script>
+<script>
+  const choferes = JSON.parse(document.getElementById('choferesData').textContent);
+
+  const $selectChofer = $('#chofer');
+  const $selectDni = $('#dni');
+  const $selectCamion = $('#patenteCamion');
+  const $selectAcoplado = $('#patenteAcoplado');
+
+  let campoIgnorado = null; // Campo ignorado temporalmente
+
+  // Doble clic desactiva autocompletado
+  ['chofer', 'dni', 'patenteCamion', 'patenteAcoplado'].forEach(id => {
+    document.getElementById(id).addEventListener('dblclick', function () {
+      campoIgnorado = id;
+      this.classList.add('border-warning');
+    });
+  });
+
+  function restaurarCampo() {
+    campoIgnorado = null;
+    ['chofer', 'dni', 'patenteCamion', 'patenteAcoplado'].forEach(id => {
+      document.getElementById(id).classList.remove('border-warning');
+    });
+  }
+
+  function completarCampos(chofer) {
+    if (!chofer) return;
+
+    if (campoIgnorado !== 'chofer') {
+      $selectChofer.val(chofer.dnichof).trigger('change.select2');
+    }
+    if (campoIgnorado !== 'dni') {
+      $selectDni.val(chofer.dnichof).trigger('change.select2');
+    }
+    if (campoIgnorado !== 'patenteCamion') {
+      $selectCamion.val(chofer.idcamion).trigger('change.select2');
+    }
+    if (campoIgnorado !== 'patenteAcoplado') {
+      $selectAcoplado.val(chofer.idcamion).trigger('change.select2');
+    }
+  }
+
+  // Eventos para autocompletar
+  $selectChofer.on('change', function () {
+    const chofer = choferes.find(c => c.dnichof === $(this).val());
+    completarCampos(chofer);
+    restaurarCampo();
+  });
+
+  $selectDni.on('change', function () {
+    const chofer = choferes.find(c => c.dnichof === $(this).val());
+    completarCampos(chofer);
+    restaurarCampo();
+  });
+
+  $selectCamion.on('change', function () {
+    const chofer = choferes.find(c => c.idcamion == $(this).val());
+    completarCampos(chofer);
+    restaurarCampo();
+  });
+
+  $selectAcoplado.on('change', function () {
+    const chofer = choferes.find(c => c.idcamion == $(this).val());
+    completarCampos(chofer);
+    restaurarCampo();
+  });
+
+  // Inicialización de Select2
+  $('#chofer, #dni').select2({
+    width: '100%',
+    dropdownAutoWidth: true,
+    placeholder: 'Seleccione una opción',
+    allowClear: true
+  });
+
+  $('#patenteCamion, #patenteAcoplado').select2({
+    width: '100%',
+    dropdownAutoWidth: true,
+    placeholder: 'Seleccione una opción',
+    allowClear: true,
+    tags: true // Permite escribir manualmente
+  });
+</script>
+
+
+
+
+</body>
+</html>

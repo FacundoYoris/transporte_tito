@@ -32,8 +32,9 @@ const save = (req, res) => {
             idcliente: req.body.clienteDestino,
             valordeclarado: req.body.valor,
             idproveedor: req.body.clienteOrigen,
-            fecha: req.body.fecha,
+            fecha: new Date(), // Usar la fecha actual
             remito: req.body.remito,
+            observacion: req.body.observaciones,
         };
 
         // Insertar la carga en la base de datos
@@ -49,13 +50,13 @@ const save = (req, res) => {
 
 // PROVEEDOR Y NOMBRE EN REALIDAD SON IDPROVEEDOR Y IDCLIENTE
 const update = (req, res) => {
-    
-    const { id, proveedor, nombre, unidad, cantidad, valor, prioridad, fecha, remito } = req.body;
-   
+
+    const { id, proveedor, nombre, unidad, cantidad, valor, prioridad, fecha, remito, observacion } = req.body;
+
     // Ahora actualizar la tabla cargas con los demás datos
     connection.query(
-        "UPDATE carga SET unidad=?, cantidad=?, idcliente=?, valordeclarado=?, idproveedor=?, fecha=?, remito=? WHERE id=?",
-        [unidad, cantidad, nombre,  valor, proveedor, fecha, remito, id],
+        "UPDATE carga SET unidad=?, cantidad=?, idcliente=?, valordeclarado=?, idproveedor=?, fecha=?, remito=?, observacion=? WHERE id=?",
+        [unidad, cantidad, nombre,  valor, proveedor, fecha, remito, observacion, id],
         (error) => {
             if (error) {
                 console.log(error);
