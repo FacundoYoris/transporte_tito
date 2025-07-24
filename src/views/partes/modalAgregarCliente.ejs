@@ -13,19 +13,19 @@
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">Nombre del Cliente</label>
-                            <input type="text" class="form-control" placeholder="Ej: Juan Pérez" name="nomclie" required>
+                            <input type="text" class="form-control" placeholder="Ej: Juan Pérez" name="nomclie" maxlength="45" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">Domicilio</label>
-                            <input type="text" class="form-control" placeholder="Ej: Calle 123" name="domclie" required>
+                            <input type="text" class="form-control" placeholder="Ej: Calle 123" name="domclie" maxlength="45" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">Localidad</label>
-                            <input type="text" class="form-control" placeholder="Ej: Buenos Aires" name="locclie" required>
+                            <input type="text" class="form-control" placeholder="Ej: Buenos Aires" name="locclie" maxlength="45" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">Número de Teléfono</label>
-                            <input type="number" class="form-control" placeholder="Ej: 1122334455" name="telclie" >
+                            <input type="text" class="form-control" placeholder="Ej: 1122334455" name="telclie" maxlength="20">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">Situación ante el IVA</label>
@@ -41,15 +41,15 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">CUIL / CUIT</label>
-                            <input type="number" class="form-control" placeholder="Ej: 20XXXXXXXXX" name="cuiclie" >
+                            <input type="text" class="form-control" placeholder="Ej: 20XXXXXXXXX" name="cuiclie" maxlength="13">
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold">Correo Electrónico</label>
-                            <input type="email" class="form-control" placeholder="Ej: usuario@email.com" name="maiclie" >
+                            <label class="form-label fw-semibold">Contacto</label>
+                            <input type="text" class="form-control" placeholder="Ej: usuario@email.com" name="maiclie" maxlength="200">
                         </div>
                         <div class="col-md-12">
                             <label class="form-label fw-semibold">Observaciones</label>
-                            <textarea class="form-control" rows="2" placeholder="Notas adicionales..." name="obsclie"></textarea>
+                            <textarea class="form-control" rows="2" placeholder="Notas adicionales..." name="obsclie" maxlength="200"></textarea>
                         </div>
                     </div>
                     <div class="mt-4 d-grid gap-2">

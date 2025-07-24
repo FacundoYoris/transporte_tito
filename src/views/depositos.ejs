@@ -18,12 +18,16 @@
 
     <style>
         #tablaDepositos tbody tr {
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-#tablaDepositos tbody tr:hover {
-  background-color: #e6f7ff; /* Color pastel para hover */
-  transform: scale(1.01); /* Leve agrandamiento */
-}
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        #tablaDepositos tbody tr:hover {
+            background-color: #e6f7ff;
+            /* Color pastel para hover */
+            transform: scale(1.01);
+            /* Leve agrandamiento */
+        }
+
         #tablaDepositos td,
         #tablaDepositos th {
             text-align: center;
@@ -82,8 +86,7 @@
                                     <tr>
                                         <th>CLIENTE</th>
                                         <th>PROVEEDOR</th>
-                                        <th>CANTIDAD</th>
-                                        <th>UNIDAD</th>
+                                        <th>CANTIDAD</th> <!-- ✅ Cambiado -->
                                         <th>REMITO</th>
                                         <th>VALOR DECLARADO</th>
                                         <th>DESTINO</th>
@@ -98,11 +101,9 @@
                                         <th><input type="text" class="form-control form-control-sm"
                                                 placeholder="Buscar proveedor" /></th>
                                         <th><input type="text" class="form-control form-control-sm"
-                                                placeholder="Buscar cantidad" /></th>
+                                                placeholder="Buscar cantidad/unidad" /></th>
                                         <th><input type="text" class="form-control form-control-sm"
                                                 placeholder="Buscar remito" /></th>
-                                        <th><input type="text" class="form-control form-control-sm"
-                                                placeholder="Buscar unidad" /></th>
                                         <th><input type="text" class="form-control form-control-sm"
                                                 placeholder="Buscar valor" /></th>
                                         <th><input type="text" class="form-control form-control-sm"
@@ -116,6 +117,7 @@
                                         <th></th>
                                     </tr>
                                 </thead>
+
                                 <tbody>
                                     <!-- Las filas se cargarán dinámicamente para rellenar el cuerpo de la tabla-->
 
@@ -190,7 +192,7 @@
                                                             <input type="text" class="form-control" id="edit-valor"
                                                                 name="valor" />
                                                         </div>
-                                                        
+
                                                         <div class="mb-3">
                                                             <input type="hidden" class="form-control"
                                                                 id="edit-prioridad" name="prioridad" />
@@ -267,7 +269,7 @@
                 fixedHeader: true,
                 bSortCellsTop: true,
                 columnDefs: [
-                    { type: "datetime-moment", targets: 9 }, // Asegúrate de poner el índice correcto de la columna fecha
+                    { type: "datetime-moment", targets: 8 }, // Asegúrate de poner el índice correcto de la columna fecha
                 ],
             });
 
@@ -317,8 +319,7 @@
                                 table.row.add([
                                     carga.nomclie,
                                     carga.nomprov,
-                                    carga.cantidad,
-                                    carga.unidad,
+                                    `${carga.cantidad} ${carga.unidad}`, // ✅ Combinado en una sola columna
                                     carga.remito,
                                     carga.valordeclarado,
                                     carga.loccliente,
@@ -412,7 +413,7 @@
                 let prioridad = $(this).data("prioridad");
                 let fecha = $(this).data("fecha");
                 let observacion = $(this).data("observacion") || "";
-                
+
 
                 let fechaFormateada = fecha.replace(" ", "T").slice(0, 16);
 
@@ -475,44 +476,44 @@
 
     <!-- Script para inicializar Select2 en los campos del modal -->
     <script>
-    function normalize(str) {
-        return str ? str.toLowerCase().replace(/\s|-/g, '') : '';
-    }
-
-    function customMatcher(params, data) {
-        if ($.trim(params.term) === '') return data;
-
-        const term = normalize(params.term);
-        const text = normalize(data.text);
-        const extra = normalize(data.element ? data.element.getAttribute('data-extra') : '');
-
-        if (text.includes(term) || extra.includes(term)) {
-            return data;
+        function normalize(str) {
+            return str ? str.toLowerCase().replace(/\s|-/g, '') : '';
         }
-        return null;
-    }
 
-    $(document).ready(function () {
-        // Inicializa Select2 con búsqueda por nombre y CUIL en modal Agregar Carga
-        $('#clienteOrigen, #clienteDestino').select2({
-            theme: 'bootstrap4',
-            matcher: customMatcher,
-            placeholder: "Seleccione",
-            allowClear: true,
-            width: '100%',
-            dropdownParent: $('#modalAgregarCarga')
-        });
+        function customMatcher(params, data) {
+            if ($.trim(params.term) === '') return data;
 
-        // Select2 para modal Editar (sin matcher)
-        $('#edit-proveedor, #edit-nombre').select2({
-            theme: 'bootstrap4',
-            placeholder: "Seleccione",
-            allowClear: true,
-            width: '100%',
-            dropdownParent: $('#modalEditarCarga')
+            const term = normalize(params.term);
+            const text = normalize(data.text);
+            const extra = normalize(data.element ? data.element.getAttribute('data-extra') : '');
+
+            if (text.includes(term) || extra.includes(term)) {
+                return data;
+            }
+            return null;
+        }
+
+        $(document).ready(function () {
+            // Inicializa Select2 con búsqueda por nombre y CUIL en modal Agregar Carga
+            $('#clienteOrigen, #clienteDestino').select2({
+                theme: 'bootstrap4',
+                matcher: customMatcher,
+                placeholder: "Seleccione",
+                allowClear: true,
+                width: '100%',
+                dropdownParent: $('#modalAgregarCarga')
+            });
+
+            // Select2 para modal Editar (sin matcher)
+            $('#edit-proveedor, #edit-nombre').select2({
+                theme: 'bootstrap4',
+                placeholder: "Seleccione",
+                allowClear: true,
+                width: '100%',
+                dropdownParent: $('#modalEditarCarga')
+            });
         });
-    });
-</script>
+    </script>
 
     <!-- Script para obtener la localidad del cliente seleccionado -->
     <script>

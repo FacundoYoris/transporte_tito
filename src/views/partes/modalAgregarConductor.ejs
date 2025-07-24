@@ -18,19 +18,19 @@
           <!-- Campo: Nombre -->
           <div class="mb-3">
             <label class="form-label fw-semibold">Nombre del Conductor</label>
-            <input type="text" class="form-control" placeholder="Ej: Juan Pérez" name="nomchof" required>
+            <input type="text" class="form-control" placeholder="Ej: Juan Pérez" name="nomchof" maxlength="45" required>
           </div>
 
           <!-- Campo: DNI -->
           <div class="mb-3">
             <label class="form-label fw-semibold">DNI</label>
-            <input type="number" class="form-control" placeholder="Ej: 30123456" name="dnichof" required>
+            <input type="text" class="form-control" placeholder="Ej: 42530953" name="dnichof" maxlength="8" pattern="[0-9]{7,8}" title="Debe contener 7 u 8 dígitos numéricos" required>
           </div>
 
           <!-- Campo: Teléfono -->
           <div class="mb-3">
             <label class="form-label fw-semibold">Teléfono</label>
-            <input type="tel" class="form-control" placeholder="Ej: 3482222222" name="telchof" title="Debe ser un número de 10 dígitos">
+          <input type="tel" class="form-control" name="telchof" placeholder="Ej: 3482222222" maxlength="10" pattern="[0-9]{10}" title="Debe contener exactamente 10 dígitos numéricos" required>
           </div>
           <!-- Campo: Camión asociado -->
           <div class="mb-3">

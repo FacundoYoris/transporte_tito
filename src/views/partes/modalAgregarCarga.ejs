@@ -1,13 +1,10 @@
 <style>
-    /* Contenedor general del modal personalizado */
     .custom-modal .modal-content {
         border-radius: 10px;
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         border: none;
         background: #f8f9fa;
     }
-
-    /* Encabezado con fondo degradado y tipografía mejorada */
     .custom-modal .modal-header {
         background: linear-gradient(90deg, #007bff, #6610f2);
         color: #fff;
@@ -15,35 +12,25 @@
         border-top-right-radius: 10px;
         padding: 1rem 1.5rem;
     }
-
     .custom-modal .modal-title {
         font-size: 1.5rem;
         font-weight: 600;
     }
-
-    /* Cuerpo del modal con mayor separación */
     .custom-modal .modal-body {
         padding: 2rem;
     }
-
-    /* Botón de cerrar más limpio */
     .custom-modal .btn-close {
         filter: brightness(0) invert(1);
         opacity: 0.8;
     }
-
     .custom-modal .btn-close:hover {
         opacity: 1;
     }
-
-    /* Estilos para los formularios dentro del modal */
     .custom-modal .form-control,
     .custom-modal .form-select {
         border-radius: 5px;
         border: 1px solid #ced4da;
     }
-
-    /* Estilo para los botones */
     .custom-modal .btn-primary,
     .custom-modal .btn-success,
     .custom-modal .btn-outline-secondary,
@@ -56,17 +43,18 @@
 <div class="modal fade custom-modal" id="modalAgregarCarga" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
+            <!-- Encabezado -->
             <div class="modal-header">
                 <h5 class="modal-title">Agregar Carga</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
+
             <div class="modal-body">
                 <!-- Formulario para agregar carga -->
                 <form action="/save" method="post" id="formAgregarCarga">
                     <!-- Cliente ORIGEN y DESTINO -->
                     <div class="mb-2">
                         <div class="d-flex align-items-center">
-                            <!-- Select Proveedor -->
                             <select class="form-select me-2 select-buscador" id="clienteOrigen" name="clienteOrigen" required>
                                 <option value="">Proveedor</option>
                                 <% clientes.forEach(cliente => { %>
@@ -75,8 +63,6 @@
                                     </option>
                                 <% }); %>
                             </select>
-
-                            <!-- Select Cliente -->
                             <select class="form-select me-2 select-buscador" id="clienteDestino" name="clienteDestino" required>
                                 <option value="">Cliente</option>
                                 <% clientes.forEach(cliente => { %>
@@ -85,8 +71,6 @@
                                     </option>
                                 <% }); %>
                             </select>
-
-                            <!-- Botón para agregar nuevo cliente -->
                             <button type="button" class="btn btn-outline-secondary" id="btnAgregarCliente">
                                 <i class='bx bx-plus' style='color:#097707'></i>
                             </button>
@@ -107,7 +91,7 @@
                     <input type="text" class="form-control mb-2" placeholder="Remito" name="remito" required>
                     <input type="number" class="form-control mb-2" placeholder="Valor declarado" name="valor" required>
                     <input type="text" class="form-control mb-2" placeholder="Destino" name="destino" required>
-                    <textarea class="form-control mb-2" name="observaciones" placeholder="Observaciones" rows="3" style="resize: both;"></textarea>
+                    <textarea class="form-control mb-2" name="observaciones" placeholder="Observaciones" rows="3" maxlength="200"></textarea>
                     <button type="submit" class="btn btn-primary w-100">Agregar</button>
                 </form>
 
@@ -118,7 +102,9 @@
                         <input type="text" class="form-control mb-2" placeholder="Nombre del Cliente" name="nomclie" required>
                         <input type="text" class="form-control mb-2" placeholder="Domicilio" name="domclie" required>
                         <input type="text" class="form-control mb-2" placeholder="Localidad" name="locclie" required>
-                        <input type="number" class="form-control mb-2" placeholder="Número de teléfono" name="telclie" required>
+                        <!-- Teléfono -->
+                        <input type="text" class="form-control mb-2" name="telclie" placeholder="Número de teléfono" maxlength="10" pattern="[0-9]{10}" title="Debe contener exactamente 10 dígitos" required>
+                        <!-- Situación IVA -->
                         <select class="form-control mb-2" name="sitclie" required>
                             <option value="" disabled selected>Seleccione la situación ante el IVA</option>
                             <option value="RI">Responsable Inscripto</option>
@@ -128,15 +114,16 @@
                             <option value="CF">Consumidor Final</option>
                             <option value="RD">Relación de Dependencia</option>
                         </select>
-                        <input type="number" class="form-control mb-2" placeholder="CUIL - CUIT" name="cuiclie" required>
-                        <input type="email" class="form-control mb-2" placeholder="Correo electrónico" name="maiclie" required>
-                        <input type="text" class="form-control mb-2" placeholder="Observaciones" name="obsclie" required>
+                        <!-- CUIL -->
+                        <input type="text" class="form-control mb-2" name="cuiclie" placeholder="CUIL - CUIT" maxlength="11" pattern="[0-9]{11}" title="Debe contener exactamente 11 dígitos" required>
+                        <input type="email" class="form-control mb-2" placeholder="Correo electrónico" name="maiclie">
+                        <input type="text" class="form-control mb-2" placeholder="Observaciones" name="obsclie">
                         <button type="submit" class="btn btn-success w-100">Guardar Cliente</button>
                     </form>
 
-                    <!-- Botón para volver al formulario de carga -->
+                    <!-- Botón para volver -->
                     <button type="button" class="btn btn-secondary w-100 mt-3" id="btnVolverCarga">
-                        Ir a carga
+                        Volver a Carga
                     </button>
                 </div>
             </div>
@@ -146,8 +133,39 @@
 
 <!-- Scripts -->
 <script>
+document.addEventListener("DOMContentLoaded", function() {
+    const btnAgregarCliente = document.getElementById('btnAgregarCliente');
+    const btnVolverCarga = document.getElementById('btnVolverCarga');
 
-    // AJAX para autocompletar destino al seleccionar cliente
+    if (btnAgregarCliente && btnVolverCarga) {
+        btnAgregarCliente.addEventListener('click', () => {
+            document.getElementById('formAgregarCarga').classList.add('d-none');
+            document.getElementById('formAgregarCliente').classList.remove('d-none');
+        });
+
+        btnVolverCarga.addEventListener('click', () => {
+            document.getElementById('formAgregarCliente').classList.add('d-none');
+            document.getElementById('formAgregarCarga').classList.remove('d-none');
+        });
+    }
+
+    // Validación adicional JS para Teléfono y CUIL
+    const telInput = document.querySelector('input[name="telclie"]');
+    const cuilInput = document.querySelector('input[name="cuiclie"]');
+
+    if (telInput) {
+        telInput.addEventListener('input', function () {
+            this.value = this.value.replace(/\D/g, '').slice(0, 10);
+        });
+    }
+
+    if (cuilInput) {
+        cuilInput.addEventListener('input', function () {
+            this.value = this.value.replace(/\D/g, '').slice(0, 11);
+        });
+    }
+
+    // Autocompletar destino
     $('#clienteDestino').on('select2:select', function(e) {
         const clienteId = e.params.data.id;
         $.ajax({
@@ -162,16 +180,5 @@
             }
         });
     });
-
-    // Botón para cambiar de formulario
-    document.getElementById('btnAgregarCliente').addEventListener('click', () => {
-        document.getElementById('formAgregarCarga').classList.add('d-none');
-        document.getElementById('formAgregarCliente').classList.remove('d-none');
-    });
-
-    // Botón para volver al formulario de carga
-    document.getElementById('btnVolverCarga').addEventListener('click', () => {
-        document.getElementById('formAgregarCliente').classList.add('d-none');
-        document.getElementById('formAgregarCarga').classList.remove('d-none');
-    });
+});
 </script>

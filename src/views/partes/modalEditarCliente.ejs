@@ -16,22 +16,22 @@
             <div class="col-md-6">
               <label class="form-label fw-semibold">Nombre del Cliente</label>
               <input type="text" class="form-control" placeholder="Ej: Juan Pérez" name="nomclie"
-                value="<%= datos.nomclie %>" required>
+                value="<%= datos.nomclie %>" maxlength="45" required>
             </div>
             <div class="col-md-6">
               <label class="form-label fw-semibold">Domicilio</label>
               <input type="text" class="form-control" placeholder="Ej: Calle 123" name="domclie"
-                value="<%= datos.domclie %>" required>
+                value="<%= datos.domclie %>" maxlength="45" required>
             </div>
             <div class="col-md-6">
               <label class="form-label fw-semibold">Localidad</label>
               <input type="text" class="form-control" placeholder="Ej: Buenos Aires" name="locclie"
-                value="<%= datos.locclie %>" required>
+                value="<%= datos.locclie %>" maxlength="45" required>
             </div>
             <div class="col-md-6">
               <label class="form-label fw-semibold">Número de Teléfono</label>
-              <input type="number" class="form-control" placeholder="Ej: 1122334455" name="telclie"
-                value="<%= datos.telclie %>" >
+              <input type="text" class="form-control" placeholder="Ej: 1122334455" name="telclie"
+                value="<%= datos.telclie %>" maxlength="20">
             </div>
             <div class="col-md-6">
               <label class="form-label fw-semibold">Situación ante el IVA</label>
@@ -52,18 +52,18 @@
             </div>
             <div class="col-md-6">
               <label class="form-label fw-semibold">CUIL / CUIT</label>
-              <input type="number" class="form-control" placeholder="Ej: 20XXXXXXXXX" name="cuiclie"
-                value="<%= datos.cuiclie %>" >
+              <input type="text" class="form-control" placeholder="Ej: 20XXXXXXXXX" name="cuiclie"
+                value="<%= datos.cuiclie %>" maxlength="13">
             </div>
             <div class="col-md-6">
               <label class="form-label fw-semibold">Contacto</label>
-              <input type="email" class="form-control" placeholder="Ej: usuario@email.com" name="maiclie"
-                value="<%= datos.maiclie %>" >
+              <input type="text" class="form-control" placeholder="Ej: usuario@email.com" name="maiclie"
+                value="<%= datos.maiclie %>" maxlength="200">
             </div>
             <div class="col-md-12">
               <label class="form-label fw-semibold">Observaciones</label>
               <textarea class="form-control" rows="2" placeholder="Notas adicionales..."
-                name="obsclie"><%= datos.obsclie %></textarea>
+                name="obsclie" maxlength="200"><%= datos.obsclie %></textarea>
             </div>
           </div>
           <div class="mt-4 d-grid gap-2">
@@ -74,7 +74,7 @@
         </form>
       </div>
       <div class="modal-footer d-flex justify-content-between bg-light">
-        <small class="text-muted">* Todos los campos son obligatorios.</small>
+        <small class="text-muted">* Campos son obligatorios.</small>
         <button type="button" class="btn btn-danger fw-bold" data-bs-dismiss="modal">
           <i class="bx bx-x-circle"></i> Cerrar
         </button>
