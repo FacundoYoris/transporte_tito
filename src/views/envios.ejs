@@ -18,21 +18,22 @@
       transition: background-color 0.3s ease, transform 0.2s ease;
     }
 
-   #tablaEnvios tbody tr:hover {
-  background-color: #dbc1c1; /* efecto hover */
-}
+    #tablaEnvios tbody tr:hover {
+      background-color: #dbc1c1;
+      /* efecto hover */
+    }
 
     .fila-finalizada {
-      background-color: #d4edda !important;
+      background-color: #90d4a0 !important;
       /* verde pastel */
     }
 
     .bg-success-subtle {
-      background-color: #d4edda !important;
+      background-color: #6cca82 !important;
     }
 
     .bg-danger-subtle {
-      background-color: #f8d7da !important;
+      background-color: #cd767d !important;
     }
 
     .bg-secondary-subtle {
@@ -60,7 +61,7 @@
 
 
     <!-- Botón crear envío -->
-    <button onclick="window.location.href='/cargarenvionuevo'" class="btn btn-primary mb-3">
+    <button onclick="window.location.href='/cargarenvionuevo'" class="btn btn-primary mb-3" title="Crear nuevo envío">
       Nuevo envío
     </button>
 
@@ -115,14 +116,14 @@
               <td>
                 <div class="btn-group">
                   <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"
-                    data-bs-target="#verHojaRuta<%= envio.id %>">
+                    data-bs-target="#verHojaRuta<%= envio.id %>" title="Ver hoja de ruta">
                     <i class='bx bx-show bx-sm'></i>
                   </button>
                   <button type="button" class="btn btn-info btn-sm dropdown-toggle dropdown-toggle-split"
-                    data-bs-toggle="dropdown"></button>
+                    data-bs-toggle="dropdown" title="Opciones adicionales"></button>
                   <ul class="dropdown-menu">
                     <li>
-                      <a class="dropdown-item" href="/descargar/<%= envio.id %>">
+                      <a class="dropdown-item" href="/descargar/<%= envio.id %>" title="Hoja de ruta en PDF">
                         <i class='bx bx-download'></i> Descargar
                       </a>
                     </li>
@@ -133,7 +134,7 @@
                     </li>
                     <li>
                       <button type="button" class="dropdown-item text-success btn-finalizar-envio"
-                        data-id="<%= envio.id %>" data-finalizada="<%= envio.finalizada %>">
+                        data-id="<%= envio.id %>" data-finalizada="<%= envio.finalizada %>" title="Finalizar/Reabrir envío">
                         <i class='bx bx-check-circle'></i>
                         <%= envio.finalizada===1 ? 'Reabrir' : 'Finalizar' %>
                       </button>
@@ -149,27 +150,7 @@
     </div>
   </main>
 
-  <!-- Modal eliminar -->
-  <div class="modal fade" id="modalEliminarEnvio" tabindex="-1" aria-labelledby="modalEliminarLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <form id="formEliminarEnvio" method="POST">
-        <div class="modal-content">
-          <div class="modal-header bg-danger text-white">
-            <h5 class="modal-title">Confirmar eliminación</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-          </div>
-          <div class="modal-body text-center">
-            <i class="bx bx-error-circle" style="font-size: 3rem; color: red;"></i>
-            <p>¿Eliminar la hoja de ruta <strong id="idHojaRutaEliminar"></strong>?</p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button type="submit" class="btn btn-danger">Eliminar</button>
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
+
 
   <!-- JS -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -178,13 +159,37 @@
   <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
 
+<!-- Formatear fecha de la tabla -->
+  <script>
+    function formatearFechaTabla(fechaTexto) {
+      if (!fechaTexto) return '-';
+      const fecha = new Date(fechaTexto);
+      if (isNaN(fecha)) return '-';
+      return fecha.toLocaleString('es-AR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+  </script>
+  <!-- Configuracion de tablas. Boton finalizar/reabrir -->
   <script>
     $(document).ready(function () {
       const table = $('#tablaEnvios').DataTable({
         orderCellsTop: true,
         fixedHeader: true,
         responsive: true,
-        columnDefs: [{ targets: [7], orderable: false }],
+        columnDefs: [
+          {
+            targets: 1, // Columna FECHA (segunda columna)
+            render: function (data) {
+              return formatearFechaTabla(data);
+            }
+          },
+          { targets: [7], orderable: false }
+        ],
         language: {
           search: "Buscar:",
           lengthMenu: "Mostrar _MENU_ registros",
@@ -224,43 +229,75 @@
     });
   </script>
 
-  <!-- Scripts aceptar/rechazar -->
-  <script>
-    $(document).on('click', '.btn-recibir', function () {
-      const idCarga = $(this).data('id');
-      const destino = $(this).data('destino');
-      const $item = $(this).closest('.accordion-item');
+ <!-- Scripts aceptar/rechazar cada carga -->
+<script>
+  // ✅ Recibir
+  $(document).on('click', '.btn-recibir', function () {
+    const idCarga = $(this).data('id');
+    const destino = $(this).data('destino');
+    const origen = $(this).data('origen');
+    const $item = $(this).closest('.accordion-item');
 
-      fetch('/api/carga/recibir', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ idCarga, destinoId: destino, recibido: true })
-      })
-        .then(res => res.json())
-        .then(data => {
-          if (data.success) {
-            $item.removeClass('bg-danger-subtle bg-secondary-subtle').addClass('bg-success-subtle');
-          }
-        });
-    });
+    fetch('/api/carga/recibir', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ idCarga, destinoId: destino, origenId: origen, recibido: true })
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          $item.removeClass('bg-danger-subtle bg-secondary-subtle').addClass('bg-success-subtle');
+        }
+      });
+  });
 
-    $(document).on('click', '.btn-no-recibido', function () {
-      const idCarga = $(this).data('id');
-      const $item = $(this).closest('.accordion-item');
+  // 🗑️ Rechazar
+  $(document).on('click', '.btn-no-recibido', function () {
+    const idCarga = $(this).data('id');
+    const origen = $(this).data('origen');
+    const $item = $(this).closest('.accordion-item');
 
-      fetch('/api/carga/recibir', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ idCarga, recibido: false })
-      })
-        .then(res => res.json())
-        .then(data => {
-          if (data.success) {
-            $item.removeClass('bg-success-subtle bg-secondary-subtle').addClass('bg-danger-subtle');
-          }
-        });
-    });
-  </script>
+    fetch('/api/carga/recibir', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ idCarga, origenId: origen, recibido: false })
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          $item.removeClass('bg-success-subtle bg-secondary-subtle').addClass('bg-danger-subtle');
+        }
+      });
+  });
+
+  // ✅ Actualizar TOTAL en tiempo real
+  $(document).on('click', '.btn-recibir, .btn-no-recibido', function () {
+    const $btn = $(this);
+    const $item = $btn.closest('.accordion-item');
+    const $modal = $btn.closest('.modal-content');
+
+    const $totalEl = $modal.find('.row .col-md-4 strong:contains("TOTAL")').parent();
+    let totalTexto = $totalEl.text().replace(/[^\d]/g, '');
+    let total = parseFloat(totalTexto) || 0;
+
+    const valorTexto = $item.find('p:contains("Valor declarado:")').text().replace(/[^\d]/g, '');
+    const valor = parseFloat(valorTexto) || 0;
+
+    if ($btn.hasClass('btn-no-recibido')) {
+      total -= valor; // Rechazar: restamos
+    } else {
+      // Si estaba roja (rechazada) y ahora es recibida → sumamos de nuevo
+      if ($item.hasClass('bg-danger-subtle')) {
+        total += valor;
+      }
+    }
+
+    if (total < 0) total = 0;
+
+    $totalEl.html(`<strong>TOTAL:</strong> $${total.toLocaleString('es-AR')}`);
+  });
+</script>
+
 
 </body>
 

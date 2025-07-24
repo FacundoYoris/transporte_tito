@@ -31,12 +31,12 @@
             <div class="col-md-6">
               <label class="form-label fw-semibold">Número de Teléfono</label>
               <input type="number" class="form-control" placeholder="Ej: 1122334455" name="telclie"
-                value="<%= datos.telclie %>" required>
+                value="<%= datos.telclie %>" >
             </div>
             <div class="col-md-6">
               <label class="form-label fw-semibold">Situación ante el IVA</label>
              
-              <select class="form-select" name="sitclie" required>
+              <select class="form-select" name="sitclie" >
                 <option value="" disabled>Situación ante el IVA</option>
                 <% iva.forEach(i => { %>
                     <option 
@@ -53,12 +53,12 @@
             <div class="col-md-6">
               <label class="form-label fw-semibold">CUIL / CUIT</label>
               <input type="number" class="form-control" placeholder="Ej: 20XXXXXXXXX" name="cuiclie"
-                value="<%= datos.cuiclie %>" required>
+                value="<%= datos.cuiclie %>" >
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Correo Electrónico</label>
+              <label class="form-label fw-semibold">Contacto</label>
               <input type="email" class="form-control" placeholder="Ej: usuario@email.com" name="maiclie"
-                value="<%= datos.maiclie %>" required>
+                value="<%= datos.maiclie %>" >
             </div>
             <div class="col-md-12">
               <label class="form-label fw-semibold">Observaciones</label>

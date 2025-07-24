@@ -125,7 +125,7 @@
 
       <!-- Boton agregar cliente -->
       <button type="button" class="btn btn-outline-secondary  mt-4" style="font-size: 2rem;" data-bs-toggle="modal"
-        data-bs-target="#agregarCliente" id="botonAgregarStock">
+        data-bs-target="#agregarCliente" id="botonAgregarStock" title="Agregar Cliente">
         <i class='bx bxs-user-plus' undefined></i>
       </button>
       <%- include('partes/modalAgregarCliente.ejs') %>
@@ -173,11 +173,11 @@
                 </td>
                 <td class="p-1 col-acciones">
                   <button type="button" class="btn btn-outline-info" data-bs-toggle="modal"
-                    data-bs-target="#editarCliente<%= cliente.numclie %>">
+                    data-bs-target="#editarCliente<%= cliente.numclie %>" title="Editar Cliente">
                     <i class='bx bx-edit-alt bx-sm'></i>
                   </button>
                   <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
-                    data-bs-target="#eliminarCliente<%= cliente.numclie %>">
+                    data-bs-target="#eliminarCliente<%= cliente.numclie %>" title="Eliminar Cliente">
                     <i class='bx bx-trash bx-sm bx-flip-horizontal' style='color:#0f1010'></i>
                   </button>
                 </td>

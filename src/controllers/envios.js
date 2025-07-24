@@ -6,30 +6,22 @@ const saveEnvio = (req, res) => {
   const { idCamion, dniChofer, cargas } = req.body;
   const usuario = req.session.userName;
 
-  console.log('🔸 Usuario:', usuario);
-  console.log('🔸 Chofer:', dniChofer);
-  console.log('🔸 Camión:', idCamion);
-  console.log('🔸 Cargas recibidas:', cargas);
-
   if (!idCamion || !dniChofer || !Array.isArray(cargas) || cargas.length === 0) {
-    console.error('❌ Datos incompletos para guardar envío');
-    return res.status(400).send('Datos incompletos');
+    return res.status(400).json({ success: false, message: 'Datos incompletos' });
   }
 
   const queryDeposito = 'SELECT iddeposito FROM usuarios WHERE usuario = ?';
   connection.query(queryDeposito, [usuario], (err, resultadoDeposito) => {
     if (err || resultadoDeposito.length === 0) {
-      console.error('❌ Error obteniendo depósito del usuario:', err);
-      return res.status(500).send('Error al obtener origen');
+      return res.status(500).json({ success: false, message: 'Error al obtener origen' });
     }
 
     const idOrigen = resultadoDeposito[0].iddeposito;
 
-    const queryChofer = 'SELECT nrochof, nomchof FROM conductores WHERE dnichof = ?';
+    const queryChofer = 'SELECT nrochof FROM conductores WHERE dnichof = ?';
     connection.query(queryChofer, [dniChofer], (err, resultadoChofer) => {
       if (err || resultadoChofer.length === 0) {
-        console.error('❌ Error obteniendo chofer:', err);
-        return res.status(500).send('Error al obtener chofer');
+        return res.status(500).json({ success: false, message: 'Error al obtener chofer' });
       }
 
       const nroChofer = resultadoChofer[0].nrochof;
@@ -40,52 +32,40 @@ const saveEnvio = (req, res) => {
       `;
       const valoresRuta = [idOrigen, 1, nroChofer, idCamion];
 
-      console.log('🔸 Insertando hoja de ruta:', valoresRuta);
-
       connection.query(insertRuta, valoresRuta, (err, resultadoInsert) => {
         if (err) {
-          console.error('❌ Error al insertar hoja de ruta:', err);
-          return res.status(500).send('Error al guardar hoja de ruta');
+          return res.status(500).json({ success: false, message: 'Error al guardar hoja de ruta' });
         }
 
         const idHojaRuta = resultadoInsert.insertId;
-        console.log('✅ Hoja de ruta creada con ID:', idHojaRuta);
 
-        const insertCarga = 'INSERT INTO cargaporenvio (idenvio, idcarga) VALUES (?, ?)';
-        let insertados = 0;
+        // Insertar cargas en cargaporenvio
+        const insertCarga = 'INSERT INTO cargaporenvio (idenvio, idcarga) VALUES ?';
+        const values = cargas.map(c => [idHojaRuta, c.id]);
 
-        cargas.forEach((carga) => {
-          const valores = [idHojaRuta, carga.id];
-          connection.query(insertCarga, valores, (err) => {
-            if (!err) {
-              insertados++;
-
-              const queryActualizarEstado = 'UPDATE carga SET estado = 1 WHERE id = ?';
-              connection.query(queryActualizarEstado, [carga.id], (err2) => {
-                if (err2) {
-                  console.error(`⚠️ Error actualizando estado de carga ${carga.id}:`, err2);
-                }
-              });
-            } else {
-              console.error(`❌ Error insertando en cargaporenvio (Carga ID ${carga.id}):`, err);
-            }
-          });
-        });
-
-        // Esperar a que terminen las inserciones
-        setTimeout(() => {
-          if (insertados < cargas.length) {
-            console.error('❌ No se pudieron insertar todas las cargas');
-            return res.status(500).send('No se pudieron asociar todas las cargas.');
+        connection.query(insertCarga, [values], (err) => {
+          if (err) {
+            return res.status(500).json({ success: false, message: 'Error al asociar cargas' });
           }
 
-          // ✅ Aquí usamos la función helper
-          generarHojaDeRutaPDF(idHojaRuta, res);
-        }, 500);
+          // Actualizar estado de las cargas a "en envío"
+          const queryActualizarEstado = 'UPDATE carga SET estado = 1 WHERE id IN (?)';
+          const cargaIds = cargas.map(c => c.id);
+
+          connection.query(queryActualizarEstado, [cargaIds], (err2) => {
+            if (err2) {
+              return res.status(500).json({ success: false, message: 'Error al actualizar cargas' });
+            }
+
+            // ✅ Devolvemos JSON, no PDF
+            return res.json({ success: true, idHojaRuta });
+          });
+        });
       });
     });
   });
 };
+
 
 
 
@@ -138,6 +118,7 @@ const updateEnvio = (req, res) => {
       }
 
       // ✅ Generar PDF actualizado
+      generarHojaDeRutaPDF(idHojaRuta, res);
       
     });
   });

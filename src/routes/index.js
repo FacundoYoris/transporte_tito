@@ -98,29 +98,29 @@ router.get('/api/cargas', (req, res) => {
 
 // Ruta para recibir una carga y actualizar su estado
 router.post('/api/carga/recibir', (req, res) => {
-  const { idCarga, destinoId, recibido } = req.body;
+  const { idCarga, destinoId, origenId, recibido } = req.body;
 
-  // Paso 1: Actualizar la tabla carga
+  // ✅ Si recibimos -> pasa al destino, si rechazamos -> vuelve al origen
+  const nuevoDeposito = recibido ? destinoId : origenId;
+
   const queryCarga = `
     UPDATE carga
-    SET estado = 0 ${recibido ? ', iddeposito = ?' : ''}
+    SET estado = 0, iddeposito = ?
     WHERE id = ?
   `;
-  const paramsCarga = recibido ? [destinoId, idCarga] : [idCarga];
 
-  connection.query(queryCarga, paramsCarga, (error) => {
+  connection.query(queryCarga, [nuevoDeposito, idCarga], (error) => {
     if (error) {
       console.error('❌ Error actualizando carga:', error);
       return res.status(500).json({ success: false, message: 'Error actualizando carga' });
     }
 
-    // Paso 2: Actualizar estadoEntregaAvda en cargaporenvio
+    // ✅ Actualizar estadoEntregaAvda en cargaporenvio
     let estadoEntregaAvda = null;
-
     if (recibido) {
-      estadoEntregaAvda = destinoId == 1 ? 1 : null; // 1 = Avellaneda, si es otro no se marca como entrega final
+      estadoEntregaAvda = destinoId == 1 ? 1 : null; // Solo 1 si Avellaneda
     } else {
-      estadoEntregaAvda = 0; // no llegó
+      estadoEntregaAvda = 0; // Rechazada
     }
 
     const queryEstadoEntrega = `
@@ -138,6 +138,11 @@ router.post('/api/carga/recibir', (req, res) => {
       return res.json({ success: true });
     });
   });
+});
+
+router.get('/descargar/:idHojaRuta', (req, res) => {
+  const idHojaRuta = req.params.idHojaRuta;
+  generarHojaDeRutaPDF(idHojaRuta, res);
 });
 
 
@@ -247,7 +252,9 @@ router.get('/envios', (req, res) => {
 
           const enviosConTodo = envios.map(envio => {
             const detallesEnvio = detallesConCarga.filter(d => d.idenvio === envio.id);
+
             const totalValorDeclarado = detallesEnvio.reduce((sum, det) => {
+              if (det.estadoEntregaAvda === 0) return sum; // Ignorar rechazadas
               const valor = Number(det.carga?.valordeclarado || 0);
               return sum + valor;
             }, 0);
@@ -411,10 +418,6 @@ router.post('/envios/finalizar', (req, res) => {
   });
 });
 
-
-
-
-
 // Ruta para cargar un nuevo envío
 router.get('/cargarenvionuevo', (req, res) => {
   const userName = req.session.userName;
@@ -524,7 +527,6 @@ router.get('/cargarenvionuevo', (req, res) => {
   });
 });
 
-
 router.get('/clientes', (req, res) => {
   const sqlClientes = 'SELECT * FROM clientes';
   const sqlSituacionIVA = 'SELECT sitiva FROM situacioniva';
@@ -606,7 +608,6 @@ router.get('/camiones', (req, res) => {
     });
   });
 });
-
 
 router.get('/modificarDatosPersonales', (req, res) => res.render('modificarDatosPersonales.ejs'))
 router.get('/newPassword', (req, res) => {

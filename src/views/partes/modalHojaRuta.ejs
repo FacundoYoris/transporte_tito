@@ -1,4 +1,5 @@
-<div class="modal fade" id="verHojaRuta<%= id %>" tabindex="-1" aria-labelledby="modalLabel<%= id %>" aria-hidden="true">
+<div class="modal fade" id="verHojaRuta<%= id %>" tabindex="-1" aria-labelledby="modalLabel<%= id %>"
+  aria-hidden="true">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
 
@@ -15,66 +16,96 @@
           <div class="card border-secondary mb-3">
             <div class="card-header bg-info text-white text-center">HOJA DE RUTA</div>
             <div class="card-body">
-              <% const fechaHora = new Date(datos.fecha); 
-                 const fecha = fechaHora.toLocaleDateString('es-AR'); 
-                 const hora = fechaHora.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' }); %>
-              <div class="row mb-3">
-                <div class="col-md-4"><strong>Fecha:</strong> <%= fecha %></div>
-                <div class="col-md-4"><strong>Hora:</strong> <%= hora %></div>
-                <div class="col-md-4"><strong>Hoja de Ruta:</strong> <%= datos.id %></div>
-              </div>
-              <div class="row mb-3">
-                <div class="col-md-4"><strong>Camión:</strong> <%= datos.desmovil %></div>
-                <div class="col-md-4"><strong>Patente Camión:</strong> <%= datos.patmovil %></div>
-                <div class="col-md-4"><strong>Patente Acoplado:</strong> <%= datos.pacmovil %></div>
-              </div>
-              <div class="row">
-                <div class="col-md-4"><strong>Chofer:</strong> <%= datos.nomchof %></div>
-                <div class="col-md-4"><strong>DNI:</strong> <%= datos.dnichof %></div>
-                <div class="col-md-4"><strong>TOTAL:</strong> $<%= datos.total_valor.toLocaleString('es-AR') %></div>
-              </div>
+              <% const fechaHora=new Date(datos.fecha); const fecha=fechaHora.toLocaleDateString('es-AR'); const
+                hora=fechaHora.toLocaleTimeString('es-AR', { hour: '2-digit' , minute: '2-digit' }); %>
+                <div class="row mb-3">
+                  <div class="col-md-4"><strong>Fecha:</strong>
+                    <%= fecha %>
+                  </div>
+                  <div class="col-md-4"><strong>Hora:</strong>
+                    <%= hora %>
+                  </div>
+                  <div class="col-md-4"><strong>Hoja de Ruta:</strong>
+                    <%= datos.id %>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-4"><strong>Camión:</strong>
+                    <%= datos.desmovil %>
+                  </div>
+                  <div class="col-md-4"><strong>Patente Camión:</strong>
+                    <%= datos.patmovil %>
+                  </div>
+                  <div class="col-md-4"><strong>Patente Acoplado:</strong>
+                    <%= datos.pacmovil %>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-4"><strong>Chofer:</strong>
+                    <%= datos.nomchof %>
+                  </div>
+                  <div class="col-md-4"><strong>DNI:</strong>
+                    <%= datos.dnichof %>
+                  </div>
+                  <div class="col-md-4"><strong>TOTAL:</strong> $<%= datos.total_valor.toLocaleString('es-AR') %>
+                  </div>
+                </div>
             </div>
           </div>
 
           <!-- Cargas -->
-          <% if (datos.detalles.length === 0) { %>
+          <% if (datos.detalles.length===0) { %>
             <p class="text-center text-muted">No hay cargas asociadas.</p>
-          <% } else { %>
-            <div class="accordion" id="accordionCargas<%= id %>">
-              <% datos.detalles.forEach((detalle, index) => {
-                const carga = detalle.carga;
-                const cargaFecha = new Date(carga?.fecha || '').toLocaleString('es-AR', {
+            <% } else { %>
+              <div class="accordion" id="accordionCargas<%= id %>">
+                <% datos.detalles.forEach((detalle, index)=> {
+                  const carga = detalle.carga;
+                  const cargaFecha = new Date(carga?.fecha || '').toLocaleString('es-AR', {
                   day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
-                });
-                const collapseId = `collapseCarga${id}_${index}`;
-                let claseEstado = 'bg-secondary-subtle';
-                if (detalle.estadoEntregaAvda === 1) claseEstado = 'bg-success-subtle';
-                else if (detalle.estadoEntregaAvda === 0) claseEstado = 'bg-danger-subtle';
-              %>
-              <div class="accordion-item <%= claseEstado %>">
-                <div class="d-flex justify-content-between align-items-center px-2 py-1">
-                  <!-- Botón del acordeón -->
-                  <button class="accordion-button collapsed flex-grow-1 text-start" type="button" data-bs-toggle="collapse" data-bs-target="#<%= collapseId %>">
-                    #<%= index + 1 %> - Cliente: <%= carga?.nombre_cliente || '-' %> | Proveedor: <%= carga?.nombre_proveedor || '-' %> | Remito: <%= carga?.remito || '-' %>
-                  </button>
-                  <!-- Botones al lado en fila -->
-                  <div class="d-flex gap-2 ms-2">
-                    <button class="btn btn-sm btn-outline-success btn-recibir" data-id="<%= carga?.id %>" data-destino="<%= datos.id_destino %>">✅</button>
-                    <button class="btn btn-sm btn-outline-danger btn-no-recibido" data-id="<%= carga?.id %>">🗑️</button>
+                  });
+                  const collapseId = `collapseCarga${id}_${index}`;
+                  let claseEstado = 'bg-secondary-subtle';
+                  if (detalle.estadoEntregaAvda === 1) claseEstado = 'bg-success-subtle';
+                  else if (detalle.estadoEntregaAvda === 0) claseEstado = 'bg-danger-subtle';
+                  %>
+                  <div class="accordion-item <%= claseEstado %>">
+                    <div class="d-flex justify-content-between align-items-center px-2 py-1">
+                      <!-- Botón del acordeón -->
+                      <button class="accordion-button collapsed flex-grow-1 text-start" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#<%= collapseId %>">
+                        #<%= index + 1 %> - Cliente: <%= carga?.nombre_cliente || '-' %> | Proveedor: <%=
+                              carga?.nombre_proveedor || '-' %> | Remito: <%= carga?.remito || '-' %>
+                      </button>
+                      <!-- Botones al lado en fila -->
+                      <div class="d-flex gap-2 ms-2">
+                        <button class="btn btn-sm btn-outline-success btn-recibir" data-id="<%= carga?.id %>"
+                          data-destino="<%= datos.id_destino %>" data-origen="<%= datos.id_origen %>">✅</button>
+                        <button class="btn btn-sm btn-outline-danger btn-no-recibido" data-id="<%= carga?.id %>"
+                          data-origen="<%= datos.id_origen %>">🗑️</button>
+                      </div>
+
+                    </div>
+                    <div id="<%= collapseId %>" class="accordion-collapse collapse"
+                      data-bs-parent="#accordionCargas<%= id %>">
+                      <div class="accordion-body">
+                        <p><strong>Cantidad:</strong>
+                          <%= carga?.cantidad || '-' %>
+                            <%= carga?.unidad || '' %>
+                        </p>
+                        <p><strong>Localidad:</strong>
+                          <%= carga?.localidad_cliente || '-' %>
+                        </p>
+                        <p><strong>Valor declarado:</strong> $<%= carga?.valordeclarado || '0' %>
+                        </p>
+                        <p><strong>Fecha:</strong>
+                          <%= cargaFecha %>
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div id="<%= collapseId %>" class="accordion-collapse collapse" data-bs-parent="#accordionCargas<%= id %>">
-                  <div class="accordion-body">
-                    <p><strong>Cantidad:</strong> <%= carga?.cantidad || '-' %> <%= carga?.unidad || '' %></p>
-                    <p><strong>Localidad:</strong> <%= carga?.localidad_cliente || '-' %></p>
-                    <p><strong>Valor declarado:</strong> $<%= carga?.valordeclarado || '0' %></p>
-                    <p><strong>Fecha:</strong> <%= cargaFecha %></p>
-                  </div>
-                </div>
+                  <% }) %>
               </div>
-              <% }) %>
-            </div>
-          <% } %>
+              <% } %>
         </div>
       </div>
 

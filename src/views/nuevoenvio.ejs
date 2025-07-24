@@ -281,7 +281,7 @@ $(document).ready(function () {
     searching: false
   });
 
-  // Transferir a Seleccionados
+  // ✅ Transferir a Seleccionados
   $('#pasarDatos').click(function () {
     $('#tablaDepositos tbody tr.selected').each(function () {
       let datos = tablaDepositos.row(this).data();
@@ -298,7 +298,7 @@ $(document).ready(function () {
     });
   });
 
-  // Transferir a Depósitos
+  // ✅ Transferir a Depósitos
   $('#quitarDatos').click(function () {
     $('#tablaSeleccionados tbody tr.selected').each(function () {
       let datos = tablaSeleccionados.row(this).data();
@@ -314,7 +314,7 @@ $(document).ready(function () {
     });
   });
 
-  // Doble clic para mover filas
+  // ✅ Doble clic para mover a Seleccionados
   $('#tablaDepositos tbody').on('dblclick', 'tr', function () {
     let datos = tablaDepositos.row(this).data();
     if (datos) {
@@ -329,6 +329,7 @@ $(document).ready(function () {
     }
   });
 
+  // ✅ Doble clic para devolver a Depósitos
   $('#tablaSeleccionados tbody').on('dblclick', 'tr', function () {
     let datos = tablaSeleccionados.row(this).data();
     if (datos) {
@@ -342,7 +343,7 @@ $(document).ready(function () {
     }
   });
 
-  // Botón X
+  // ✅ Botón X para eliminar carga seleccionada
   $(document).on('click', '.eliminarCarga', function () {
     let fila = $(this).closest('tr');
     let datos = tablaSeleccionados.row(fila).data();
@@ -357,12 +358,12 @@ $(document).ready(function () {
     }
   });
 
-  // Seleccionar filas
+  // ✅ Seleccionar filas (toggle)
   $('#tablaDepositos tbody, #tablaSeleccionados tbody').on('click', 'tr', function () {
     $(this).toggleClass('selected');
   });
 
-  // ✅ Guardar envío
+  // ✅ Guardar envío y descargar PDF (dos pasos)
   $('#enviarDatos').click(function () {
     let cargasSeleccionadas = [];
     $('#tablaSeleccionados tbody tr').each(function () {
@@ -385,7 +386,6 @@ $(document).ready(function () {
     const envioData = {
       idCamion: $('#patenteCamion').val(),
       dniChofer: $('#chofer').val(),
-      patenteAcoplado: $('#patenteAcoplado').val(),
       cargas: cargasSeleccionadas
     };
 
@@ -394,24 +394,24 @@ $(document).ready(function () {
       return;
     }
 
+    // ✅ Paso 1: Guardar envío
     fetch('/guardarEnvio', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(envioData)
     })
-    .then(response => {
-      if (!response.ok) throw new Error('Error al guardar el envío.');
-      return response.blob(); // PDF
-    })
-    .then(blob => {
-      const url = window.URL.createObjectURL(blob);
+    .then(response => response.json())
+    .then(data => {
+      if (!data.success) throw new Error('Error al guardar el envío.');
+
+      // ✅ Paso 2: Descargar PDF con nueva ruta
+      const url = `/descargar/${data.idHojaRuta}`;
       const a = document.createElement('a');
       a.href = url;
-      a.download = `hoja_ruta_${Date.now()}.pdf`;
+      a.download = `Hoja_de_ruta_${data.idHojaRuta}.pdf`;
       document.body.appendChild(a);
       a.click();
       a.remove();
-      window.URL.revokeObjectURL(url);
 
       alert('✅ Envío registrado y PDF descargado.');
       setTimeout(() => location.reload(), 500);
@@ -423,6 +423,7 @@ $(document).ready(function () {
   });
 });
 </script>
+
 
   <!-- SCRIPT PARA LOS SELECTED DEL CHOFER Y DEL CAMION (AUTOCOMPLEMENTAR) -->
   <script>

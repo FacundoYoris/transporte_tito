@@ -127,7 +127,7 @@
 
       <!-- Boton agregar conductor -->
       <button type="button" class="btn btn-outline-secondary  mt-4" style="font-size: 2rem;" data-bs-toggle="modal"
-        data-bs-target="#agregarConductor" id="botonAgregarStock">
+        data-bs-target="#agregarConductor" id="botonAgregarStock" title="AGREGAR CONDUCTOR">
         <i class='bx bxs-user-plus' undefined></i>
       </button>
       <%- include('partes/modalAgregarConductor.ejs', { camiones: camiones }) %>
@@ -165,9 +165,9 @@
                 </td>
                 <td class="align-middle">
                   <button class="btn btn-sm btn-outline-dark me-1 fw-semibold" data-bs-toggle="modal"
-                    data-bs-target="#editarConductor<%= conductor.nrochof %>"><i class='bx bx-edit-alt'></i></button>
+                    data-bs-target="#editarConductor<%= conductor.nrochof %>" title="EDITAR CONDUCTOR"><i class='bx bx-edit-alt'></i></button>
                   <button class="btn btn-sm btn-outline-danger fw-semibold" data-bs-toggle="modal"
-                    data-bs-target="#eliminarConductor<%= conductor.nrochof %>"><i class='bx bx-trash'></i></button>
+                    data-bs-target="#eliminarConductor<%= conductor.nrochof %>" title="ELIMINAR CONDUCTOR"><i class='bx bx-trash'></i></button>
                 </td>
               </tr>
               <%- include('partes/modalEditarConductor.ejs', { id: conductor.nrochof, datos: conductor, camiones:

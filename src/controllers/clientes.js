@@ -12,7 +12,7 @@ const saveClientes = (req, res) => {
         sitclie, cuiclie, maiclie, obsclie 
     } = req.body;
 
-    if (!nomclie || !domclie || !locclie || !telclie || !sitclie || !cuiclie || !maiclie) {
+    if (!nomclie || !domclie || !locclie) {
         return res.status(400).json({ success: false, error: "Faltan datos obligatorios." });
     }
 
@@ -39,7 +39,7 @@ const saveClientes2 = (req, res) => {
         sitclie, cuiclie, maiclie, obsclie 
     } = req.body;
 
-    if (!nomclie || !domclie || !locclie || !telclie || !sitclie || !cuiclie || !maiclie) {
+    if (!nomclie || !domclie || !locclie) {
         return res.status(400).json({ success: false, error: "Faltan datos obligatorios." });
     }
 

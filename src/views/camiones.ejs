@@ -126,7 +126,7 @@
 
       <!-- Boton agregar camión -->
       <button type="button" class="btn btn-outline-secondary mt-4" style="font-size: 2rem;" data-toggle="modal"
-        data-target="#agregarCamion">
+        data-target="#agregarCamion" title="Agregar Camión">
         <i class='bx bxs-truck'></i>
       </button>
 
@@ -163,9 +163,9 @@
                 </td>
                 <td class="align-middle">
                   <button class="btn btn-sm btn-outline-primary me-1 fw-bold" data-toggle="modal"
-                    data-target="#editarCamion<%= camion.nummovil %>"><i class='bx bx-edit-alt'></i></button>
+                    data-target="#editarCamion<%= camion.nummovil %>" title="EDITAR CAMIÓN"><i class='bx bx-edit-alt'></i></button>
                   <button class="btn btn-sm btn-outline-danger fw-bold" data-toggle="modal"
-                    data-target="#eliminarCamion<%= camion.nummovil %>"><i class='bx bx-trash'></i></button>
+                    data-target="#eliminarCamion<%= camion.nummovil %>" title="ELIMINAR CAMIÓN"><i class='bx bx-trash'></i></button>
                 </td>
               </tr>
               <%- include('partes/modalEditarCamion.ejs', { id: camion.nummovil, datos: camion, conductores }) %>
