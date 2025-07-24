@@ -458,6 +458,7 @@
         });
     </script>
 
+    <!-- Script para abrir el modal automáticamente si se pasa el parámetro 'openModal' -->
     <script>
         // Verificar si el parámetro 'openModal' está presente en la URL
         const params = new URLSearchParams(window.location.search);
@@ -472,42 +473,48 @@
         }
     </script>
 
+    <!-- Script para inicializar Select2 en los campos del modal -->
     <script>
-        $(document).ready(function () {
-            $('#clienteOrigen').select2({
-                theme: 'bootstrap4',
-                placeholder: "Proveedor",
-                allowClear: true,
-                width: '100%',
-                dropdownParent: $('#modalAgregarCarga') // si está en modal
-            });
+    function normalize(str) {
+        return str ? str.toLowerCase().replace(/\s|-/g, '') : '';
+    }
 
-            $('#clienteDestino').select2({
-                theme: 'bootstrap4',
-                placeholder: "Cliente",
-                allowClear: true,
-                width: '100%',
-                dropdownParent: $('#modalAgregarCarga')
-            });
+    function customMatcher(params, data) {
+        if ($.trim(params.term) === '') return data;
 
+        const term = normalize(params.term);
+        const text = normalize(data.text);
+        const extra = normalize(data.element ? data.element.getAttribute('data-extra') : '');
 
-            $('#edit-proveedor').select2({
-                theme: 'bootstrap4',
-                placeholder: "Proveedor",
-                allowClear: true,
-                width: '100%',
-                dropdownParent: $('#modalEditarCarga')
-            });
+        if (text.includes(term) || extra.includes(term)) {
+            return data;
+        }
+        return null;
+    }
 
-            $('#edit-nombre').select2({
-                theme: 'bootstrap4',
-                placeholder: "Cliente",
-                allowClear: true,
-                width: '100%',
-                dropdownParent: $('#modalEditarCarga')
-            });
+    $(document).ready(function () {
+        // Inicializa Select2 con búsqueda por nombre y CUIL en modal Agregar Carga
+        $('#clienteOrigen, #clienteDestino').select2({
+            theme: 'bootstrap4',
+            matcher: customMatcher,
+            placeholder: "Seleccione",
+            allowClear: true,
+            width: '100%',
+            dropdownParent: $('#modalAgregarCarga')
         });
-    </script>
+
+        // Select2 para modal Editar (sin matcher)
+        $('#edit-proveedor, #edit-nombre').select2({
+            theme: 'bootstrap4',
+            placeholder: "Seleccione",
+            allowClear: true,
+            width: '100%',
+            dropdownParent: $('#modalEditarCarga')
+        });
+    });
+</script>
+
+    <!-- Script para obtener la localidad del cliente seleccionado -->
     <script>
         $('#clienteDestino').on('select2:select', function (e) {
             const clienteId = e.params.data.id;

@@ -19,46 +19,54 @@ router.get('/cerrarSesion', login.logout);
 
 // Ruta para obtener todos los depósitos (sin cargas)
 router.get('/depositos', (req, res) => {
-  const queryUsuarioDeposito = `
+    const queryUsuarioDeposito = `
         SELECT u.iddeposito, d.nombre AS nombreDeposito
         FROM usuarios u
         LEFT JOIN depositos d ON u.iddeposito = d.id
         WHERE u.usuario = ?
     `;
 
-  connection.query(queryUsuarioDeposito, [req.session.userName], (error, result) => {
-    if (error) {
-      throw error;
-    }
-
-    const userDeposito = result.length > 0 ? result[0] : { iddeposito: null, nombreDeposito: "Sin depósito asignado" };
-
-    const queryDepositos = 'SELECT id, nombre FROM depositos';
-    const queryClientes = 'SELECT numclie,nomclie FROM clientes';
-
-    connection.query(queryDepositos, (error, depositos) => {
-      if (error) {
-        throw error;
-      }
-
-      connection.query(queryClientes, (error, clientes) => {
+    connection.query(queryUsuarioDeposito, [req.session.userName], (error, result) => {
         if (error) {
-          throw error;
+            console.error('Error al obtener el depósito del usuario:', error);
+            return res.status(500).send('Error interno al obtener depósito.');
         }
 
-        res.render('depositos.ejs', {
-          depositos,
-          clientes,
-          gestor: req.session.gestor,
-          deposito: req.session.deposito,
-          administracion: req.session.administracion,
-          idDeposito: userDeposito.iddeposito,
-          nombreDeposito: userDeposito.nombreDeposito
+        const userDeposito = result.length > 0
+            ? result[0]
+            : { iddeposito: null, nombreDeposito: "Sin depósito asignado" };
+
+        const queryDepositos = 'SELECT id, nombre FROM depositos';
+        // ✅ Agregamos cuiclie en la consulta de clientes
+        const queryClientes = 'SELECT numclie, nomclie, cuiclie FROM clientes';
+
+        connection.query(queryDepositos, (error, depositos) => {
+            if (error) {
+                console.error('Error al obtener depósitos:', error);
+                return res.status(500).send('Error interno al obtener depósitos.');
+            }
+
+            connection.query(queryClientes, (error, clientes) => {
+                if (error) {
+                    console.error('Error al obtener clientes:', error);
+                    return res.status(500).send('Error interno al obtener clientes.');
+                }
+
+                // Renderizamos la vista con todos los datos necesarios
+                res.render('depositos.ejs', {
+                    depositos,
+                    clientes, // ✅ Ahora incluye cuiclie
+                    gestor: req.session.gestor,
+                    deposito: req.session.deposito,
+                    administracion: req.session.administracion,
+                    idDeposito: userDeposito.iddeposito,
+                    nombreDeposito: userDeposito.nombreDeposito
+                });
+            });
         });
-      });
     });
-  });
 });
+
 
 // Ruta API para obtener las cargas según el depósito seleccionado
 router.get('/api/cargas', (req, res) => {

@@ -29,7 +29,6 @@
     /* Botón de cerrar más limpio */
     .custom-modal .btn-close {
         filter: brightness(0) invert(1);
-        /* Asegura que el botón se vea bien sobre el encabezado oscuro */
         opacity: 0.8;
     }
 
@@ -44,7 +43,7 @@
         border: 1px solid #ced4da;
     }
 
-    /* Estilo para el botón del formulario */
+    /* Estilo para los botones */
     .custom-modal .btn-primary,
     .custom-modal .btn-success,
     .custom-modal .btn-outline-secondary,
@@ -52,7 +51,6 @@
         border-radius: 5px;
     }
 </style>
-
 
 <!-- Modal -->
 <div class="modal fade custom-modal" id="modalAgregarCarga" tabindex="-1" aria-hidden="true">
@@ -63,39 +61,39 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
+                <!-- Formulario para agregar carga -->
                 <form action="/save" method="post" id="formAgregarCarga">
-                    <!-- Cliente ORIGEN -->
+                    <!-- Cliente ORIGEN y DESTINO -->
                     <div class="mb-2">
                         <div class="d-flex align-items-center">
-                            <!-- Tus selects -->
-                            <select class="form-select me-2 select-buscador" id="clienteOrigen" name="clienteOrigen"
-                                required>
+                            <!-- Select Proveedor -->
+                            <select class="form-select me-2 select-buscador" id="clienteOrigen" name="clienteOrigen" required>
                                 <option value="">Proveedor</option>
-                                <% clientes.forEach(cliente=> { %>
-                                    <option value="<%= cliente.numclie %>">
+                                <% clientes.forEach(cliente => { %>
+                                    <option value="<%= cliente.numclie %>" data-extra="<%= cliente.cuiclie %>">
                                         <%= cliente.nomclie %>
                                     </option>
-                                    <% }); %>
+                                <% }); %>
                             </select>
 
-                            <select class="form-select me-2 select-buscador" id="clienteDestino" name="clienteDestino"
-                                required>
+                            <!-- Select Cliente -->
+                            <select class="form-select me-2 select-buscador" id="clienteDestino" name="clienteDestino" required>
                                 <option value="">Cliente</option>
-                                <% clientes.forEach(cliente=> { %>
-                                    <option value="<%= cliente.numclie %>">
+                                <% clientes.forEach(cliente => { %>
+                                    <option value="<%= cliente.numclie %>" data-extra="<%= cliente.cuiclie %>">
                                         <%= cliente.nomclie %>
                                     </option>
-                                    <% }); %>
+                                <% }); %>
                             </select>
 
-
+                            <!-- Botón para agregar nuevo cliente -->
                             <button type="button" class="btn btn-outline-secondary" id="btnAgregarCliente">
                                 <i class='bx bx-plus' style='color:#097707'></i>
                             </button>
                         </div>
                     </div>
 
-                    <!-- Campo para Unidad -->
+                    <!-- Unidad -->
                     <div class="mb-2">
                         <select class="form-select" id="unidad" name="unidad" required>
                             <option value="">Seleccionar unidad</option>
@@ -113,16 +111,14 @@
                     <button type="submit" class="btn btn-primary w-100">Agregar</button>
                 </form>
 
-                <!-- Formulario para agregar nuevo cliente -->
+                <!-- Formulario para agregar cliente nuevo -->
                 <div id="formAgregarCliente" class="mt-3 d-none">
                     <h6>Agregar Nuevo Cliente</h6>
                     <form action="/saveClientes" method="post">
-                        <input type="text" class="form-control mb-2" placeholder="Nombre del Cliente" name="nomclie"
-                            required>
+                        <input type="text" class="form-control mb-2" placeholder="Nombre del Cliente" name="nomclie" required>
                         <input type="text" class="form-control mb-2" placeholder="Domicilio" name="domclie" required>
                         <input type="text" class="form-control mb-2" placeholder="Localidad" name="locclie" required>
-                        <input type="number" class="form-control mb-2" placeholder="Número de teléfono" name="telclie"
-                            required>
+                        <input type="number" class="form-control mb-2" placeholder="Número de teléfono" name="telclie" required>
                         <select class="form-control mb-2" name="sitclie" required>
                             <option value="" disabled selected>Seleccione la situación ante el IVA</option>
                             <option value="RI">Responsable Inscripto</option>
@@ -132,13 +128,9 @@
                             <option value="CF">Consumidor Final</option>
                             <option value="RD">Relación de Dependencia</option>
                         </select>
-                        <input type="number" class="form-control mb-2" placeholder="CUIL - CUIT" name="cuiclie"
-                            required>
-                        <input type="email" class="form-control mb-2" placeholder="Correo electrónico" name="maiclie"
-                            required>
-                        <input type="text" class="form-control mb-2" placeholder="Observaciones" name="obsclie"
-                            required>
-
+                        <input type="number" class="form-control mb-2" placeholder="CUIL - CUIT" name="cuiclie" required>
+                        <input type="email" class="form-control mb-2" placeholder="Correo electrónico" name="maiclie" required>
+                        <input type="text" class="form-control mb-2" placeholder="Observaciones" name="obsclie" required>
                         <button type="submit" class="btn btn-success w-100">Guardar Cliente</button>
                     </form>
 
@@ -151,26 +143,26 @@
         </div>
     </div>
 </div>
+
+<!-- Scripts -->
 <script>
-  $('#clienteDestino').on('select2:select', function(e) {
-  const clienteId = e.params.data.id;
 
-  $.ajax({
-    url: `/api/destinoCliente/${clienteId}`,
-    method: 'GET',
-    success: function(data) {
-      $('input[name="destino"]').val(data.locclie || '');
-    },
-    error: function() {
-      alert('No se pudo obtener la localidad del cliente');
-      $('input[name="destino"]').val('');
-    }
-  });
-});
+    // AJAX para autocompletar destino al seleccionar cliente
+    $('#clienteDestino').on('select2:select', function(e) {
+        const clienteId = e.params.data.id;
+        $.ajax({
+            url: `/api/destinoCliente/${clienteId}`,
+            method: 'GET',
+            success: function(data) {
+                $('input[name="destino"]').val(data.locclie || '');
+            },
+            error: function() {
+                alert('No se pudo obtener la localidad del cliente');
+                $('input[name="destino"]').val('');
+            }
+        });
+    });
 
-</script>
-
-<script>
     // Botón para cambiar de formulario
     document.getElementById('btnAgregarCliente').addEventListener('click', () => {
         document.getElementById('formAgregarCarga').classList.add('d-none');
