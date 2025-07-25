@@ -3,7 +3,7 @@ import mysql2 from 'mysql2';
 const connection = mysql2.createPool({
 	host: 'localhost',
 	user: 'root',
-	password: 'root',
+	password: '42530953!Facund0',
 	database: 'transporte_tito',
 	dateStrings: true // ← ESTA LÍNEA resuelve todo
 	// host: 'biughjwhbdg2q0yrwblg-mysql.services.clever-cloud.com',
