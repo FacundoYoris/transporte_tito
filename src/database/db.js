@@ -2,7 +2,7 @@
 import mysql2 from 'mysql2';
 const connection = mysql2.createPool({
 	host: 'localhost',
-	user: 'root',
+	user: 'tito_user',
 	password: '42530953!Facund0',
 	database: 'transporte_tito',
 	dateStrings: true // ← ESTA LÍNEA resuelve todo
